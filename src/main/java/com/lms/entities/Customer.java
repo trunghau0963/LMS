@@ -1,7 +1,7 @@
 package com.lms.entities;
 
 public class Customer extends User {
-    private boolean isMember;
+    public boolean isMember;
 
     public Customer() {
         super();

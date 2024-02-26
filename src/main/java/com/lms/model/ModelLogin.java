@@ -18,9 +18,18 @@ public class ModelLogin {
         this.password = password;
     }
 
-    public ModelLogin(String phoneNumber, String password) {
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public ModelLogin(String phoneNumber, String password, String userType) {
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.userType = userType;
     }
 
     public ModelLogin() {
@@ -28,4 +37,5 @@ public class ModelLogin {
 
     private String phoneNumber;
     private String password;
+    private String userType;
 }

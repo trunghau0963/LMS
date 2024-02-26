@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lms.entities.Customer;
+import com.lms.entities.Employee;
 import com.lms.entities.User;
 import com.lms.model.ModelLogin;
 
@@ -36,21 +38,59 @@ public class UserDao {
     }
 
     public User logIn(ModelLogin login) {
-        User user = new User();
         Connection connection = null;
         try {
             connection = JDBCConnection.getJDBConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM employee WHERE phonenumber = '" + login.getPhoneNumber()
-                    + "' AND pwd = '" + login.getPassword() + "'");
-            while (resultSet.next()) {
-                user.setId(resultSet.getString("empId"));
-                user.setName(resultSet.getString("empName"));
-                user.setDob(resultSet.getString("dob"));
-                user.setPhoneNumber(resultSet.getString("phoneNumber"));
-                user.setPwd(resultSet.getString("pwd"));
-                user.setGender(resultSet.getString("gender"));
-                user.setIsBlock(resultSet.getBoolean("isBlock"));
+            if (login.getUserType().equals("Admin")) {
+                User user = new User();
+                ResultSet resultSet = statement
+                        .executeQuery("SELECT * FROM admin WHERE phonenumber = '" + login.getPhoneNumber()
+                                + "' AND pwd = '" + login.getPassword() + "'");
+                while (resultSet.next()) {
+                    user.setId(resultSet.getString("adminId"));
+                    user.setName(resultSet.getString("adminName"));
+                    user.setDob(resultSet.getString("dob"));
+                    user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                    user.setPwd(resultSet.getString("pwd"));
+                    user.setGender(resultSet.getString("gender"));
+                    user.setIsBlock(resultSet.getBoolean("isBlock"));
+                }
+                return user;
+            } else if (login.getUserType().equals("Employee")) {
+                System.out.println("Employee");
+                Employee user = new Employee();
+                ResultSet resultSet = statement
+                        .executeQuery("SELECT * FROM employee WHERE phonenumber = '" + login.getPhoneNumber()
+                                + "' AND pwd = '" + login.getPassword() + "'");
+                while (resultSet.next()) {
+                    user.setId(resultSet.getString("empId"));
+                    user.setName(resultSet.getString("empName"));
+                    user.setDob(resultSet.getString("dob"));
+                    user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                    user.setPwd(resultSet.getString("pwd"));
+                    user.setGender(resultSet.getString("gender"));
+                    user.setIsBlock(resultSet.getBoolean("isBlock"));
+                }
+
+                return user;
+
+            } else if (login.getUserType().equals("Customer")) {
+                Customer user = new Customer();
+                ResultSet resultSet = statement
+                        .executeQuery("SELECT * FROM customer WHERE phonenumber = '" + login.getPhoneNumber()
+                                + "' AND pwd = '" + login.getPassword() + "'");
+                while (resultSet.next()) {
+                    user.setId(resultSet.getString("customerId"));
+                    user.setName(resultSet.getString("customerName"));
+                    user.setDob(resultSet.getString("dob"));
+                    user.setPhoneNumber(resultSet.getString("phoneNumber"));
+                    user.setPwd(resultSet.getString("pwd"));
+                    user.setGender(resultSet.getString("gender"));
+                    user.setIsBlock(resultSet.getBoolean("isBlock"));
+                    user.setIsMember(resultSet.getBoolean("isMember"));
+                }
+                return user;
             }
         } catch (SQLException e) {
             System.out.println("Connection to PostgreSQL failed.");
@@ -65,7 +105,7 @@ public class UserDao {
                 }
             }
         }
-        return user;
+        return null;
     }
 
     public List<User> getAllEmployeeList() {

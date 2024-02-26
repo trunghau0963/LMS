@@ -25,10 +25,11 @@ public class UserService {
         return userDao.register(data);
     }
     
-    public User logIn(String phoneNumber, String pwd) {
+    public User logIn(String phoneNumber, String pwd, String userType) {
         ModelLogin data = new ModelLogin();
         data.setPhoneNumber(phoneNumber);
         data.setPassword(pwd);
+        data.setUserType(userType);
         return userDao.logIn(data);
     }
 
