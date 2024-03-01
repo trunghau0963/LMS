@@ -1,7 +1,3 @@
--- -- Tạo cơ sở dữ liệu
--- CREATE DATABASE LibraryManagement;
-
-
 CREATE TABLE employee(
 	empId CHAR(16) DEFAULT substr(md5(random()::text), 1, 16) PRIMARY KEY,
 	empName VARCHAR(255) NOT NULL, 
