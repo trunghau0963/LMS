@@ -1,10 +1,16 @@
-package com.lms.auth.entities;
+package com.lms.auth;
 
-public class Customer extends User {
-    public boolean isMember;
+public class User {
+    protected String Id;
+    protected String Name;
+    protected String dob;
+    protected String phoneNumber;
+    protected String pwd;
+    protected String gender;
+    protected boolean isBlock;
 
-    public Customer() {
-        super();
+    public User() {
+        
     }
 
     public void setId(String Id) {
@@ -27,16 +33,12 @@ public class Customer extends User {
         this.pwd = pwd;
     }
 
-    public void setGender(String gender){
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
     public void setIsBlock(boolean isBlock) {
         this.isBlock = isBlock;
-    }
-
-    public void setIsMember(boolean isMember) {
-        this.isMember = isMember;
     }
 
     public String getId() {
@@ -63,8 +65,9 @@ public class Customer extends User {
         return gender;
     }
 
-    public boolean getIsMember() {
-        return isMember;
+    public boolean isIsBlock() {
+        return isBlock;
     }
+    
     
 }

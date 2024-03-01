@@ -1,4 +1,4 @@
-package com.lms.auth.entities;
+package com.lms.auth;
 
 public class Employee extends User {
 

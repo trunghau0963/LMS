@@ -1,4 +1,4 @@
-package com.lms.auth.model;
+package com.lms.auth;
 
 public class ModelLogin {
 

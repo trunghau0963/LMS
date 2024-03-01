@@ -8,8 +8,11 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-import com.lms.auth.entities.User;
-import com.lms.auth.service.UserService;
+import com.lms.auth.ui.Background;
+import com.lms.auth.ui.PanelTransparent;
+import com.lms.auth.ui.PasswordField;
+import com.lms.auth.ui.Selection;
+import com.lms.auth.ui.TextField;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -96,9 +99,9 @@ public class Login extends javax.swing.JFrame {
         defaultTableModel.addColumn("gender");
         defaultTableModel.addColumn("isBlock");
 
-        List<com.lms.auth.entities.User> users = userService.getAllEmployees();
+        List<com.lms.auth.User> users = userService.getAllEmployees();
 
-        for (com.lms.auth.entities.User user : users) {
+        for (com.lms.auth.User user : users) {
             defaultTableModel.addRow(new Object[] { user.getId(), user.getName(), user.getDob(), user.getPhoneNumber(),
                     user.getPwd(), user.getGender(), user.isIsBlock() });
         }
@@ -113,17 +116,17 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        background1 = new com.lms.auth.ui.Background();
+        background1 = new com.lms.ui.Background();
         panelLogin = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtPass = new com.lms.auth.ui.PasswordField();
+        txtPass = new com.lms.ui.PasswordField();
         signInButton = new javax.swing.JButton();
-        txtUser = new com.lms.auth.ui.TextField();
+        txtUser = new com.lms.ui.TextField();
         signUptxt = new javax.swing.JLabel();
         signUpButton = new javax.swing.JButton();
-        selectionRole = new com.lms.auth.ui.Selection();
-        panelBody = new com.lms.auth.ui.PanelTransparent();
+        selectionRole = new com.lms.ui.Selection();
+        panelBody = new com.lms.ui.PanelTransparent();
         jScrollPane1 = new javax.swing.JScrollPane();
         userTable = new javax.swing.JTable();
         signOutButton = new javax.swing.JButton();
@@ -420,19 +423,19 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.lms.auth.ui.Background background1;
+    private com.lms.ui.Background background1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.lms.auth.ui.PanelTransparent panelBody;
+    private com.lms.ui.PanelTransparent panelBody;
     private javax.swing.JPanel panelLogin;
-    private com.lms.auth.ui.Selection selectionRole;
+    private com.lms.ui.Selection selectionRole;
     private javax.swing.JButton signInButton;
     private javax.swing.JButton signOutButton;
     private javax.swing.JButton signUpButton;
     private javax.swing.JLabel signUptxt;
-    private com.lms.auth.ui.PasswordField txtPass;
-    private com.lms.auth.ui.TextField txtUser;
+    private com.lms.ui.PasswordField txtPass;
+    private com.lms.ui.TextField txtUser;
     private javax.swing.JTable userTable;
     // End of variables declaration//GEN-END:variables
 }
