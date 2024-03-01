@@ -23,6 +23,15 @@ CREATE TABLE customer(
 	isMember BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE administrator(
+	adminId CHAR(16) DEFAULT substr(md5(random()::text), 1, 16) PRIMARY KEY,
+	adminName VARCHAR(255) NOT NULL, 
+	dob DATE,
+	phoneNumber char(11) UNIQUE,
+	pwd VARCHAR(255),
+	gender VARCHAR(10)
+);
+
 CREATE TABLE author (
 	authorId CHAR(16) DEFAULT substr(md5(random()::text), 1, 16) PRIMARY KEY,
 	authorName varchar(255) NOT NULL,
@@ -108,12 +117,15 @@ ALTER TABLE invoice_detail ADD CONSTRAINT invoiceDetail_book FOREIGN KEY (bookId
 ALTER TABLE employee ADD CONSTRAINT CHECK_GENRE_1 CHECK(gender IN ('male', 'female'));
 ALTER TABLE customer ADD CONSTRAINT CHECK_GENRE_2 CHECK(gender IN ('male', 'female'));
 ALTER TABLE author ADD CONSTRAINT CHECK_GENRE_3 CHECK(gender IN ('male', 'female'));
+ALTER TABLE administrator ADD CONSTRAINT CHECK_GENRE_4 CHECK(gender IN ('male', 'female'));
 
 ALTER TABLE employee ADD CONSTRAINT CHECK_AGE_1 CHECK(DOB < CURRENT_DATE);
 ALTER TABLE customer ADD CONSTRAINT CHECK_AGE_2 CHECK(DOB < CURRENT_DATE);
+ALTER TABLE administrator ADD CONSTRAINT CHECK_AGE_3 CHECK(DOB < CURRENT_DATE);
 
 ALTER TABLE employee ADD CONSTRAINT CHECK_PWD_1 CHECK(LENGTH(PWD) > 6);
 ALTER TABLE customer ADD CONSTRAINT CHECK_PWD_2 CHECK(LENGTH(PWD) > 6);
+ALTER TABLE administrator ADD CONSTRAINT CHECK_PWD_3 CHECK(LENGTH(PWD) > 6);
 
 ALTER TABLE sheet ADD CONSTRAINT CHECK_DATE_2 CHECK(importDate <= CURRENT_DATE);
 
@@ -331,6 +343,20 @@ AS $$
 	END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION insertAdministrator(
+    p_adminName VARCHAR(255),
+    p_dob DATE,
+	p_phoneNumber CHAR(11),
+	p_pwd VARCHAR(255),
+	p_gender VARCHAR(10)
+) RETURNS void
+AS $$
+	BEGIN
+		INSERT INTO administrator(adminName, dob, phoneNumber, pwd, gender)
+		VALUES(p_adminName, p_dob, p_phoneNumber, p_pwd, p_gender);
+	END;
+$$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION insertAuthor(
 	p_authorName VARCHAR(255),
@@ -495,6 +521,7 @@ BEGIN
 	PERFORM insertEmp('Brandon Davis', '1989-07-25', '23456789012', 'brandon123', 'male', false);
 	PERFORM insertEmp('Catherine Smith', '1996-03-10', '87654321098', 'catherinePwd', 'male', false);
 	PERFORM insertEmp('Peter Johnson', '1988-01-05', '98765432109', 'peterPass', 'male', true);
+	PERFORM insertEmp('Thuc Doan', '2003-01-01', '01234567890', '1234567', 'male', false);
 
 
 	PERFORM insertCustomer('Sophie Johnson', '1993-08-12', '45678901234', 'sophie123', 'female', false, true);
@@ -508,7 +535,7 @@ BEGIN
 	PERFORM insertCustomer('Madison Smith', '1996-03-10', '87654321098', 'madisonPwd', 'female', false, true);
 	PERFORM insertCustomer('Caleb Johnson', '1988-01-05', '98765432109', 'calebPass', 'female', true, true);
 	PERFORM insertCustomer('Hailey Brown', '1992-06-20', '67000123456', 'hailey123', 'female', false, false);
-
+	PERFORM insertCustomer('Vinh Thai', '2002-06-25', '12345678901', '1234567', 'female', false, true);
 
 	PERFORM insertAuthor('J.K. Rowling', 'female', false);
 	PERFORM insertAuthor('George R.R. Martin', 'male', true);
@@ -519,7 +546,12 @@ BEGIN
 	PERFORM insertAuthor('Dan Brown', 'male', false);
 	PERFORM insertAuthor('Harper Lee', 'male', true);
 	PERFORM insertAuthor('J.D. Salinger', 'female', false);
-	PERFORM insertAuthor( 'Gabriel Garcia Marquez', 'male', true);
+	PERFORM insertAuthor('Gabriel Garcia Marquez', 'male', true);
+
+	PERFORM insertAdministrator('Hau Nguyen', '2000-05-22', '23456789012', '1234567', 'male');
+	PERFORM insertAdministrator('Minh Nguyen', '2003-05-22', '34567890123', '1234567', 'male');
+	PERFORM insertAdministrator('Anh Nguyen', '2002-05-22', '45678901234', '1234567', 'male');
+
 
 	PERFORM insertPublisher('XYZ Books', '123 Oak St, City', false);
 	PERFORM insertPublisher('ABC Publishers', '456 Maple St, Town', true);
