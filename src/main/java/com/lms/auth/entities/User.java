@@ -1,17 +1,24 @@
-package com.lms.auth;
+package com.lms.auth.entities;
 
-public class Employee extends User {
+public class User {
+    protected String Id;
+    protected String Name;
+    protected String dob;
+    protected String phoneNumber;
+    protected String pwd;
+    protected String gender;
+    protected boolean isBlock;
 
-    public Employee() {
-        super();
+    public User() {
+        
     }
 
-    public void setEmpId(String empId) {
-        this.Id = empId;
+    public void setId(String Id) {
+        this.Id = Id;
     }
 
-    public void setEmpName(String empName) {
-        this.Name = empName;
+    public void setName(String Name) {
+        this.Name = Name;
     }
 
     public void setDob(String dob) {
@@ -26,7 +33,7 @@ public class Employee extends User {
         this.pwd = pwd;
     }
 
-    public void setGender(String gender){
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -34,11 +41,11 @@ public class Employee extends User {
         this.isBlock = isBlock;
     }
 
-    public String getEmpId() {
+    public String getId() {
         return Id;
     }
 
-    public String getEmpName() {
+    public String getName() {
         return Name;
     }
 
@@ -58,7 +65,9 @@ public class Employee extends User {
         return gender;
     }
 
-    public boolean getIsBlock() {
+    public boolean isIsBlock() {
         return isBlock;
     }
+    
+    
 }

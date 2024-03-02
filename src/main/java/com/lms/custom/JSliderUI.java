@@ -1,4 +1,4 @@
-package com.lms.auth.ui;
+package com.lms.custom;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

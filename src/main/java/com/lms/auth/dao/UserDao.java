@@ -1,4 +1,4 @@
-package com.lms.auth;
+package com.lms.auth.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,6 +7,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lms.auth.entities.Customer;
+import com.lms.auth.entities.Employee;
+import com.lms.auth.entities.User;
+import com.lms.auth.model.ModelLogin;
 import com.lms.connection.JDBCConnection;
 
 public class UserDao {

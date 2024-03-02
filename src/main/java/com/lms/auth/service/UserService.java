@@ -1,6 +1,10 @@
-package com.lms.auth;
+package com.lms.auth.service;
 
 import java.util.List;
+
+import com.lms.auth.dao.UserDao;
+import com.lms.auth.entities.User;
+import com.lms.auth.model.ModelLogin;
 
 public class UserService {
         private UserDao userDao;
