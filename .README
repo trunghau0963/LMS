@@ -3,3 +3,6 @@ LMS
 
 ## HOW TO USE DOCKER
 - source : https://www.youtube.com/watch?v=qECVC6t_2mU&t=12s
+- docker-compose up
+- docker container ls 
+- docker inspect ____
