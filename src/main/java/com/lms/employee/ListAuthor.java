@@ -8,12 +8,12 @@ package com.lms.employee;
  *
  * @author Van Vinh
  */
-public class ListAuthorComponent extends javax.swing.JFrame {
+public class ListAuthor extends javax.swing.JFrame {
 
     /**
      * Creates new form ListAuthorComponent
      */
-    public ListAuthorComponent() {
+    public ListAuthor() {
         initComponents();
     }
 
@@ -44,16 +44,20 @@ public class ListAuthorComponent extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         jTextField1.setText("jTextField1");
+        jTextField1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jTextField1.setPreferredSize(new java.awt.Dimension(400, 28));
         jPanel3.add(jTextField1, java.awt.BorderLayout.CENTER);
         jTextField1.getAccessibleContext().setAccessibleParent(jPanel2);
 
-        jButton1.setText("jButton1");
+        jButton1.setBackground(new java.awt.Color(217, 217, 217));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/employee/search.png"))); // NOI18N
+        jButton1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jButton1.setPreferredSize(new java.awt.Dimension(50, 23));
         jPanel3.add(jButton1, java.awt.BorderLayout.EAST);
         jButton1.getAccessibleContext().setAccessibleParent(jPanel2);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jComboBox1.setPreferredSize(new java.awt.Dimension(90, 22));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,17 +71,17 @@ public class ListAuthorComponent extends javax.swing.JFrame {
         listAuthor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         listAuthor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Table Cell", "Table Cell", "Table Cell", "Table Cell", ""},
-                {"Table Cell", "Table Cell", "Table Cell", "Table Cell", null},
-                {"Table Cell", "Table Cell", "Table Cell", "Table Cell", null},
-                {"Table Cell", "Table Cell", "Table Cell", "Table Cell", null}
+                {null, "Table Cell", "Table Cell", "Table Cell", "Table Cell", ""},
+                {null, "Table Cell", "Table Cell", "Table Cell", "Table Cell", null},
+                {null, "Table Cell", "Table Cell", "Table Cell", "Table Cell", null},
+                {null, "Table Cell", "Table Cell", "Table Cell", "Table Cell", null}
             },
             new String [] {
-                "UserName", "FullName", "Phone Number", "Password", "Lock/Hide"
+                "Id", "UserName", "FullName", "Phone Number", "Password", "Hide/UnHide"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -110,22 +114,20 @@ public class ListAuthorComponent extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(57, 57, 57)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jButton2)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(92, 92, 92)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(308, 308, 308)
                         .addComponent(jLabel1)))
-                .addGap(104, 168, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,20 +185,21 @@ public class ListAuthorComponent extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ListAuthorComponent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListAuthor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ListAuthorComponent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListAuthor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ListAuthorComponent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListAuthor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ListAuthorComponent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ListAuthor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ListAuthorComponent().setVisible(true);
+                new ListAuthor().setVisible(true);
             }
         });
     }
