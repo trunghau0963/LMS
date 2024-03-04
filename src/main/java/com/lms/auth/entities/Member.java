@@ -1,9 +1,8 @@
 package com.lms.auth.entities;
 
-public class Customer extends User {
-    public boolean isMember;
+public class Member extends User {
 
-    public Customer() {
+    public Member() {
         super();
     }
 
@@ -23,21 +22,11 @@ public class Customer extends User {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
 
     public void setGender(String gender){
         this.gender = gender;
     }
 
-    public void setIsBlock(boolean isBlock) {
-        this.isBlock = isBlock;
-    }
-
-    public void setIsMember(boolean isMember) {
-        this.isMember = isMember;
-    }
 
     public String getId() {
         return Id;
@@ -55,16 +44,10 @@ public class Customer extends User {
         return phoneNumber;
     }
 
-    public String getPwd() {
-        return pwd;
-    }
 
     public String getGender() {
         return gender;
     }
 
-    public boolean getIsMember() {
-        return isMember;
-    }
     
 }

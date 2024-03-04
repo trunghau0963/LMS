@@ -2,9 +2,11 @@ package com.lms.auth.service;
 
 import java.util.List;
 
-import com.lms.auth.dao.UserDao;
+import com.lms.auth.dal.UserDao;
+import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
 import com.lms.auth.model.ModelLogin;
+import com.lms.auth.model.ModelRegister;
 
 public class UserService {
         private UserDao userDao;
@@ -13,16 +15,9 @@ public class UserService {
         userDao = new UserDao();
     }
 
-    public User register(String userName, String phoneNumber, String pw){
-        User newUser = new User();
-        newUser.setName(userName);
-        newUser.setPhoneNumber(phoneNumber);
-        newUser.setPwd(pw);
+    public User register(String userName, String phoneNumber, String pw, String userType){
+        ModelRegister newUser = new ModelRegister(userName, phoneNumber, pw, userType);
         return userDao.register(newUser);
-    }
-
-    public User registerUser(User data){
-        return userDao.register(data);
     }
     
     public User logIn(String phoneNumber, String pwd, String userType) {
@@ -33,7 +28,15 @@ public class UserService {
         return userDao.logIn(data);
     }
 
-    public List<User> getAllEmployees() {
+    public User forgotPassword(String phoneNumber, String userType) {
+        return userDao.forgotPassword(phoneNumber, userType);
+    }
+
+    public List<Employee> getAllEmployees() {
         return userDao.getAllEmployeeList();
+    }
+
+    public User updatePassword(User user, String newPassword) {
+        return userDao.updatePassword(user, newPassword);
     }
 }

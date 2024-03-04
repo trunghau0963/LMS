@@ -11,19 +11,15 @@ import org.jdesktop.animation.timing.TimingTargetAdapter;
 import com.lms.auth.entities.User;
 import com.lms.auth.service.UserService;
 
-import net.miginfocom.swing.MigLayout;
+import raven.toast.Notifications;
 
 public class Login extends javax.swing.JFrame {
 
     UserService userService;
 
-    private MigLayout layout;
     private Animator animatorLogin;
     private Animator animatorBody;
     private boolean signIn;
-
-    private final double addSize = 30;
-    private final double coverSize = 40;
 
     public Login() {
         initComponents();
@@ -96,11 +92,11 @@ public class Login extends javax.swing.JFrame {
         defaultTableModel.addColumn("gender");
         defaultTableModel.addColumn("isBlock");
 
-        List<com.lms.auth.entities.User> users = userService.getAllEmployees();
+        List<com.lms.auth.entities.Employee> users = userService.getAllEmployees();
 
-        for (com.lms.auth.entities.User user : users) {
+        for (com.lms.auth.entities.Employee user : users) {
             defaultTableModel.addRow(new Object[] { user.getId(), user.getName(), user.getDob(), user.getPhoneNumber(),
-                    user.getPwd(), user.getGender(), user.isIsBlock() });
+                    user.getPwd(), user.getGender(), user.getIsBlock() });
         }
     }
 
@@ -185,14 +181,10 @@ public class Login extends javax.swing.JFrame {
 
         selectionRole.setBackground(new java.awt.Color(39, 38, 44));
         selectionRole.setForeground(new java.awt.Color(255, 255, 255));
-        selectionRole.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "Employee", "Customer", " " }));
+        selectionRole.setMaximumRowCount(20);
+        selectionRole.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "Employee" }));
         selectionRole.setSelectedIndex(-1);
         selectionRole.setLabeText("Role");
-        selectionRole.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectionRoleActionPerformed(evt);
-            }
-        });
 
         forgotPwButton.setText("Forgot Password");
         forgotPwButton.addActionListener(new java.awt.event.ActionListener() {
@@ -226,7 +218,7 @@ public class Login extends javax.swing.JFrame {
                                 .addComponent(signUptxt)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(signUpButton)))
-                        .addGap(0, 57, Short.MAX_VALUE))
+                        .addGap(0, 58, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(rememberCheckbok)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -262,12 +254,12 @@ public class Login extends javax.swing.JFrame {
         panelLoginLayout.setHorizontalGroup(
             panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(295, 295, 295))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(300, 300, 300))
         );
         panelLoginLayout.setVerticalGroup(
             panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,13 +336,25 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                       
 
-    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        // TODO add your handling code here:
-    }                                       
+    // private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    //     // TODO add your handling code here:
+    // }                                       
 
-    private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUserActionPerformed
+    // private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
+    //     // TODO add your handling code here:
+    // }//GEN-LAST:event_txtUserActionPerformed
+
+    // private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    //     // TODO add your handling code here:
+    // }                                       
+
+    // private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    //     // TODO add your handling code here:
+    // }                                       
+
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+        //     // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassActionPerformed
 
     private void forgotPwButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_forgotPwButtonActionPerformed
         ForgotPw ForgotPwFrame = new ForgotPw();
@@ -397,7 +401,7 @@ public class Login extends javax.swing.JFrame {
                 action = false;
             }
             if (role.equals("")) {
-                txtPass.setHelperText("Please input password");
+                txtPass.setHelperText("Please select role");
                 if (action) {
                     txtPass.grabFocus();
                 }
@@ -405,24 +409,21 @@ public class Login extends javax.swing.JFrame {
             }
 
             if (action) {
-                System.out.println(user + " " + pass + " " + role);
+                // System.out.println(user + " " + pass + " " + role);
                 User userLogin = userService.logIn(user, pass, role);
                 if (userLogin.getName() != null) {
                     // System.out.print(userLogin.getName());
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS,Notifications.Location.TOP_CENTER, "Login Success\n" + " Welcome " + userLogin.getName());
                     animatorLogin.start();
                     enableLogin(false);
                 } else {
+                    Notifications.getInstance().show(Notifications.Type.ERROR,Notifications.Location.TOP_CENTER, "Login Failed\n" + "User does not exist or password is incorrect");
                     txtUser.setHelperText("User does not exist or password is incorrect");
                     txtUser.grabFocus();
                 }
             }
         }
     }// GEN-LAST:event_jButton1ActionPerformed
-
-    // private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//
-    // GEN-FIRST:event_textField1ActionPerformed
-    // // TODO add your handling code here:
-    // }// GEN-LAST:event_textField1ActionPerformed
 
     private void enableLogin(boolean action) {
         txtUser.setEditable(action);

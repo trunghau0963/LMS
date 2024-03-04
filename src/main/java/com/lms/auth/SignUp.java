@@ -1,11 +1,19 @@
 package com.lms.auth;
 
+import javax.management.Notification;
 
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
+import com.lms.auth.entities.User;
+import com.lms.auth.service.UserService;
+
+import raven.toast.Notifications;
+
 public class SignUp extends javax.swing.JFrame {
+
+    UserService userService;
 
     private Animator animatorLogin;
     private Animator animatorBody;
@@ -13,8 +21,10 @@ public class SignUp extends javax.swing.JFrame {
 
     public SignUp() {
         initComponents();
-        // init();
-        getContentPane().setBackground(new java.awt.Color(39,38,44));
+
+        userService = new UserService();
+
+        getContentPane().setBackground(new java.awt.Color(39, 38, 44));
 
         TimingTarget targetLogin = new TimingTargetAdapter() {
             @Override
@@ -36,7 +46,7 @@ public class SignUp extends javax.swing.JFrame {
                     animatorBody.start();
                 } else {
                     enableLogin(true);
-                    txtUser.grabFocus();
+                    txtUserName.grabFocus();
                 }
             }
         };
@@ -72,6 +82,8 @@ public class SignUp extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -81,11 +93,11 @@ public class SignUp extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtPass = new com.lms.auth.ui.PasswordField();
         signUpButton = new javax.swing.JButton();
-        txtUser = new com.lms.auth.ui.TextField();
+        txtUserName = new com.lms.auth.ui.TextField();
         signUptxt = new javax.swing.JLabel();
         signInChangeButton = new javax.swing.JButton();
-        textField1 = new com.lms.auth.ui.TextField();
-        selection1 = new com.lms.auth.ui.Selection();
+        textPhoneNumber = new com.lms.auth.ui.TextField();
+        selectionRole = new com.lms.auth.ui.Selection();
         header1 = new com.lms.auth.component.Header();
         panelBody = new com.lms.auth.ui.PanelTransparent();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -120,18 +132,13 @@ public class SignUp extends javax.swing.JFrame {
         signUpButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         signUpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                signInButtonActionPerformed(evt);
+                signUpButtonActionPerformed(evt);
             }
         });
 
-        txtUser.setBackground(new java.awt.Color(39, 38, 44));
-        txtUser.setForeground(new java.awt.Color(255, 255, 255));
-        txtUser.setLabelText("Full Name");
-        txtUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUserActionPerformed(evt);
-            }
-        });
+        txtUserName.setBackground(new java.awt.Color(39, 38, 44));
+        txtUserName.setForeground(new java.awt.Color(255, 255, 255));
+        txtUserName.setLabelText("Full Name");
 
         signUptxt.setForeground(new java.awt.Color(255, 255, 255));
         signUptxt.setText("Already have account ?");
@@ -143,16 +150,17 @@ public class SignUp extends javax.swing.JFrame {
             }
         });
 
-        textField1.setBackground(new java.awt.Color(39, 38, 44));
-        textField1.setForeground(new java.awt.Color(255, 255, 255));
-        textField1.setToolTipText("");
-        textField1.setLabelText("Phone Number");
+        textPhoneNumber.setBackground(new java.awt.Color(39, 38, 44));
+        textPhoneNumber.setForeground(new java.awt.Color(255, 255, 255));
+        textPhoneNumber.setToolTipText("");
+        textPhoneNumber.setLabelText("Phone Number");
 
-        selection1.setBackground(new java.awt.Color(39, 38, 44));
-        selection1.setForeground(new java.awt.Color(255, 255, 255));
-        selection1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "Employee", "Customer", " " }));
-        selection1.setSelectedIndex(-1);
-        selection1.setLabeText("Role");
+        selectionRole.setBackground(new java.awt.Color(39, 38, 44));
+        selectionRole.setForeground(new java.awt.Color(255, 255, 255));
+        selectionRole.setMaximumRowCount(20);
+        selectionRole.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "Employee" }));
+        selectionRole.setSelectedIndex(-1);
+        selectionRole.setLabeText("Role");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -160,15 +168,15 @@ public class SignUp extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(signUpButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(selection1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(txtUserName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(textPhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(selectionRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 45, Short.MAX_VALUE)
                 .addComponent(signUptxt)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(signInChangeButton)
@@ -180,13 +188,13 @@ public class SignUp extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(textPhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selection1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(selectionRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addComponent(signUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -200,21 +208,21 @@ public class SignUp extends javax.swing.JFrame {
         panelLogin.setLayout(panelLoginLayout);
         panelLoginLayout.setHorizontalGroup(
             panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLoginLayout.createSequentialGroup()
-                .addGap(302, 302, 302)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(panelLoginLayout.createSequentialGroup()
+                .addGap(300, 300, 300)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLoginLayout.setVerticalGroup(
             panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLoginLayout.createSequentialGroup()
                 .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addGap(21, 21, 21)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         background1.add(panelLogin, "card2");
@@ -279,39 +287,45 @@ public class SignUp extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtPassActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPassActionPerformed
+    }// GEN-LAST:event_txtPassActionPerformed
 
-    private void signOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signOutButtonActionPerformed
-         signIn = false;
+    private void signOutButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_signOutButtonActionPerformed
+        signIn = false;
         clearLogin();
-        animatorBody.start();        // TODO add your handling code here:
-    }//GEN-LAST:event_signOutButtonActionPerformed
+        animatorBody.start(); // TODO add your handling code here:
+    }// GEN-LAST:event_signOutButtonActionPerformed
 
-    private void signInChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInChangeButtonActionPerformed
+    private void signInChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_signInChangeButtonActionPerformed
         Login LoginFrame = new Login();
         LoginFrame.setVisible(true);
         LoginFrame.pack();
         LoginFrame.setLocationRelativeTo(null);
         this.dispose();
-    }//GEN-LAST:event_signInChangeButtonActionPerformed
+    }// GEN-LAST:event_signInChangeButtonActionPerformed
 
-    private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUserActionPerformed
-                                    
-
-        
-    private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+    private void signUpButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         if (!animatorLogin.isRunning()) {
             signIn = true;
-            String user = txtUser.getText().trim();
+            String userName = txtUserName.getText().trim();
+            String userPhoneNumber = textPhoneNumber.getText().trim();
             String pass = String.valueOf(txtPass.getPassword());
+            String role = null;
+            if (selectionRole.getSelectedItem() != null) {
+                role = selectionRole.getSelectedItem().toString();
+            }
             boolean action = true;
-            if (user.equals("")) {
-                txtUser.setHelperText("Please input user name");
-                txtUser.grabFocus();
+            if (userName.equals("")) {
+                txtUserName.setHelperText("Please input user name");
+                txtUserName.grabFocus();
+                action = false;
+            }
+            if (userPhoneNumber.equals("")) {
+                textPhoneNumber.setHelperText("Please input phone number");
+                if (action) {
+                    textPhoneNumber.grabFocus();
+                }
                 action = false;
             }
             if (pass.equals("")) {
@@ -321,41 +335,50 @@ public class SignUp extends javax.swing.JFrame {
                 }
                 action = false;
             }
+            if (role.equals("")) {
+                txtPass.setHelperText("Please select role");
+                if (action) {
+                    txtPass.grabFocus();
+                }
+                action = false;
+            }
             if (action) {
-                animatorLogin.start();
-                enableLogin(false);
+                User userRegister = userService.register(userName, userPhoneNumber, pass, role);
+                if (userRegister != null) {
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, "User Register Successfully");
+                    System.out.println("User Register: " + userRegister.getPhoneNumber());
+                    Login LoginFrame = new Login();
+                    LoginFrame.setVisible(true);
+                    LoginFrame.pack();
+                    LoginFrame.setLocationRelativeTo(null);
+                    this.dispose();
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.ERROR,
+                            "User does not exist or password is incorrect");
+                    clearLogin();
+                    txtUserName.setHelperText("User does not exist or password is incorrect");
+                    txtUserName.grabFocus();
+                }
             }
         }
     }// GEN-LAST:event_jButton1ActionPerformed
 
-    private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_textField1ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_textField1ActionPerformed
-
-    
     private void enableLogin(boolean action) {
-        txtUser.setEditable(action);
+        txtUserName.setEditable(action);
         txtPass.setEditable(action);
         signUpButton.setEnabled(action);
     }
 
     public void clearLogin() {
-        txtUser.setText("");
+        txtUserName.setText("");
+        textPhoneNumber.setText("");
         txtPass.setText("");
-        txtUser.setHelperText("");
+        textPhoneNumber.setHelperText("");
+        txtUserName.setHelperText("");
         txtPass.setHelperText("");
     }
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -372,9 +395,7 @@ public class SignUp extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(SignUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        // </editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new SignUp().setVisible(true);
@@ -391,13 +412,13 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private com.lms.auth.ui.PanelTransparent panelBody;
     private javax.swing.JPanel panelLogin;
-    private com.lms.auth.ui.Selection selection1;
+    private com.lms.auth.ui.Selection selectionRole;
     private javax.swing.JButton signInChangeButton;
     private javax.swing.JButton signOutButton;
     private javax.swing.JButton signUpButton;
     private javax.swing.JLabel signUptxt;
-    private com.lms.auth.ui.TextField textField1;
+    private com.lms.auth.ui.TextField textPhoneNumber;
     private com.lms.auth.ui.PasswordField txtPass;
-    private com.lms.auth.ui.TextField txtUser;
+    private com.lms.auth.ui.TextField txtUserName;
     // End of variables declaration//GEN-END:variables
 }

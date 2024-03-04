@@ -1,22 +1,18 @@
 package com.lms.auth.entities;
 
-public class User {
-    protected String Id;
-    protected String Name;
-    protected String dob = null;
-    protected String phoneNumber;
-    protected String gender = null;
+public class Admin extends User{
+    private String pwd;
 
-    public User() {
-
+    public Admin() {
+        super();
     }
 
-    public void setId(String Id) {
-        this.Id = Id;
+    public void setAdminId(String adminId) {
+        this.Id = adminId;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public void setAdminName(String adminName) {
+        this.Name = adminName;
     }
 
     public void setDob(String dob) {
@@ -27,17 +23,19 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
 
-    public void setGender(String gender) {
+    public void setGender(String gender){
         this.gender = gender;
     }
 
-
-    public String getId() {
+    public String getAdminId() {
         return Id;
     }
 
-    public String getName() {
+    public String getAdminName() {
         return Name;
     }
 
@@ -49,9 +47,11 @@ public class User {
         return phoneNumber;
     }
 
+    public String getPwd() {
+        return pwd;
+    }
 
     public String getGender() {
         return gender;
     }
-
 }
