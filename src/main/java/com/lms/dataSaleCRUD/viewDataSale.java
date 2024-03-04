@@ -44,10 +44,10 @@ public class viewDataSale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        button1 = new com.lms.custom.Button();
-        button2 = new com.lms.custom.Button();
-        button3 = new com.lms.custom.Button();
-        button4 = new com.lms.custom.Button();
+        btn1 = new com.lms.custom.Button();
+        btn2 = new com.lms.custom.Button();
+        btn3 = new com.lms.custom.Button();
+        btn4 = new com.lms.custom.Button();
         chart2 = new com.raven.chart.Chart();
         chart4 = new com.raven.chart.Chart();
         chart1 = new com.raven.chart.Chart();
@@ -61,26 +61,41 @@ public class viewDataSale extends javax.swing.JFrame {
             }
         });
 
-        button1.setBackground(new java.awt.Color(60, 58, 72));
-        button1.setForeground(new java.awt.Color(255, 255, 255));
-        button1.setLabel("View data sale - Book");
-
-        button2.setBackground(new java.awt.Color(60, 58, 72));
-        button2.setForeground(new java.awt.Color(255, 255, 255));
-        button2.setLabel("View data sale - Employee");
-
-        button3.setBackground(new java.awt.Color(60, 58, 72));
-        button3.setForeground(new java.awt.Color(255, 255, 255));
-        button3.setLabel("View data sale - Category");
-        button3.addActionListener(new java.awt.event.ActionListener() {
+        btn1.setBackground(new java.awt.Color(60, 58, 72));
+        btn1.setForeground(new java.awt.Color(255, 255, 255));
+        btn1.setLabel("View data sale - Book");
+        btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button3ActionPerformed(evt);
+                btn1ActionPerformed(evt);
             }
         });
 
-        button4.setBackground(new java.awt.Color(60, 58, 72));
-        button4.setForeground(new java.awt.Color(255, 255, 255));
-        button4.setLabel("View data sale - Customer");
+        btn2.setBackground(new java.awt.Color(60, 58, 72));
+        btn2.setForeground(new java.awt.Color(255, 255, 255));
+        btn2.setLabel("View data sale - Employee");
+        btn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn2ActionPerformed(evt);
+            }
+        });
+
+        btn3.setBackground(new java.awt.Color(60, 58, 72));
+        btn3.setForeground(new java.awt.Color(255, 255, 255));
+        btn3.setLabel("View data sale - Category");
+        btn3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn3ActionPerformed(evt);
+            }
+        });
+
+        btn4.setBackground(new java.awt.Color(60, 58, 72));
+        btn4.setForeground(new java.awt.Color(255, 255, 255));
+        btn4.setLabel("View data sale - Customer");
+        btn4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,8 +106,8 @@ public class viewDataSale extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(button1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-                            .addComponent(button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                            .addComponent(btn3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(chart1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -101,8 +116,8 @@ public class viewDataSale extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chart4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chart2, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn2, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
@@ -110,16 +125,16 @@ public class viewDataSale extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chart2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chart1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chart4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -137,9 +152,37 @@ public class viewDataSale extends javax.swing.JFrame {
         chart4.start();
     }//GEN-LAST:event_formWindowOpened
 
-    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_button3ActionPerformed
+    private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
+        viewDataSaleCategory viewCategory = new viewDataSaleCategory();
+        viewCategory.setVisible(true);
+        viewCategory.pack();
+        viewCategory.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btn3ActionPerformed
+
+    private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
+        viewDataSaleBook viewBook = new viewDataSaleBook();
+        viewBook.setVisible(true);
+        viewBook.pack();
+        viewBook.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btn1ActionPerformed
+
+    private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
+        viewDataSaleEmployee viewEmployee = new viewDataSaleEmployee();
+        viewEmployee.setVisible(true);
+        viewEmployee.pack();
+        viewEmployee.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btn2ActionPerformed
+
+    private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
+        viewDataSaleCustomer viewCustomer = new viewDataSaleCustomer();
+        viewCustomer.setVisible(true);
+        viewCustomer.pack();
+        viewCustomer.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_btn4ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -174,10 +217,10 @@ public class viewDataSale extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.lms.custom.Button button1;
-    private com.lms.custom.Button button2;
-    private com.lms.custom.Button button3;
-    private com.lms.custom.Button button4;
+    private com.lms.custom.Button btn1;
+    private com.lms.custom.Button btn2;
+    private com.lms.custom.Button btn3;
+    private com.lms.custom.Button btn4;
     private com.raven.chart.Chart chart1;
     private com.raven.chart.Chart chart2;
     private com.raven.chart.Chart chart3;

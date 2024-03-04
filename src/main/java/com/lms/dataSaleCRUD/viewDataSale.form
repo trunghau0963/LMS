@@ -34,8 +34,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="button1" alignment="0" pref="305" max="32767" attributes="0"/>
-                          <Component id="button3" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btn1" alignment="0" pref="305" max="32767" attributes="0"/>
+                          <Component id="btn3" alignment="0" max="32767" attributes="0"/>
                           <Component id="chart1" alignment="1" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="82" max="32767" attributes="0"/>
@@ -48,8 +48,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="chart4" min="-2" pref="305" max="-2" attributes="0"/>
                   <Component id="chart2" min="-2" pref="305" max="-2" attributes="0"/>
-                  <Component id="button2" min="-2" pref="305" max="-2" attributes="0"/>
-                  <Component id="button4" min="-2" pref="305" max="-2" attributes="0"/>
+                  <Component id="btn2" min="-2" pref="305" max="-2" attributes="0"/>
+                  <Component id="btn4" min="-2" pref="305" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
           </Group>
@@ -60,8 +60,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="button1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -70,8 +70,8 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="button3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button4" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn4" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -84,7 +84,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.lms.custom.Button" name="button1">
+    <Component class="com.lms.custom.Button" name="btn1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -94,8 +94,11 @@
         </Property>
         <Property name="label" type="java.lang.String" value="View data sale - Book"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn1ActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="com.lms.custom.Button" name="button2">
+    <Component class="com.lms.custom.Button" name="btn2">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -105,8 +108,11 @@
         </Property>
         <Property name="label" type="java.lang.String" value="View data sale - Employee"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn2ActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="com.lms.custom.Button" name="button3">
+    <Component class="com.lms.custom.Button" name="btn3">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -117,10 +123,10 @@
         <Property name="label" type="java.lang.String" value="View data sale - Category"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button3ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn3ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.lms.custom.Button" name="button4">
+    <Component class="com.lms.custom.Button" name="btn4">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -130,6 +136,9 @@
         </Property>
         <Property name="label" type="java.lang.String" value="View data sale - Customer"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn4ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="com.raven.chart.Chart" name="chart2">
     </Component>
