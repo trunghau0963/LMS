@@ -7,6 +7,8 @@ package com.lms.employee;
 import javax.swing.table.TableCellRenderer;
 
 import com.lms.employee.SwitchButton.SwitchButton;
+import com.lms.employee.SwitchButton.SwitchButtonEditor;
+import com.lms.employee.SwitchButton.SwitchButtonRenderer;
 
 /**
  *
@@ -94,7 +96,7 @@ public class ListPublisher extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, com.lms.employee.SwitchButton.SwitchButton.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -108,9 +110,9 @@ public class ListPublisher extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        // listAuthor.getColumnModel().getColumn(4).setCellRenderer(new TableCellRenderer() {
-            
-        // });
+
+        listAuthor.setDefaultRenderer(SwitchButton.class, new SwitchButtonRenderer());
+        listAuthor.setDefaultEditor(SwitchButton.class, new SwitchButtonEditor());
         listAuthor.setGridColor(new java.awt.Color(0, 0, 0));
         listAuthor.setShowGrid(true);
         jScrollPane1.setViewportView(listAuthor);

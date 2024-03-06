@@ -14,6 +14,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -27,16 +29,22 @@ public class SwitchButton extends Component {
         this.selected = selected;
         timer.start();
         runEvent();
+        repaint();
     }
 
     private Timer timer;
     private float location;
     private boolean selected;
     private boolean mouseOver;
-    private float speed = 0.1f;
+    private float speed = 2f;
+    private boolean value = false;
     private List<EventSwitchSelected> events;
+    private List<ActionListener> actionListeners;
 
     public SwitchButton() {
+        actionListeners = new ArrayList<>(); 
+        selected = false;
+
         setBackground(new Color(0, 174, 255));
         setPreferredSize(new Dimension(50, 25));
         setForeground(Color.WHITE);
@@ -67,9 +75,16 @@ public class SwitchButton extends Component {
                         repaint();
                     }
                 }
+                setValue(!value);
             }
         });
         addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setSelected(!isSelected());
+                fireActionPerformed(); // Notify action listeners
+            }
+            
             @Override
             public void mouseEntered(MouseEvent me) {
                 mouseOver = true;
@@ -134,4 +149,34 @@ public class SwitchButton extends Component {
     public void addEventSelected(EventSwitchSelected event) {
         events.add(event);
     }
+
+    public void addActionListener(ActionListener listener) {
+        actionListeners.add(listener);
+    }
+
+    public void removeActionListener(ActionListener listener) {
+        actionListeners.remove(listener);
+    }
+
+    public void setValue(boolean newVal){
+        this.value = newVal;
+    }
+
+    public boolean getValue(){
+        return this.value;
+    }
+
+    protected void fireActionPerformed() {
+        ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "SwitchStateChanged");
+        for (ActionListener listener : actionListeners) {
+            listener.actionPerformed(event);
+        }
+    }
+
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+            int row, int column) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getTableCellRendererComponent'");
+    }
+
 }
