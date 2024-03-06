@@ -2,7 +2,7 @@ package com.lms.dataSaleCRUD;
 
 import java.awt.Color;
 
-import com.raven.chart.ModelChart;
+import com.lms.dataSaleCRUD.component.chart.ModelChart;
 
 public class viewDataSale extends javax.swing.JFrame {
     public viewDataSale() {
@@ -44,14 +44,14 @@ public class viewDataSale extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btn1 = new com.lms.custom.Button();
-        btn2 = new com.lms.custom.Button();
-        btn3 = new com.lms.custom.Button();
-        btn4 = new com.lms.custom.Button();
-        chart2 = new com.raven.chart.Chart();
-        chart4 = new com.raven.chart.Chart();
-        chart1 = new com.raven.chart.Chart();
-        chart3 = new com.raven.chart.Chart();
+        btn1 = new com.lms.dataSaleCRUD.ui.Button();
+        btn2 = new com.lms.dataSaleCRUD.ui.Button();
+        btn3 = new com.lms.dataSaleCRUD.ui.Button();
+        btn4 = new com.lms.dataSaleCRUD.ui.Button();
+        chart2 = new com.lms.dataSaleCRUD.component.chart.Chart();
+        chart4 = new com.lms.dataSaleCRUD.component.chart.Chart();
+        chart1 = new com.lms.dataSaleCRUD.component.chart.Chart();
+        chart3 = new com.lms.dataSaleCRUD.component.chart.Chart();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(900, 630));
@@ -217,13 +217,13 @@ public class viewDataSale extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.lms.custom.Button btn1;
-    private com.lms.custom.Button btn2;
-    private com.lms.custom.Button btn3;
-    private com.lms.custom.Button btn4;
-    private com.raven.chart.Chart chart1;
-    private com.raven.chart.Chart chart2;
-    private com.raven.chart.Chart chart3;
-    private com.raven.chart.Chart chart4;
+    private com.lms.dataSaleCRUD.ui.Button btn1;
+    private com.lms.dataSaleCRUD.ui.Button btn2;
+    private com.lms.dataSaleCRUD.ui.Button btn3;
+    private com.lms.dataSaleCRUD.ui.Button btn4;
+    private com.lms.dataSaleCRUD.component.chart.Chart chart1;
+    private com.lms.dataSaleCRUD.component.chart.Chart chart2;
+    private com.lms.dataSaleCRUD.component.chart.Chart chart3;
+    private com.lms.dataSaleCRUD.component.chart.Chart chart4;
     // End of variables declaration//GEN-END:variables
 }

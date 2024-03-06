@@ -1,4 +1,4 @@
-package com.raven.chart;
+package com.lms.dataSaleCRUD.component.chart;
 
 import java.awt.Color;
 

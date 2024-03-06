@@ -1,4 +1,4 @@
-package com.raven.chart;
+package com.lms.dataSaleCRUD.component.chart;
 
 public class ModelChart {
 

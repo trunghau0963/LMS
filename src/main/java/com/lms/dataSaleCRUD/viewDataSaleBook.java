@@ -36,7 +36,7 @@ public class viewDataSaleBook extends javax.swing.JFrame {
         jToggleButton1 = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        button1 = new com.lms.custom.Button();
+        button1 = new com.lms.dataSaleCRUD.ui.Button();
         jTextField1 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         label1 = new java.awt.Label();
@@ -169,7 +169,7 @@ public class viewDataSaleBook extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.lms.custom.Button button1;
+    private com.lms.dataSaleCRUD.ui.Button button1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;

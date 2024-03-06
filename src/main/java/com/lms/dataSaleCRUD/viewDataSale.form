@@ -84,7 +84,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="com.lms.custom.Button" name="btn1">
+    <Component class="com.lms.dataSaleCRUD.ui.Button" name="btn1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -98,7 +98,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn1ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.lms.custom.Button" name="btn2">
+    <Component class="com.lms.dataSaleCRUD.ui.Button" name="btn2">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -112,7 +112,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn2ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.lms.custom.Button" name="btn3">
+    <Component class="com.lms.dataSaleCRUD.ui.Button" name="btn3">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -126,7 +126,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn3ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.lms.custom.Button" name="btn4">
+    <Component class="com.lms.dataSaleCRUD.ui.Button" name="btn4">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="48" green="3a" red="3c" type="rgb"/>
@@ -140,13 +140,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn4ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.raven.chart.Chart" name="chart2">
+    <Component class="com.lms.dataSaleCRUD.component.chart.Chart" name="chart2">
     </Component>
-    <Component class="com.raven.chart.Chart" name="chart4">
+    <Component class="com.lms.dataSaleCRUD.component.chart.Chart" name="chart4">
     </Component>
-    <Component class="com.raven.chart.Chart" name="chart1">
+    <Component class="com.lms.dataSaleCRUD.component.chart.Chart" name="chart1">
     </Component>
-    <Component class="com.raven.chart.Chart" name="chart3">
+    <Component class="com.lms.dataSaleCRUD.component.chart.Chart" name="chart3">
     </Component>
   </SubComponents>
 </Form>

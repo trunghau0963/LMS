@@ -90,7 +90,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="com.lms.custom.Button" name="button1">
+    <Component class="com.lms.dataSaleCRUD.ui.Button" name="button1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="cc" green="c8" red="c7" type="rgb"/>

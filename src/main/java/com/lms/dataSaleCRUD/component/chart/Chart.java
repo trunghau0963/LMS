@@ -1,4 +1,4 @@
-package com.raven.chart;
+package com.lms.dataSaleCRUD.component.chart;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,9 +8,9 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-import com.raven.chart.blankchart.BlankPlotChart;
-import com.raven.chart.blankchart.BlankPlotChatRender;
-import com.raven.chart.blankchart.SeriesSize;
+import com.lms.dataSaleCRUD.component.chart.blankchart.BlankPlotChart;
+import com.lms.dataSaleCRUD.component.chart.blankchart.BlankPlotChatRender;
+import com.lms.dataSaleCRUD.component.chart.blankchart.SeriesSize;
 
 public class Chart extends javax.swing.JPanel {
 
@@ -82,7 +82,7 @@ public class Chart extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        blankPlotChart = new com.raven.chart.blankchart.BlankPlotChart();
+        blankPlotChart = new com.lms.dataSaleCRUD.component.chart.blankchart.BlankPlotChart();
         panelLegend = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -113,7 +113,7 @@ public class Chart extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.raven.chart.blankchart.BlankPlotChart blankPlotChart;
+    private com.lms.dataSaleCRUD.component.chart.blankchart.BlankPlotChart blankPlotChart;
     private javax.swing.JPanel panelLegend;
     // End of variables declaration//GEN-END:variables
 }

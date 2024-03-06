@@ -1,4 +1,4 @@
-package com.raven.chart.blankchart;
+package com.lms.dataSaleCRUD.component.chart.blankchart;
 
 public class NiceScale {
 
