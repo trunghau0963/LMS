@@ -21,10 +21,10 @@ public class JDBCConnection {
             Class.forName("org.postgresql.Driver");
 
             // Configure connection parameters
-            String url = "jdbc:postgresql://localhost:5432/lms"; // Change to your Docker container's IP and database
+            String url = "jdbc:postgresql://localhost:5432/LMS"; // Change to your Docker container's IP and database
                                                                   // name
-            String username = "root"; // Change to your Docker container's username
-            String password = "root"; // Change to your Docker container's password
+            String username = "postgres"; // Change to your Docker container's username
+            String password = "myfamily270103"; // Change to your Docker container's password
 
             // Establish the connection
             connection = DriverManager.getConnection(url, username, password);
