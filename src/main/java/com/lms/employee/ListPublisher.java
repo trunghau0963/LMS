@@ -3,12 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.lms.employee;
-
-import javax.swing.table.TableCellRenderer;
-
-import com.lms.employee.SwitchButton.SwitchButton;
-import com.lms.employee.SwitchButton.SwitchButtonEditor;
-import com.lms.employee.SwitchButton.SwitchButtonRenderer;
+import com.lms.employee.SwitchButton.ToggleEditor;
+import com.lms.employee.SwitchButton.ToggleRenderer;
 
 /**
  *
@@ -38,7 +34,7 @@ public class ListPublisher extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listAuthor = new javax.swing.JTable();
+        listPublisher = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -82,9 +78,9 @@ public class ListPublisher extends javax.swing.JFrame {
         jPanel3.add(jComboBox1, java.awt.BorderLayout.WEST);
         jComboBox1.getAccessibleContext().setAccessibleParent(jPanel2);
 
-        listAuthor.setBackground(new java.awt.Color(231, 226, 226));
-        listAuthor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        listAuthor.setModel(new javax.swing.table.DefaultTableModel(
+        listPublisher.setBackground(new java.awt.Color(231, 226, 226));
+        listPublisher.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        listPublisher.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -96,7 +92,7 @@ public class ListPublisher extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, com.lms.employee.SwitchButton.SwitchButton.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, javax.swing.JToggleButton.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -111,14 +107,14 @@ public class ListPublisher extends javax.swing.JFrame {
             }
         });
 
-        listAuthor.setDefaultRenderer(SwitchButton.class, new SwitchButtonRenderer());
-        listAuthor.setDefaultEditor(SwitchButton.class, new SwitchButtonEditor());
-        listAuthor.setGridColor(new java.awt.Color(0, 0, 0));
-        listAuthor.setShowGrid(true);
-        jScrollPane1.setViewportView(listAuthor);
-        listAuthor.getAccessibleContext().setAccessibleName("");
-        listAuthor.getAccessibleContext().setAccessibleDescription("");
-        listAuthor.getAccessibleContext().setAccessibleParent(jPanel2);
+        listPublisher.getColumnModel().getColumn(3).setCellRenderer(new ToggleRenderer());
+        listPublisher.getColumnModel().getColumn(3).setCellEditor(new ToggleEditor());
+        listPublisher.setGridColor(new java.awt.Color(0, 0, 0));
+        listPublisher.setShowGrid(true);
+        jScrollPane1.setViewportView(listPublisher);
+        listPublisher.getAccessibleContext().setAccessibleName("");
+        listPublisher.getAccessibleContext().setAccessibleDescription("");
+        listPublisher.getAccessibleContext().setAccessibleParent(jPanel2);
 
         jButton2.setBackground(new java.awt.Color(51, 51, 51));
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -245,6 +241,6 @@ public class ListPublisher extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable listAuthor;
+    private javax.swing.JTable listPublisher;
     // End of variables declaration//GEN-END:variables
 }

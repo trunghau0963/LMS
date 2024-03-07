@@ -4,6 +4,9 @@
  */
 package com.lms.employee;
 
+import com.lms.employee.SwitchButton.ToggleEditor;
+import com.lms.employee.SwitchButton.ToggleRenderer;
+
 /**
  *
  * @author Van Vinh
@@ -94,6 +97,8 @@ public class ListAuthor extends javax.swing.JFrame {
         listAuthor.getAccessibleContext().setAccessibleName("");
         listAuthor.getAccessibleContext().setAccessibleDescription("");
         listAuthor.getAccessibleContext().setAccessibleParent(jPanel2);
+        listAuthor.getColumnModel().getColumn(5).setCellRenderer(new ToggleRenderer());
+        listAuthor.getColumnModel().getColumn(5).setCellEditor(new ToggleEditor());
 
         jButton2.setBackground(new java.awt.Color(51, 51, 51));
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
