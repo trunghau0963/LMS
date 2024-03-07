@@ -40,15 +40,44 @@
             <artifactId>timingframework</artifactId>
             <version>1.0</version>
         </dependency>
-        
 
-        <!-- https://mvnrepository.com/artifact/org.jdesktop/swing-worker -->
+        <dependency>
+            <groupId>raven.toast</groupId>
+            <artifactId>swing-toast-notifications</artifactId>
+            <version>1.0.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/library/swing-toast-notifications-1.0.1.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>org.jdesktop</groupId>
             <artifactId>swing-worker</artifactId>
             <version>1.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-extras</artifactId>
+            <version>3.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-fonts-roboto</artifactId>
+            <version>2.137</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
