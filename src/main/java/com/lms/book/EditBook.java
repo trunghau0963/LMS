@@ -57,7 +57,6 @@ public class EditBook extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         label1.setText("Edit a Book");
 
-        jTextField2.setText("jTextField2");
         jTextField2.setPreferredSize(new java.awt.Dimension(115, 36));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -71,7 +70,6 @@ public class EditBook extends javax.swing.JFrame {
             }
         });
 
-        jTextField3.setText("jTextField3");
         jTextField3.setToolTipText("");
         jTextField3.setName(""); // NOI18N
         jTextField3.setPreferredSize(new java.awt.Dimension(259, 36));
@@ -91,7 +89,6 @@ public class EditBook extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 112, 8));
         jButton3.setText("Go Back");
-        jButton3.setActionCommand("Go Back");
         jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 112, 8)));
         jButton3.setPreferredSize(new java.awt.Dimension(92, 28));
 
@@ -211,7 +208,6 @@ public class EditBook extends javax.swing.JFrame {
                 .addGap(68, 68, 68))
         );
 
-        jButton3.getAccessibleContext().setAccessibleName("Go Back");
         jButton3.getAccessibleContext().setAccessibleDescription("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
