@@ -4,6 +4,11 @@
  */
 package com.lms.dataSaleCRUD;
 
+import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
+import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
+import java.awt.Color;
+import java.awt.Font;
+
 /**
  *
  * @author PC
@@ -15,6 +20,13 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
      */
     public viewDataSaleCategory() {
         initComponents();
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        table.getTableHeader().setOpaque(false);
+        table.getTableHeader().setBackground(new Color(199, 200, 204));
+        table.getTableHeader().setForeground(new Color(0, 0, 0));
+        
+        table.getColumnModel().getColumn(4).setCellRenderer(new ToggleRenderer());
+        table.getColumnModel().getColumn(4).setCellEditor(new ToggleEditor());
     }
 
     /**
