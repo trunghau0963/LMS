@@ -4,9 +4,11 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
+import com.lms.auth.dal.AuthDao;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
+import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.UserService;
 
 import net.miginfocom.swing.MigLayout;
@@ -20,6 +22,7 @@ public class ForgotPw extends javax.swing.JFrame {
     private boolean searchAccount;
     private String role;
     UserService userService;
+    AuthDao authDao;
     private User user;
 
     private final double addSize = 30;
@@ -27,7 +30,8 @@ public class ForgotPw extends javax.swing.JFrame {
 
     public ForgotPw() {
         initComponents();
-        userService = new UserService();
+        authDao = new AuthRepo();
+        userService = new UserService(authDao);
         // init();
         getContentPane().setBackground(new java.awt.Color(39, 38, 44));
 

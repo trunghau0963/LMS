@@ -2,6 +2,7 @@ package com.lms.auth.service;
 
 import java.util.List;
 
+import com.lms.auth.dal.AuthDao;
 import com.lms.auth.dal.UserDao;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
@@ -9,10 +10,10 @@ import com.lms.auth.model.ModelLogin;
 import com.lms.auth.model.ModelRegister;
 
 public class UserService {
-        private UserDao userDao;
+    private AuthDao userDao;
 
-    public UserService() {
-        userDao = new UserDao();
+    public UserService(AuthDao userDao) {
+        this.userDao = userDao;
     }
 
     public User register(String userName, String phoneNumber, String pw, String userType){
