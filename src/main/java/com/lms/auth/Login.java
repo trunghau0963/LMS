@@ -10,7 +10,12 @@ import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 import com.lms.auth.entities.User;
 import com.lms.auth.service.UserService;
-
+import com.lms.dashboard.main.DashboardAdmin;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.Timer;
 import raven.toast.Notifications;
 
 public class Login extends javax.swing.JFrame {
@@ -79,25 +84,6 @@ public class Login extends javax.swing.JFrame {
         animatorBody = new Animator(500, targetBody);
         animatorLogin.setResolution(0);
         animatorBody.setResolution(0);
-
-        DefaultTableModel defaultTableModel = new DefaultTableModel();
-
-        userTable.setModel(defaultTableModel);
-
-        defaultTableModel.addColumn("Emp ID");
-        defaultTableModel.addColumn("Emp Name");
-        defaultTableModel.addColumn("DOB");
-        defaultTableModel.addColumn("Phone Number");
-        defaultTableModel.addColumn("Password");
-        defaultTableModel.addColumn("gender");
-        defaultTableModel.addColumn("isBlock");
-
-        List<com.lms.auth.entities.Employee> users = userService.getAllEmployees();
-
-        for (com.lms.auth.entities.Employee user : users) {
-            defaultTableModel.addRow(new Object[] { user.getId(), user.getName(), user.getDob(), user.getPhoneNumber(),
-                    user.getPwd(), user.getGender(), user.getIsBlock() });
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -107,7 +93,8 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         background1 = new com.lms.auth.ui.Background();
@@ -124,9 +111,7 @@ public class Login extends javax.swing.JFrame {
         rememberCheckbok = new javax.swing.JCheckBox();
         header1 = new com.lms.auth.component.Header();
         panelBody = new com.lms.auth.ui.PanelTransparent();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        userTable = new javax.swing.JTable();
-        signOutButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -202,159 +187,151 @@ public class Login extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(signInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(selectionRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(signUptxt)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(signUpButton)))
-                        .addGap(0, 58, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(rememberCheckbok)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(forgotPwButton)))
-                .addContainerGap())
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(signInButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(selectionRole, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGroup(jPanel1Layout
+                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                                .addGap(32, 32, 32)
+                                                                .addComponent(signUptxt)
+                                                                .addPreferredGap(
+                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(signUpButton)))
+                                                .addGap(0, 58, Short.MAX_VALUE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(rememberCheckbok)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(forgotPwButton)))
+                                .addContainerGap()));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selectionRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(forgotPwButton)
-                    .addComponent(rememberCheckbok))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addComponent(signInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(signUptxt)
-                    .addComponent(signUpButton))
-                .addGap(22, 22, 22))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(selectionRole, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(forgotPwButton)
+                                        .addComponent(rememberCheckbok))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63,
+                                        Short.MAX_VALUE)
+                                .addComponent(signInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(signUptxt)
+                                        .addComponent(signUpButton))
+                                .addGap(22, 22, 22)));
 
         javax.swing.GroupLayout panelLoginLayout = new javax.swing.GroupLayout(panelLogin);
         panelLogin.setLayout(panelLoginLayout);
         panelLoginLayout.setHorizontalGroup(
-            panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(300, 300, 300))
-        );
+                panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(300, 300, 300)));
         panelLoginLayout.setVerticalGroup(
-            panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLoginLayout.createSequentialGroup()
-                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(123, Short.MAX_VALUE))
-        );
+                panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelLoginLayout.createSequentialGroup()
+                                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(24, 24, 24)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(92, Short.MAX_VALUE)));
 
         background1.add(panelLogin, "card2");
 
-        userTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(userTable);
-
-        signOutButton.setText("Sign Out");
-        signOutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                signOutButtonActionPerformed(evt);
-            }
-        });
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel2.setText("Loading ...");
 
         javax.swing.GroupLayout panelBodyLayout = new javax.swing.GroupLayout(panelBody);
         panelBody.setLayout(panelBodyLayout);
         panelBodyLayout.setHorizontalGroup(
-            panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBodyLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(signOutButton)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(227, Short.MAX_VALUE))
-        );
+                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBodyLayout.createSequentialGroup()
+                                .addContainerGap(361, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 268,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(271, 271, 271)));
         panelBodyLayout.setVerticalGroup(
-            panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBodyLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(signOutButton)
-                .addContainerGap(265, Short.MAX_VALUE))
-        );
-
-        signOutButton.getAccessibleContext().setAccessibleName("SignOut");
+                panelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelBodyLayout.createSequentialGroup()
+                                .addGap(237, 237, 237)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(286, Short.MAX_VALUE)));
 
         background1.add(panelBody, "card3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(background1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(background1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    }                                       
+    }
 
-    // private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {                                        
-    //     // TODO add your handling code here:
-    // }                                       
+    // private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {
+    // // TODO add your handling code here:
+    // }
 
-    // private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
-    //     // TODO add your handling code here:
+    // private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt)
+    // {//GEN-FIRST:event_txtUserActionPerformed
+    // // TODO add your handling code here:
     // }//GEN-LAST:event_txtUserActionPerformed
 
-    // private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {                                        
-    //     // TODO add your handling code here:
-    // }                                       
+    // private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {
+    // // TODO add your handling code here:
+    // }
 
-    // private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt) {                                        
-    //     // TODO add your handling code here:
-    // }                                       
+    // private void selectionRoleActionPerformed(java.awt.event.ActionEvent evt) {
+    // // TODO add your handling code here:
+    // }
 
-    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
-        //     // TODO add your handling code here:
-    }//GEN-LAST:event_txtPassActionPerformed
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtPassActionPerformed
+        // // TODO add your handling code here:
+    }// GEN-LAST:event_txtPassActionPerformed
 
     private void forgotPwButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_forgotPwButtonActionPerformed
         ForgotPw ForgotPwFrame = new ForgotPw();
@@ -409,15 +386,39 @@ public class Login extends javax.swing.JFrame {
             }
 
             if (action) {
-                // System.out.println(user + " " + pass + " " + role);
                 User userLogin = userService.logIn(user, pass, role);
                 if (userLogin.getName() != null) {
                     // System.out.print(userLogin.getName());
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS,Notifications.Location.TOP_CENTER, "Login Success\n" + " Welcome " + userLogin.getName());
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER,
+                            "Login Success\n" + " Welcome " + userLogin.getName());
                     animatorLogin.start();
                     enableLogin(false);
+                    final String finalRole = role;
+                    Timer timer = new Timer(3000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            ((Timer) e.getSource()).stop(); // Stop the timer
+                            if (finalRole.equals("Admin")) {
+                                DashboardAdmin dashboardAdmin = new DashboardAdmin();
+                                dashboardAdmin.setVisible(true);
+                                dashboardAdmin.pack();
+                                dashboardAdmin.setLocationRelativeTo(null);
+                                Login.this.dispose();
+                            } else if (finalRole.equals("Employee")) {
+                                // DashboardEmployee dashboardEmployee = new DashboardEmployee();
+                                // dashboardEmployee.setVisible(true);
+                                // dashboardEmployee.pack();
+                                // dashboardEmployee.setLocationRelativeTo(null);
+                                // Login.this.dispose();
+                            }
+                        }
+                    });
+                    timer.setRepeats(false); // Ensure the timer only runs once
+                    timer.start();
+
                 } else {
-                    Notifications.getInstance().show(Notifications.Type.ERROR,Notifications.Location.TOP_CENTER, "Login Failed\n" + "User does not exist or password is incorrect");
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER,
+                            "Login Failed\n" + "User does not exist or password is incorrect");
                     txtUser.setHelperText("User does not exist or password is incorrect");
                     txtUser.grabFocus();
                 }
@@ -470,18 +471,16 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton forgotPwButton;
     private com.lms.auth.component.Header header1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private com.lms.auth.ui.PanelTransparent panelBody;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JCheckBox rememberCheckbok;
     private com.lms.auth.ui.Selection selectionRole;
     private javax.swing.JButton signInButton;
-    private javax.swing.JButton signOutButton;
     private javax.swing.JButton signUpButton;
     private javax.swing.JLabel signUptxt;
     private com.lms.auth.ui.PasswordField txtPass;
     private com.lms.auth.ui.TextField txtUser;
-    private javax.swing.JTable userTable;
     // End of variables declaration//GEN-END:variables
 }
