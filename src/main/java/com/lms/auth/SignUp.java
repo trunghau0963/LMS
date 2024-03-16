@@ -6,7 +6,9 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
+import com.lms.auth.dal.AuthDao;
 import com.lms.auth.entities.User;
+import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.UserService;
 
 import raven.toast.Notifications;
@@ -14,7 +16,7 @@ import raven.toast.Notifications;
 public class SignUp extends javax.swing.JFrame {
 
     UserService userService;
-
+    AuthDao authDao;
     private Animator animatorLogin;
     private Animator animatorBody;
     private boolean signIn;
@@ -22,7 +24,8 @@ public class SignUp extends javax.swing.JFrame {
     public SignUp() {
         initComponents();
 
-        userService = new UserService();
+        authDao = new AuthRepo();
+        userService = new UserService(authDao);
 
         getContentPane().setBackground(new java.awt.Color(39, 38, 44));
 

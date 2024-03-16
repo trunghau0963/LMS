@@ -8,7 +8,9 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
+import com.lms.auth.dal.AuthDao;
 import com.lms.auth.entities.User;
+import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.UserService;
 import com.lms.dashboard.main.DashboardAdmin;
 import java.awt.event.ActionEvent;
@@ -21,15 +23,15 @@ import raven.toast.Notifications;
 public class Login extends javax.swing.JFrame {
 
     UserService userService;
-
+    AuthDao authDao;
     private Animator animatorLogin;
     private Animator animatorBody;
     private boolean signIn;
 
     public Login() {
         initComponents();
-
-        userService = new UserService();
+        authDao = new AuthRepo();
+        userService = new UserService(authDao);
         // init();
         getContentPane().setBackground(new java.awt.Color(39, 38, 44));
 
