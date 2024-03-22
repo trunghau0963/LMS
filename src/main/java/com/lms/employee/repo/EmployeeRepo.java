@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import com.lms.connection.JDBCConnection;
 import com.lms.employee.dal.EmployeeDao;
 import com.lms.employee.entities.Author;
@@ -74,16 +77,16 @@ public class EmployeeRepo implements EmployeeDao {
         ArrayList<Author> authors = new ArrayList<Author>();
         try {
             boolean convertIsHide;
-            
+
             String stmt = "SELECT * FROM author WHERE authorId ILIKE ?";
-            
+
             stmt += gender != null ? " AND GENDER ILIKE '" + gender + "'" : "";
 
-            if(isHide != null) {
+            if (isHide != null) {
                 convertIsHide = isHide.equals("Hide") ? true : false;
-                stmt += isHide != null ? " AND isHide = " + convertIsHide + "": "";
+                stmt += isHide != null ? " AND isHide = " + convertIsHide + "" : "";
             }
-            
+
             stmt += " ORDER BY authorName ASC";
 
             PreparedStatement statement = connection.prepareStatement(stmt);
@@ -111,16 +114,16 @@ public class EmployeeRepo implements EmployeeDao {
         ArrayList<Author> authors = new ArrayList<Author>();
         try {
             boolean convertIsHide;
-            
+
             String stmt = "SELECT * FROM author WHERE authorName ILIKE ?";
-            
+
             stmt += gender != null ? " AND GENDER ILIKE '" + gender + "'" : "";
 
-            if(isHide != null) {
+            if (isHide != null) {
                 convertIsHide = isHide.equals("Hide") ? true : false;
-                stmt += isHide != null ? " AND isHide = " + convertIsHide + "": "";
+                stmt += isHide != null ? " AND isHide = " + convertIsHide + "" : "";
             }
-            
+
             stmt += " ORDER BY authorName ASC";
 
             PreparedStatement statement = connection.prepareStatement(stmt);
@@ -147,5 +150,40 @@ public class EmployeeRepo implements EmployeeDao {
     public Author editInfo(String id, String name, String address) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public Author addAuthor(String name, String gender, String isHide) {
+        Author author = null;
+        try {
+            String stmt = "INSERT INTO author (authorName, gender, isHide) VALUES (?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(stmt);
+            statement.setString(1, name);
+            statement.setString(2, gender.toLowerCase());
+            statement.setBoolean(3, isHide.equals("Hide") ? true : false);
+
+            statement.execute();
+
+            stmt = "SELECT * FROM AUTHOR WHERE authorName = ? and gender = ?";
+            statement = connection.prepareStatement(stmt);
+            statement.setString(1, name);
+            statement.setString(2, gender);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                author = new Author();
+                author.setAuthorId(resultSet.getString("authorId"));
+                author.setAuthorName(resultSet.getString("authorName"));
+                author.setAuthorGender(resultSet.getString("gender"));
+                author.setVisible(resultSet.getString("isHide").equals("t") ? true : false);
+            }
+
+            JOptionPane.showMessageDialog(null, "Add successfull");
+        } catch (SQLException e) {
+            System.out.println("Connection to PostgreSQL failed.");
+            e.printStackTrace();
+        }
+        return author;
     }
 }

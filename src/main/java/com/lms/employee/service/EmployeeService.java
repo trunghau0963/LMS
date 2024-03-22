@@ -26,4 +26,8 @@ public class EmployeeService {
     public Author setVisible(String id, boolean isHide) {
         return employeeDao.setVisible(id, isHide);
     }
+
+    public Author addAuthor(String name, String gender, String isHide){
+        return employeeDao.addAuthor(name, gender, isHide);
+    }
 }
