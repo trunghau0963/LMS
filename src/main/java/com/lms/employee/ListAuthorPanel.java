@@ -20,20 +20,20 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
 import com.lms.employee.SwitchButton.ToggleRenderer;
-import com.lms.employee.dal.EmployeeDao;
+import com.lms.employee.dal.AuthorDao;
 import com.lms.employee.entities.Author;
-import com.lms.employee.repo.EmployeeRepo;
-import com.lms.employee.service.EmployeeService;
+import com.lms.employee.repo.AuthorRepo;
+import com.lms.employee.service.AuthorService;
 
 /**
  *
  * @author Van Vinh
  */
 
-class ToggleEditor extends AbstractCellEditor implements TableCellEditor {
+class AuthorsTableEditor extends AbstractCellEditor implements TableCellEditor {
         private JToggleButton button = new JToggleButton("Unhide");
-        EmployeeDao empDao = new EmployeeRepo();
-        EmployeeService empService = new EmployeeService(empDao);
+        AuthorDao empDao = new AuthorRepo();
+        AuthorService empService = new AuthorService(empDao);
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
@@ -63,8 +63,8 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 initComponents();
 
                 this.panelParent = panelParent;
-                this.empDao = new EmployeeRepo();
-                this.empService = new EmployeeService(empDao);
+                this.empDao = new AuthorRepo();
+                this.empService = new AuthorService(empDao);
                 this.cardLayout = cobj;
 
                 ArrayList<Author> authors = empService.getListAuthors();
@@ -112,7 +112,11 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 searchBtn.setPreferredSize(new java.awt.Dimension(50, 23));
                 searchZone.add(searchBtn, java.awt.BorderLayout.EAST);
                 searchBtn.getAccessibleContext().setAccessibleParent(this);
-                searchBtn.addActionListener(this);
+                searchBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchActionPerformed(evt);
+                        }
+                });
 
                 resetBtn.setBackground(new java.awt.Color(217, 217, 217));
                 resetBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
@@ -178,7 +182,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 listAuthor.getAccessibleContext().setAccessibleDescription("");
                 listAuthor.getAccessibleContext().setAccessibleParent(this);
                 listAuthor.getColumnModel().getColumn(3).setCellRenderer(new ToggleRenderer());
-                listAuthor.getColumnModel().getColumn(3).setCellEditor(new ToggleEditor());
+                listAuthor.getColumnModel().getColumn(3).setCellEditor(new AuthorsTableEditor());
 
                 addAuthorBtn.setBackground(new java.awt.Color(51, 51, 51));
                 addAuthorBtn.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -331,8 +335,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 // TODO add your handling code here:
         }// GEN-LAST:event_searchOptionActionPerformed
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        public void searchActionPerformed(ActionEvent e) {
                 String key = searchField.getText();
                 String field = searchOption.getSelectedItem().toString();
 
@@ -375,7 +378,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                 model.addRow(rowData);
                         }
                 } else {
-                        ArrayList<Author> authors = empService.getListAuthors();
+                        ArrayList<Author> authors = empService.getListAuthors(sex, status);
                         DefaultTableModel model = (DefaultTableModel) listAuthor.getModel();
                         model.setRowCount(0);
                         for (Author author : authors) {
@@ -394,8 +397,8 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
         // Variables declaration - do not modify//GEN-BEGIN:variables
         CardLayout cardLayout;
         JPanel panelParent;
-        EmployeeService empService;
-        EmployeeDao empDao;
+        AuthorService empService;
+        AuthorDao empDao;
 
         private javax.swing.JPanel searchZone;
         private javax.swing.JScrollPane jScrollPane1;
@@ -415,5 +418,10 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
         private ButtonGroup sexBtnGroup;
         private ButtonGroup statusBtnGroup;
         // End of variables declaration//GEN-END:variables
+        @Override
+        public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+        }
 
 }

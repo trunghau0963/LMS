@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import com.lms.connection.JDBCConnection;
-import com.lms.employee.dal.EmployeeDao;
+import com.lms.employee.dal.AuthorDao;
 import com.lms.employee.entities.Author;
 
-public class EmployeeRepo implements EmployeeDao {
+public class AuthorRepo implements AuthorDao {
     Connection connection = null;
 
-    public EmployeeRepo() {
+    public AuthorRepo() {
         connection = JDBCConnection.getJDBConnection();
     }
 
@@ -26,6 +26,42 @@ public class EmployeeRepo implements EmployeeDao {
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM author ORDER BY authorName ASC");
+            while (resultSet.next()) {
+                Author author = new Author();
+                author.setAuthorId(resultSet.getString("authorId"));
+                author.setAuthorName(resultSet.getString("authorName"));
+                author.setAuthorGender(resultSet.getString("gender"));
+                author.setVisible(resultSet.getString("isHide").equals("t") ? true : false);
+                authors.add(author);
+            }
+        } catch (SQLException e) {
+            System.out.println("Connection to PostgreSQL failed.");
+            e.printStackTrace();
+        }
+        return authors;
+    }
+
+    @Override
+    public ArrayList<Author> getListAuthors(String gender, String isHide) {
+        ArrayList<Author> authors = new ArrayList<Author>();
+        try {
+            String stmt = "SELECT * FROM author";
+            stmt += gender != null ? " Where GENDER ILIKE '" + gender + "'" : "";
+            
+            if (isHide != null && gender != null) {
+                boolean convertIsHide = isHide.equals("Hide") ? true : false;
+                stmt += isHide != null ? " And isHide = " + convertIsHide + "" : "";
+            }else if(isHide != null && gender == null){
+                boolean convertIsHide = isHide.equals("Hide") ? true : false;
+                stmt += isHide != null ? " Where isHide = " + convertIsHide + "" : "";
+            }
+            
+            stmt += " ORDER BY authorName ASC";
+
+            PreparedStatement statement = connection.prepareStatement(stmt);
+            
+            ResultSet resultSet = statement.executeQuery();
+
             while (resultSet.next()) {
                 Author author = new Author();
                 author.setAuthorId(resultSet.getString("authorId"));
