@@ -1,20 +1,29 @@
 package com.lms.dataSaleCRUD;
 
 import java.awt.Color;
+import java.util.List;
 
 import com.lms.dataSaleCRUD.component.chart.ModelChart;
+import com.lms.dataSaleCRUD.dao.UserDao;
+import com.lms.dataSaleCRUD.entities.Book;
 
 public class viewDataSale extends javax.swing.JFrame {
     public viewDataSale() {
         initComponents();
         getContentPane().setBackground(new Color(250, 250, 250));
-        chart1.addLegend("Income", new Color(255, 0, 77));
-        chart1.addData(new ModelChart("Jan", new double[]{500}));
-        chart1.addData(new ModelChart("Feb", new double[]{500}));
-        chart1.addData(new ModelChart("Mar", new double[]{500}));
-        chart1.addData(new ModelChart("Apr", new double[]{580}));
-        chart1.addData(new ModelChart("May", new double[]{550}));
-        chart1.addData(new ModelChart("June", new double[]{590}));
+
+        UserDao userDao = new UserDao();
+        List<Book> books = userDao.getListBooksByRevenue();
+
+        double[] revenueArray = new double[] {books.get(0).getTotal_revenue(), books.get(1).getTotal_revenue(), books.get(2).getTotal_revenue(), books.get(3).getTotal_revenue(), books.get(4).getTotal_revenue(), books.get(5).getTotal_revenue()};
+
+        chart1.addLegend("Revenue", new Color(255, 0, 77));
+        chart1.addData(new ModelChart(getInitials(books.get(0).getTitle()), new double[]{revenueArray[0]}));
+        chart1.addData(new ModelChart(getInitials(books.get(1).getTitle()), new double[]{revenueArray[1]}));
+        chart1.addData(new ModelChart(getInitials(books.get(2).getTitle()), new double[]{revenueArray[2]}));
+        chart1.addData(new ModelChart(getInitials(books.get(3).getTitle()), new double[]{revenueArray[3]}));
+        chart1.addData(new ModelChart(getInitials(books.get(4).getTitle()), new double[]{revenueArray[4]}));
+        chart1.addData(new ModelChart(getInitials(books.get(5).getTitle()), new double[]{revenueArray[5]}));
 
         chart2.addLegend("Income", new Color(245, 189, 135));
         chart2.addData(new ModelChart("Jan", new double[]{500}));
@@ -40,6 +49,20 @@ public class viewDataSale extends javax.swing.JFrame {
         chart4.addData(new ModelChart("May", new double[]{300}));
         chart4.addData(new ModelChart("June", new double[]{190}));
     }
+
+    public static String getInitials(String str) {
+        String[] words = str.split(" ");
+        StringBuilder initials = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                initials.append(word.charAt(0));
+            }
+        }
+
+        return initials.toString().toUpperCase();
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -102,23 +125,26 @@ public class viewDataSale extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(239, 239, 239)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btn1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(chart1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE))
+                            .addComponent(chart3, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chart4, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
+                        .addGap(25, 25, 25))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(chart3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(82, 82, 82)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chart4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chart2, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn2, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn4, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(chart1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                            .addComponent(btn1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(chart2, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,8 +158,8 @@ public class viewDataSale extends javax.swing.JFrame {
                     .addComponent(chart2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chart1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
