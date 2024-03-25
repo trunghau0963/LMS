@@ -6,18 +6,28 @@ package com.lms.employee;
 
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.lms.employee.SwitchButton.ToggleRenderer;
 import com.lms.employee.dal.AuthorDao;
@@ -118,12 +128,17 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                         }
                 });
 
+                resetBtn.setText("Refesh");
                 resetBtn.setBackground(new java.awt.Color(217, 217, 217));
                 resetBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
                 resetBtn.setPreferredSize(new java.awt.Dimension(50, 23));
-                searchZone.add(resetBtn, java.awt.BorderLayout.WEST);
+                searchZone.add(resetBtn, java.awt.BorderLayout.EAST);
                 resetBtn.getAccessibleContext().setAccessibleParent(this);
-                resetBtn.addActionListener(this);
+                resetBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                resetActionPerformed(evt);
+                        }
+                });
 
                 sexBtn1 = new javax.swing.JRadioButton();
                 sexBtn2 = new javax.swing.JRadioButton();
@@ -149,7 +164,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
 
                 searchOption.setModel(
                                 new javax.swing.DefaultComboBoxModel<>(
-                                                new String[] { "", "Id", "FullName"}));
+                                                new String[] { "", "Id", "FullName" }));
                 searchOption.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
                 searchOption.setPreferredSize(new java.awt.Dimension(90, 22));
                 searchOption.addActionListener(new java.awt.event.ActionListener() {
@@ -184,13 +199,30 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 listAuthor.getColumnModel().getColumn(3).setCellRenderer(new ToggleRenderer());
                 listAuthor.getColumnModel().getColumn(3).setCellEditor(new AuthorsTableEditor());
 
+                listAuthor.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                                rowSelectedActionPerformed(e);
+                        }
+                });
+                //Sorted row
+                TableRowSorter<TableModel> sorter = new TableRowSorter<>(listAuthor.getModel());
+                listAuthor.setRowSorter(sorter);
+
+                List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+              
+                for (int i = 0; i < listAuthor.getColumnCount(); i++) {
+                        sortKeys.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
+                }
+                sorter.setSortKeys(sortKeys);
+
                 addAuthorBtn.setBackground(new java.awt.Color(51, 51, 51));
                 addAuthorBtn.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
                 addAuthorBtn.setForeground(new java.awt.Color(255, 255, 255));
                 addAuthorBtn.setText("ADD NEW AUTHOR");
                 addAuthorBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                addAuthorBtnActionPerformed(evt, cardLayout, panelParent);
+                                addAuthorBtnActionPerformed(evt);
                         }
                 });
 
@@ -325,15 +357,35 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
 
         }// </editor-fold>//GEN-END:initComponents
 
-        private void addAuthorBtnActionPerformed(java.awt.event.ActionEvent evt, CardLayout cobj, JPanel panelParent) {// GEN-FIRST:event_addAuthorBtnActionPerformed
+        private void addAuthorBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_addAuthorBtnActionPerformed
                 // TODO add your handling code here:
-                cobj.next(panelParent);
+                cardLayout.show(panelParent, "addAuthor");
 
         }// GEN-LAST:event_addAuthorBtnActionPerformed
 
         private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed
                 // TODO add your handling code here:
         }// GEN-LAST:event_searchOptionActionPerformed
+
+        private void rowSelectedActionPerformed(MouseEvent e) {// GEN-FIRST:event_searchOptionActionPerformed
+                // TODO add your handling code here:
+                if (e.getClickCount() == 2) { // Kiểm tra xem người dùng đã nhấp đúp chuột chưa
+                        int row = listAuthor.getSelectedRow();
+
+                        Author author = new Author();
+                        author.setAuthorId((String) listAuthor.getValueAt(row, 0));
+                        author.setAuthorName((String) listAuthor.getValueAt(row, 1));
+                        author.setAuthorGender((String) listAuthor.getValueAt(row, 2));
+                        author.setVisible((Boolean) listAuthor.getValueAt(row, 3));
+
+                        EditInfoAuthorPanel editAuthorPanel = new EditInfoAuthorPanel(cardLayout, panelParent, author);
+                        if (editAuthorPanel != null) {
+                                panelParent.add(editAuthorPanel, "editAuthor");
+                                cardLayout.show(panelParent, "editAuthor");
+                        }
+                }
+
+        }
 
         public void searchActionPerformed(ActionEvent e) {
                 String key = searchField.getText();
@@ -394,6 +446,35 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
 
         }
 
+        public void resetActionPerformed(ActionEvent e) {
+                searchField.setText("");
+                sexBtnGroup.clearSelection();
+                statusBtnGroup.clearSelection();
+                searchOption.setSelectedIndex(0);
+
+                String sex = null;
+                sex = sexBtn1.isSelected() ? sexBtn1.getText() : sex;
+                sex = sexBtn2.isSelected() ? sexBtn2.getText() : sex;
+
+                String status = null;
+                status = statusBtn1.isSelected() ? statusBtn1.getText() : status;
+                status = statusBtn2.isSelected() ? statusBtn2.getText() : status;
+
+                ArrayList<Author> authors = empService.getListAuthors(sex, status);
+                DefaultTableModel model = (DefaultTableModel) listAuthor.getModel();
+                model.setRowCount(0);
+                for (Author author : authors) {
+                        Object[] rowData = {
+                                        author.getAuthorId(),
+                                        author.getAuthorName(),
+                                        author.getAuthorGender(),
+                                        author.isHide()
+                        };
+                        model.addRow(rowData);
+                }
+
+        }
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         CardLayout cardLayout;
         JPanel panelParent;
@@ -417,6 +498,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
         private JRadioButton statusBtn2;
         private ButtonGroup sexBtnGroup;
         private ButtonGroup statusBtnGroup;
+
         // End of variables declaration//GEN-END:variables
         @Override
         public void actionPerformed(ActionEvent e) {

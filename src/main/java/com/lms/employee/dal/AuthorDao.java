@@ -14,7 +14,7 @@ public interface AuthorDao {
 
     public Author setVisible(String id, boolean isHide);
 
-    public Author editInfo(String id, String name, String address);
+    public Author editInfo(String id, String name, String gender, String isHide);
 
     public Author addAuthor(String name, String gender, String isHide);
 }

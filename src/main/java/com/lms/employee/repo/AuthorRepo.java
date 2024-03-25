@@ -47,19 +47,19 @@ public class AuthorRepo implements AuthorDao {
         try {
             String stmt = "SELECT * FROM author";
             stmt += gender != null ? " Where GENDER ILIKE '" + gender + "'" : "";
-            
+
             if (isHide != null && gender != null) {
                 boolean convertIsHide = isHide.equals("Hide") ? true : false;
                 stmt += isHide != null ? " And isHide = " + convertIsHide + "" : "";
-            }else if(isHide != null && gender == null){
+            } else if (isHide != null && gender == null) {
                 boolean convertIsHide = isHide.equals("Hide") ? true : false;
                 stmt += isHide != null ? " Where isHide = " + convertIsHide + "" : "";
             }
-            
+
             stmt += " ORDER BY authorName ASC";
 
             PreparedStatement statement = connection.prepareStatement(stmt);
-            
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -183,12 +183,6 @@ public class AuthorRepo implements AuthorDao {
     }
 
     @Override
-    public Author editInfo(String id, String name, String address) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Author addAuthor(String name, String gender, String isHide) {
         Author author = null;
         try {
@@ -215,7 +209,42 @@ public class AuthorRepo implements AuthorDao {
                 author.setVisible(resultSet.getString("isHide").equals("t") ? true : false);
             }
 
-            JOptionPane.showMessageDialog(null, "Add successfull");
+            JOptionPane.showMessageDialog(null, "Add successfully");
+        } catch (SQLException e) {
+            System.out.println("Connection to PostgreSQL failed.");
+            e.printStackTrace();
+        }
+        return author;
+    }
+
+    @Override
+    public Author editInfo(String id, String name, String gender, String isHide) {
+        Author author = null;
+        try {
+            String stmt = "Update author set authorName = ?, gender = ?, isHide = ? Where authorId = ?";
+            PreparedStatement statement = connection.prepareStatement(stmt);
+            statement.setString(1, name);
+            statement.setString(2, gender.toLowerCase());
+            statement.setBoolean(3, isHide.equals("Hide") ? true : false);
+            statement.setString(4, id);
+
+            statement.execute();
+
+            stmt = "SELECT * FROM AUTHOR WHERE authorId = ?";
+            statement = connection.prepareStatement(stmt);
+            statement.setString(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                author = new Author();
+                author.setAuthorId(resultSet.getString("authorId"));
+                author.setAuthorName(resultSet.getString("authorName"));
+                author.setAuthorGender(resultSet.getString("gender"));
+                author.setVisible(resultSet.getString("isHide").equals("t") ? true : false);
+            }
+
+            JOptionPane.showMessageDialog(null, "Edit info successfully");
         } catch (SQLException e) {
             System.out.println("Connection to PostgreSQL failed.");
             e.printStackTrace();

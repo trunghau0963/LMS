@@ -8,6 +8,7 @@ public class AuthorsPage extends JFrame {
     private CardLayout cardLayout;
     ListAuthorPanel authors;
     AddAuthorPanel addAuthor;
+    EditInfoAuthorPanel editAuthor;
 
     public AuthorsPage() {
         

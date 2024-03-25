@@ -11,7 +11,7 @@ public interface PublisherDao {
     public ArrayList<Publisher> getPublisherByName(String name, String isHide);
     public ArrayList<Publisher> getPublisherByAddress(String address, String isHide);
     public Publisher setVisible(String id, boolean isHide);
-    public Publisher editInfo(String id, String name, String address);
+    public Publisher editInfo(String id, String name, String address, String isHide);
 
     public Publisher addPublisher(String name, String address, String isHide);
 }

@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 
 import com.lms.connection.JDBCConnection;
 import com.lms.employee.dal.PublisherDao;
-
 import com.lms.employee.entities.Publisher;
 
 public class PublisherRepo implements PublisherDao {
@@ -213,9 +212,38 @@ public class PublisherRepo implements PublisherDao {
     }
 
     @Override
-    public Publisher editInfo(String id, String name, String address) {
-        // TODO Auto-generated method stub
-        return null;
+    public Publisher editInfo(String id, String name, String address, String isHide) {
+        Publisher publisher = null;
+        try {
+            String stmt = "Update Publisher set publisherName = ?, publisherAddress = ?, isHide = ? Where publisherId = ?";
+            PreparedStatement statement = connection.prepareStatement(stmt);
+            statement.setString(1, name);
+            statement.setString(2, address.toLowerCase());
+            statement.setBoolean(3, isHide.equals("Hide") ? true : false);
+            statement.setString(4, id);
+
+            statement.execute();
+
+            stmt = "SELECT * FROM Publisher WHERE publisherId = ?";
+            statement = connection.prepareStatement(stmt);
+            statement.setString(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                publisher = new Publisher();
+                publisher.setPublisherId(resultSet.getString("publisherId"));
+                publisher.setPublisherName(resultSet.getString("publisherName"));
+                publisher.setPublisherAddress(resultSet.getString("publisherAddress"));
+                publisher.setVisible(resultSet.getString("isHide").equals("t") ? true : false);
+            }
+
+            JOptionPane.showMessageDialog(null, "Edit info successfully");
+        } catch (SQLException e) {
+            System.out.println("Connection to PostgreSQL failed.");
+            e.printStackTrace();
+        }
+        return publisher;
     }
 
     @Override
@@ -225,7 +253,7 @@ public class PublisherRepo implements PublisherDao {
             String stmt = "INSERT INTO publisher (publisherName, publisherAddress, isHide) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setString(1, name);
-            statement.setString(2, address.toLowerCase());
+            statement.setString(2, address);
             statement.setBoolean(3, isHide.equals("Hide") ? true : false);
 
             statement.execute();

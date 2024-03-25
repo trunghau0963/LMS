@@ -154,7 +154,7 @@ public class AddAuthorPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_saveBtnActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt, CardLayout cobj, JPanel mainPanel) {//GEN-FIRST:event_saveBtnActionPerformed
-        cobj.next(mainPanel);
+        cobj.show(mainPanel, "authorsPage");
     }//GEN-LAST:event_saveBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

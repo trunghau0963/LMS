@@ -34,9 +34,8 @@ public class PublisherService {
         return pubDao.getPublisherByAddress(address, isHide);
     }
 
-    public Publisher editInfo(String id, String name, String address) {
-        // TODO Auto-generated method stub
-        return null;
+    public Publisher editInfo(String id, String name, String address, String isHide) {
+        return pubDao.editInfo(id, name, address, isHide);
     }
 
     
