@@ -95,6 +95,7 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
                 searchPanel = new javax.swing.JPanel();
+                searchBtnPanel = new javax.swing.JPanel();
                 searchField = new javax.swing.JTextField();
                 searchBtn = new javax.swing.JButton();
                 resetBtn = new javax.swing.JButton();
@@ -110,6 +111,7 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                 setPreferredSize(new java.awt.Dimension(800, 630));
 
                 searchPanel.setLayout(new java.awt.BorderLayout());
+                searchBtnPanel.setLayout(new java.awt.BorderLayout());
 
                 searchField.setText("");
                 searchField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -131,7 +133,7 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                                 searchBtnActionPerformed(evt);
                         }
                 });
-                searchPanel.add(searchBtn, java.awt.BorderLayout.EAST);
+                searchBtnPanel.add(searchBtn, java.awt.BorderLayout.CENTER);
 
                 resetBtn.setText("Refesh");
                 resetBtn.setBackground(new java.awt.Color(217, 217, 217));
@@ -142,7 +144,8 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                                 resetActionPerformed(evt);
                         }
                 });
-                searchPanel.add(resetBtn, java.awt.BorderLayout.SOUTH);
+                searchBtnPanel.add(resetBtn, java.awt.BorderLayout.EAST);
+                searchPanel.add(searchBtnPanel, java.awt.BorderLayout.EAST);
 
                 searchOption.setModel(
                                 new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Id", "Name", "Address" }));
@@ -155,8 +158,6 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                 });
                 searchPanel.add(searchOption, java.awt.BorderLayout.LINE_START);
                 searchOption.getAccessibleContext().setAccessibleParent(this);
-
-
 
                 listPublisher.setBackground(new java.awt.Color(231, 226, 226));
                 listPublisher.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -188,12 +189,12 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                         }
                 });
 
-                //Sorted row
+                // Sorted row
                 TableRowSorter<TableModel> sorter = new TableRowSorter<>(listPublisher.getModel());
                 listPublisher.setRowSorter(sorter);
 
                 List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-              
+
                 for (int i = 0; i < listPublisher.getColumnCount(); i++) {
                         sortKeys.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
                 }
@@ -400,7 +401,7 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
 
         public void resetActionPerformed(ActionEvent e) {
                 searchField.setText("");
-                
+
                 statusBtnGroup.clearSelection();
                 searchOption.setSelectedIndex(0);
 
@@ -413,10 +414,10 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                 model.setRowCount(0);
                 for (Publisher publisher : publishers) {
                         Object[] rowData = {
-                                publisher.getPublisherId(),
-                                publisher.getPublisherName(),
-                                publisher.getPublisherAddress(),
-                                publisher.isHide()
+                                        publisher.getPublisherId(),
+                                        publisher.getPublisherName(),
+                                        publisher.getPublisherAddress(),
+                                        publisher.isHide()
                         };
                         model.addRow(rowData);
                 }
@@ -433,7 +434,8 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                         publisher.setPublisherAddress((String) listPublisher.getValueAt(row, 2));
                         publisher.setVisible((Boolean) listPublisher.getValueAt(row, 3));
 
-                        EditInfoPublisherPanel editInfoPublisherPanel = new EditInfoPublisherPanel(cardLayout, panelParent, publisher);
+                        EditInfoPublisherPanel editInfoPublisherPanel = new EditInfoPublisherPanel(cardLayout,
+                                        panelParent, publisher);
                         if (editInfoPublisherPanel != null) {
                                 panelParent.add(editInfoPublisherPanel, "editPublisher");
                                 cardLayout.show(panelParent, "editPublisher");
@@ -455,6 +457,7 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
         private javax.swing.JComboBox<String> searchOption;
         private javax.swing.JLabel pageTitle;
         private javax.swing.JPanel searchPanel;
+        private javax.swing.JPanel searchBtnPanel;
         private javax.swing.JRadioButton statusBtn1;
         private javax.swing.JRadioButton statusBtn2;
         private javax.swing.JScrollPane jScrollPane1;

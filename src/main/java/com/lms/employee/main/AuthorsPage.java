@@ -1,6 +1,11 @@
-package com.lms.employee;
+package com.lms.employee.main;
 
 import javax.swing.*;
+
+import com.lms.employee.AddAuthorPanel;
+import com.lms.employee.EditInfoAuthorPanel;
+import com.lms.employee.ListAuthorPanel;
+
 import java.awt.*;
 
 public class AuthorsPage extends JFrame {
@@ -12,7 +17,7 @@ public class AuthorsPage extends JFrame {
 
     public AuthorsPage() {
         
-        setTitle("Author Registration Form");
+        setTitle("Author management");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         // Tạo CardLayout

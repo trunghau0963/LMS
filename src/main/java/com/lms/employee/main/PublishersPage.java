@@ -1,9 +1,12 @@
-package com.lms.employee;
+package com.lms.employee.main;
 
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.lms.employee.AddPublisherPanel;
+import com.lms.employee.ListPublisherPanel;
 
 public class PublishersPage extends JFrame{
     private JPanel mainPanel;

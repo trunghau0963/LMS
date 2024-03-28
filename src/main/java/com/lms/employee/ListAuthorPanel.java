@@ -15,17 +15,14 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
-import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -96,6 +93,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
                 searchZone = new javax.swing.JPanel();
+                searchBtnZone = new javax.swing.JPanel();
                 searchField = new javax.swing.JTextField();
                 searchBtn = new javax.swing.JButton();
                 resetBtn = new javax.swing.JButton();
@@ -109,18 +107,18 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 setPreferredSize(new java.awt.Dimension(800, 630));
 
                 searchZone.setLayout(new java.awt.BorderLayout());
+                searchBtnZone.setLayout(new java.awt.BorderLayout());
 
                 searchField.setText("");
                 searchField.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
                 searchField.setPreferredSize(new java.awt.Dimension(400, 28));
-                searchZone.add(searchField, java.awt.BorderLayout.CENTER);
                 searchField.getAccessibleContext().setAccessibleParent(this);
+                searchZone.add(searchField, java.awt.BorderLayout.CENTER);
 
                 searchBtn.setBackground(new java.awt.Color(217, 217, 217));
                 searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/employee/search.png"))); // NOI18N
                 searchBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
                 searchBtn.setPreferredSize(new java.awt.Dimension(50, 23));
-                searchZone.add(searchBtn, java.awt.BorderLayout.EAST);
                 searchBtn.getAccessibleContext().setAccessibleParent(this);
                 searchBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,13 +130,16 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 resetBtn.setBackground(new java.awt.Color(217, 217, 217));
                 resetBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
                 resetBtn.setPreferredSize(new java.awt.Dimension(50, 23));
-                searchZone.add(resetBtn, java.awt.BorderLayout.EAST);
                 resetBtn.getAccessibleContext().setAccessibleParent(this);
                 resetBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 resetActionPerformed(evt);
                         }
                 });
+
+                searchBtnZone.add(searchBtn, java.awt.BorderLayout.CENTER);
+                searchBtnZone.add(resetBtn, java.awt.BorderLayout.EAST);
+                searchZone.add(searchBtnZone, java.awt.BorderLayout.EAST);
 
                 sexBtn1 = new javax.swing.JRadioButton();
                 sexBtn2 = new javax.swing.JRadioButton();
@@ -205,12 +206,12 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                 rowSelectedActionPerformed(e);
                         }
                 });
-                //Sorted row
+                // Sorted row
                 TableRowSorter<TableModel> sorter = new TableRowSorter<>(listAuthor.getModel());
                 listAuthor.setRowSorter(sorter);
 
                 List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-              
+
                 for (int i = 0; i < listAuthor.getColumnCount(); i++) {
                         sortKeys.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
                 }
@@ -307,16 +308,11 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                                 Short.MAX_VALUE)
                                                                                                                                 .addComponent(statusBtn2)
-                                                                                                                                .addGap(133, 133,
-                                                                                                                                                133))
+                                                                                                                                .addGap(133, 133, 133))
                                                                                                                 .addComponent(searchZone,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                .addComponent(searchBtn,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                61,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
                                                                 .addContainerGap(91, Short.MAX_VALUE)));
                 jPanelLayout.setVerticalGroup(
                                 jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,10 +323,6 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                                                                 .addComponent(searchZone,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(searchBtn,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                28,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -482,6 +474,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
         AuthorDao empDao;
 
         private javax.swing.JPanel searchZone;
+        private javax.swing.JPanel searchBtnZone;
         private javax.swing.JScrollPane jScrollPane1;
 
         private javax.swing.JButton searchBtn;
