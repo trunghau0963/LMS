@@ -56,8 +56,8 @@ public class ModelEditAccount {
     this.pwd = pwd;
   }
 
-  public ModelEditAccount(String userName, String fullName, String phoneNumber, String dob, String gender, String pwd) {
-    this.userName = userName;
+  public ModelEditAccount(String fullName, String phoneNumber, String dob, String gender, String pwd) {
+
     this.fullName = fullName;
     this.phoneNumber = phoneNumber;
     this.dob = dob;
@@ -65,7 +65,6 @@ public class ModelEditAccount {
     this.pwd = pwd;
   }
 
-  
 
 
 }

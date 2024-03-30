@@ -4,10 +4,6 @@
  */
 package com.lms.admin;
 
-import com.lms.auth.Login;
-import com.lms.auth.dal.AuthDao;
-import com.lms.auth.entities.User;
-import com.lms.auth.service.UserService;
 
 import javax.swing.JOptionPane;
 
@@ -15,7 +11,6 @@ import com.lms.admin.dal.AdminDao;
 import com.lms.admin.repo.AdminRepo;
 import com.lms.admin.service.AdminService;
 
-import raven.toast.Notifications;
 
 /**
  *

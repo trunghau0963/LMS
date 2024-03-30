@@ -81,14 +81,15 @@ public class AdminRepo implements AdminDao {
     return null;
   }
 
-  public boolean editUser(ModelEditAccount editUser) {
+  public boolean editAccount(ModelEditAccount editUser) {
     Connection connection = null;
     try {
       connection = JDBCConnection.getJDBConnection();
       Statement statement = connection.createStatement();
-      statement.executeUpdate("UPDATE employee SET empName = '" + editUser.getFullName() + "', dob = '"
-          + editUser.getDob() + "', pwd = '" + editUser.getPwd() + "' where phoneNumber = '" + editUser.getPhoneNumber()
-          + "'");
+      statement.executeUpdate("UPDATE administrator SET adminName = '" + editUser.getFullName() + "', dob = '"
+          + editUser.getDob() + "', pwd = '" + editUser.getPwd() + "', gender = '" + editUser.getGender()
+          + "' WHERE phoneNumber = '"
+          + editUser.getPhoneNumber() + "'");
 
     } catch (SQLException e) {
       System.out.println("Connection to PostgreSQL failed.");
@@ -103,14 +104,14 @@ public class AdminRepo implements AdminDao {
         }
       }
     }
-    return false;
+    return true;
   }
 
-  public List<User> getAllUsers() {
+  public List<Employee> getEmployees() {
 
     Connection connection = null;
     ResultSet resultSet;
-    List<User> users = new ArrayList<User>();
+    List<Employee> users = new ArrayList<Employee>();
     try {
       connection = JDBCConnection.getJDBConnection();
       Statement statement = connection.createStatement();
@@ -123,6 +124,39 @@ public class AdminRepo implements AdminDao {
         user.setGender(resultSet.getString("gender"));
         user.setDob(resultSet.getString("dob"));
         user.setIsBlock(resultSet.getBoolean("isBlock"));
+        users.add(user);
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return users;
+  }
+
+  public List<Admin> getAdmins() {
+    Connection connection = null;
+    ResultSet resultSet;
+    List<Admin> users = new ArrayList<Admin>();
+    try {
+      connection = JDBCConnection.getJDBConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM administrator");
+      while (resultSet.next()) {
+        Admin user = new Admin();
+        user.setName(resultSet.getString("adminName"));
+        user.setPhoneNumber(resultSet.getString("phoneNumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
         users.add(user);
       }
     } catch (SQLException e) {
