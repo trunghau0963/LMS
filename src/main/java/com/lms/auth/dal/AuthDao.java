@@ -12,6 +12,6 @@ public interface AuthDao {
     public User register(RegisterModel newUser);
     public User logIn(LoginModel data);
     public User forgotPassword(String phoneNumber, String userType);
-    public List<Employee> getAllEmployeeList();
     public User updatePassword(User user, String newPassword);
+    public List<Employee> getAllEmployeeList();
 } 
