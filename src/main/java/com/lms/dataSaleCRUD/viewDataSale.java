@@ -6,6 +6,7 @@ import java.util.List;
 import com.lms.dataSaleCRUD.component.chart.ModelChart;
 import com.lms.dataSaleCRUD.dao.UserDao;
 import com.lms.dataSaleCRUD.entities.Book;
+import com.lms.dataSaleCRUD.entities.BookWithRevenue;
 
 public class viewDataSale extends javax.swing.JFrame {
     public viewDataSale() {
@@ -13,17 +14,17 @@ public class viewDataSale extends javax.swing.JFrame {
         getContentPane().setBackground(new Color(250, 250, 250));
 
         UserDao userDao = new UserDao();
-        List<Book> books = userDao.getListBooksByRevenue();
+        List<BookWithRevenue> books = userDao.getAllBooks();
 
-        double[] revenueArray = new double[] {books.get(0).getTotal_revenue(), books.get(1).getTotal_revenue(), books.get(2).getTotal_revenue(), books.get(3).getTotal_revenue(), books.get(4).getTotal_revenue(), books.get(5).getTotal_revenue()};
+        double[] revenueArray1 = new double[] {books.get(0).getTotal_revenue(), books.get(1).getTotal_revenue(), books.get(2).getTotal_revenue(), books.get(3).getTotal_revenue(), books.get(4).getTotal_revenue(), books.get(5).getTotal_revenue()};
 
         chart1.addLegend("Revenue", new Color(255, 0, 77));
-        chart1.addData(new ModelChart(getInitials(books.get(0).getTitle()), new double[]{revenueArray[0]}));
-        chart1.addData(new ModelChart(getInitials(books.get(1).getTitle()), new double[]{revenueArray[1]}));
-        chart1.addData(new ModelChart(getInitials(books.get(2).getTitle()), new double[]{revenueArray[2]}));
-        chart1.addData(new ModelChart(getInitials(books.get(3).getTitle()), new double[]{revenueArray[3]}));
-        chart1.addData(new ModelChart(getInitials(books.get(4).getTitle()), new double[]{revenueArray[4]}));
-        chart1.addData(new ModelChart(getInitials(books.get(5).getTitle()), new double[]{revenueArray[5]}));
+        chart1.addData(new ModelChart(getInitials(books.get(0).getTitle()), new double[]{revenueArray1[0]}));
+        chart1.addData(new ModelChart(getInitials(books.get(1).getTitle()), new double[]{revenueArray1[1]}));
+        chart1.addData(new ModelChart(getInitials(books.get(2).getTitle()), new double[]{revenueArray1[2]}));
+        chart1.addData(new ModelChart(getInitials(books.get(3).getTitle()), new double[]{revenueArray1[3]}));
+        chart1.addData(new ModelChart(getInitials(books.get(4).getTitle()), new double[]{revenueArray1[4]}));
+        chart1.addData(new ModelChart(getInitials(books.get(5).getTitle()), new double[]{revenueArray1[5]}));
 
         chart2.addLegend("Income", new Color(245, 189, 135));
         chart2.addData(new ModelChart("Jan", new double[]{500}));

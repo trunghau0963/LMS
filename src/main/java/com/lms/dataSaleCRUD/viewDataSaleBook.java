@@ -2,6 +2,10 @@ package com.lms.dataSaleCRUD;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.event.DocumentEvent;
@@ -9,9 +13,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.lms.dataSaleCRUD.dao.UserDao;
-import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
-import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
+// import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
+// import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
 import com.lms.dataSaleCRUD.entities.Book;
+import com.lms.dataSaleCRUD.entities.BookWithRevenue;
 
 public class viewDataSaleBook extends javax.swing.JFrame {
 
@@ -20,122 +25,156 @@ public class viewDataSaleBook extends javax.swing.JFrame {
                 getContentPane().setBackground(Color.WHITE);
 
                 table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-                table.getTableHeader().setOpaque(false);
+                // table.getTableHeader().setOpaque(false);
                 table.getTableHeader().setBackground(new Color(60, 58, 72));
                 table.getTableHeader().setForeground(new Color(0, 0, 0));
 
-                table.getColumnModel().getColumn(4).setCellRenderer(new ToggleRenderer());
-                table.getColumnModel().getColumn(4).setCellEditor(new ToggleEditor());
-
                 UserDao userDao = new UserDao();
-                List<Book> books = userDao.getListBooksByRevenue();
+                List<BookWithRevenue> books = userDao.getAllBooks();
 
-                String[] columnNames = { "bookID", "publisherID", "title", "salePrice", "isHide", "TotalRevenue" };
-
-                // Create a new DefaultTableModel with the column names and zero rows
+                String[] columnNames = { "bookID", "title", "TotalRevenue" };
                 DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
                         @Override
                         public boolean isCellEditable(int row, int column) {
-                                // Only column 4 is editable
-                                return column == 4;
-                        }
-
-                        @Override
-                        public Class<?> getColumnClass(int columnIndex) {
-                                if (columnIndex == 4) {
-                                        return Boolean.class;
-                                }
-                                return super.getColumnClass(columnIndex);
+                                return false;
                         }
                 };
 
+                // lấy dữ liệu cho bảng
                 table.setModel(model);
 
-                for (Book book : books) {
-                        model.addRow(new Object[] {
-                                        book.getBookId(),
-                                        book.getPublisherId(),
-                                        book.getTitle(),
-                                        book.getSalePrice(),
-                                        book.getIsHide(),
-                                        book.getTotal_revenue()
-                        });
-                }
+                updateTable(books, model);
 
+                // update bảng theo từ khóa tìm kiếm
                 jTextField1.getDocument().addDocumentListener(new DocumentListener() {
                         public void changedUpdate(DocumentEvent e) {
-                                filter();
+                                filterByTitle();
                         }
 
                         public void removeUpdate(DocumentEvent e) {
-                                filter();
+                                filterByTitle();
                         }
 
                         public void insertUpdate(DocumentEvent e) {
-                                filter();
+                                filterByTitle();
                         }
+                });
 
-                        public void filter() {
-                                String filterText = jTextField1.getText();
-                                UserDao userDao = new UserDao();
-                                List<Book> books = userDao.getListBooksByRevenue();
-
-                                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                                model.setRowCount(0); // Clear the table before adding new data
-
-                                for (Book book : books) {
-                                        if (book.getTitle().contains(filterText)) {
-                                                model.addRow(new Object[] {
-                                                                book.getBookId(),
-                                                                book.getPublisherId(),
-                                                                book.getTitle(),
-                                                                book.getSalePrice(),
-                                                                book.getIsHide(),
-                                                                book.getTotal_revenue()
-                                                });
+                dateChooser1.getDateEditor().addPropertyChangeListener(
+                                new PropertyChangeListener() {
+                                        @Override
+                                        public void propertyChange(PropertyChangeEvent e) {
+                                                if ("date".equals(e.getPropertyName())) {
+                                                        if (dateChooser1.getDate() != null
+                                                                        && dateChooser2.getDate() != null) {
+                                                                filterByDate();
+                                                        }
+                                                }
                                         }
-                                }
+                                });
 
+                dateChooser2.getDateEditor().addPropertyChangeListener(
+                                new PropertyChangeListener() {
+                                        @Override
+                                        public void propertyChange(PropertyChangeEvent e) {
+                                                if ("date".equals(e.getPropertyName())) {
+                                                        if (dateChooser1.getDate() != null
+                                                                        && dateChooser2.getDate() != null) {
+                                                                filterByDate();
+                                                        }
+                                                }
+                                        }
+                                });
+
+                resetBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                updateTable(books, model);
+
+                                dateChooser1.setDate(null);
+                                dateChooser2.setDate(null);
                         }
                 });
         }
 
+        public void filterByDate() {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+                java.util.Date startDate = dateChooser1.getDate();
+                java.sql.Date tempDate1 = new java.sql.Date(startDate.getTime());
+                String startDateString = formatter.format(tempDate1);
+
+                java.util.Date endDate = dateChooser2.getDate();
+                java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
+                String endDateString = formatter.format(tempDate2);
+
+                UserDao userDao = new UserDao();
+                List<BookWithRevenue> books = userDao.getTotalRevenueGroupByBookBetweenDate(startDateString, endDateString);
+
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                updateTable(books, model);
+        }
+
+        public void filterByTitle() {
+                String filterText = jTextField1.getText();
+                UserDao userDao = new UserDao();
+                List<BookWithRevenue> books = userDao.getAllBooks();
+
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.setRowCount(0);
+
+                for (BookWithRevenue book : books) {
+                        if (book.getTitle().toLowerCase().contains(filterText.toLowerCase())) {
+                                model.addRow(new Object[] {book.getBookId(),book.getTitle(),book.getTotal_revenue()});
+                        }
+                }
+
+        }
+
+        public void updateTable(List<BookWithRevenue> books, DefaultTableModel model) {
+                model.setRowCount(0);
+
+                for (BookWithRevenue book : books) {
+                        model.addRow(new Object[] {book.getBookId(),book.getTitle(),book.getTotal_revenue()
+                        });
+                }
+        }
+
         @SuppressWarnings("unchecked")
+        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jToggleButton1 = new javax.swing.JToggleButton();
-        label1 = new java.awt.Label();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        dateChooser1 = new com.toedter.calendar.JDateChooser();
+        dateChooser2 = new com.toedter.calendar.JDateChooser();
+        resetBtn = new com.lms.custom.Button();
 
         jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        label1.setAlignment(java.awt.Label.CENTER);
-        label1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        label1.setText("Data Sale - Book");
-
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "bookID", "publisherID", "title", "salePrice", "isHide", "TotalRevenue"
+                "bookId", "title", "TotalRevenue"
             }
         ));
         table.setRowHeight(30);
@@ -149,32 +188,50 @@ public class viewDataSaleBook extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Month", "Week", "Day" }));
+        dateChooser1.setBackground(new java.awt.Color(255, 255, 255));
+
+        dateChooser2.setBackground(new java.awt.Color(255, 255, 255));
+
+        resetBtn.setBackground(new java.awt.Color(60, 58, 72));
+        resetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        resetBtn.setText("Reset Table");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 208, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(label1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(198, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(dateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -182,6 +239,10 @@ public class viewDataSaleBook extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_resetBtnActionPerformed
 
         private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
                 // TODO add your handling code here:
@@ -236,11 +297,12 @@ public class viewDataSaleBook extends javax.swing.JFrame {
         }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private com.toedter.calendar.JDateChooser dateChooser1;
+    private com.toedter.calendar.JDateChooser dateChooser2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JToggleButton jToggleButton1;
-    private java.awt.Label label1;
+    private com.lms.custom.Button resetBtn;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

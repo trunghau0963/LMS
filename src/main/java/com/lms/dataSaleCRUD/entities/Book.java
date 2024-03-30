@@ -6,20 +6,18 @@ public class Book {
     private String title;
     private float salePrice;
     private boolean isHide;
-    private float total_revenue;
 
     public Book() {
         super();
     }
 
-    public Book(String bookId, String publisherId, String title, float salePrice, boolean isHide, float total_revenue) {
+    public Book(String bookId, String publisherId, String title, float salePrice, boolean isHide) {
         super();
         this.bookId = bookId;
         this.publisherId = publisherId;
         this.title = title;
         this.salePrice = salePrice;
         this.isHide = isHide;
-        this.total_revenue = total_revenue;
     }
 
     public void setBookId(String bookId) {
@@ -42,10 +40,6 @@ public class Book {
         this.isHide = isHide;
     }
 
-    public void setTotal_revenue(float total_revenue) {
-        this.total_revenue = total_revenue;
-    }
-
     public String getBookId() {
         return bookId;
     }
@@ -66,26 +60,9 @@ public class Book {
         return isHide;
     }
 
-    public float getTotal_revenue() {
-        return total_revenue;
-    }
-
     @Override
     public String toString() {
         return "Book [bookId=" + bookId + ", publisherId=" + publisherId + ", title=" + title + ", salePrice=" + salePrice
                 + ", isHide=" + isHide + "]";
-    }
-
-    public static String getInitials(String str) {
-        String[] words = str.split(" ");
-        StringBuilder initials = new StringBuilder();
-
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                initials.append(word.charAt(0));
-            }
-        }
-
-        return initials.toString().toUpperCase();
     }
 }

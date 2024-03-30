@@ -6,27 +6,141 @@ package com.lms.dataSaleCRUD;
 
 import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
 import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
+import com.lms.dataSaleCRUD.dao.UserDao;
+import com.lms.dataSaleCRUD.entities.Book;
+import com.lms.dataSaleCRUD.entities.Category;
+import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
+
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
-/**
- *
- * @author PC
- */
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+
+
 public class viewDataSaleCategory extends javax.swing.JFrame {
-
-    /**
-     * Creates new form viewDataSaleCategory
-     */
     public viewDataSaleCategory() {
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        table.getTableHeader().setOpaque(false);
-        table.getTableHeader().setBackground(new Color(199, 200, 204));
+        // table.getTableHeader().setOpaque(false);
+        table.getTableHeader().setBackground(new Color(125, 200, 204));
         table.getTableHeader().setForeground(new Color(0, 0, 0));
-        
-        table.getColumnModel().getColumn(4).setCellRenderer(new ToggleRenderer());
-        table.getColumnModel().getColumn(4).setCellEditor(new ToggleEditor());
+
+        UserDao userDao = new UserDao();
+        List<CategoryWithRevenue> categories = userDao.getAllCategories();
+        String[] columnNames = { "genreID", "Genre", "TotalRevenue" };
+
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // lấy dữ liệu cho bảng
+        table.setModel(model);
+
+        updateTable(categories, model);
+
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                filterByCategory();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                filterByCategory();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                filterByCategory();
+            }
+        });
+
+        dateChooser1.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        if ("date".equals(e.getPropertyName())) {
+                            if (dateChooser1.getDate() != null
+                                    && dateChooser2.getDate() != null) {
+                                filterByDate();
+                            }
+                        }
+                    }
+                });
+
+        dateChooser2.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        if ("date".equals(e.getPropertyName())) {
+                            if (dateChooser1.getDate() != null
+                                    && dateChooser2.getDate() != null) {
+                                filterByDate();
+                            }
+                        }
+                    }
+                });
+
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateTable(categories, model);
+
+                dateChooser1.setDate(null);
+                dateChooser2.setDate(null);
+            }
+        });
+    }
+
+    public void filterByDate() {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+                java.util.Date startDate = dateChooser1.getDate();
+                java.sql.Date tempDate1 = new java.sql.Date(startDate.getTime());
+                String startDateString = formatter.format(tempDate1);
+
+                java.util.Date endDate = dateChooser2.getDate();
+                java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
+                String endDateString = formatter.format(tempDate2);
+
+                UserDao userDao = new UserDao();
+                List<CategoryWithRevenue> categories = userDao.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
+
+                System.out.println(categories.toString());
+
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                updateTable(categories, model);
+        }
+
+    public void filterByCategory() {
+        String filterText = jTextField1.getText();
+        UserDao userDao = new UserDao();
+        List<CategoryWithRevenue> categories = userDao.getAllCategories();
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        for (CategoryWithRevenue category : categories) {
+            if (category.getGenre().toLowerCase().contains(filterText.toLowerCase())) {
+                model.addRow(new Object[] { category.getGenreId(), category.getGenre(), category.getTotal_revenue() });
+            }
+        }
+    }
+
+    public void updateTable(List<CategoryWithRevenue> categories, DefaultTableModel model) {
+        model.setRowCount(0);
+
+        for (CategoryWithRevenue category : categories) {
+            model.addRow(new Object[] { category.getGenreId(), category.getGenre(), category.getTotal_revenue() });
+        }
+        table.setModel(model);
     }
 
     /**
@@ -35,52 +149,38 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        button1 = new com.lms.dataSaleCRUD.ui.Button();
         jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        label1 = new java.awt.Label();
+        dateChooser1 = new com.toedter.calendar.JDateChooser();
+        dateChooser2 = new com.toedter.calendar.JDateChooser();
+        resetBtn = new com.lms.custom.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "bookId", "publisherId", "title", "salePrice", "isHide"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+                new Object[][] {
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null },
+                        { null, null, null }
+                },
+                new String[] {
+                        "bookId", "category", "TotalRevenue"
+                }));
         table.setRowHeight(30);
-        table.setSelectionBackground(new java.awt.Color(180, 180, 184));
         table.setShowGrid(true);
-        table.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(table);
-
-        button1.setBackground(new java.awt.Color(199, 200, 204));
-        button1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        button1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/dataSaleCRUD/loupe.png"))); // NOI18N
+        jScrollPane2.setViewportView(table);
 
         jTextField1.setText("Searching something...");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -89,60 +189,95 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Month", "Week", "Day" }));
+        dateChooser1.setBackground(new java.awt.Color(255, 255, 255));
 
-        label1.setAlignment(java.awt.Label.CENTER);
-        label1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        label1.setText("Data Sale - Category");
+        dateChooser2.setBackground(new java.awt.Color(255, 255, 255));
+
+        resetBtn.setBackground(new java.awt.Color(60, 58, 72));
+        resetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        resetBtn.setText("Reset Table");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(187, 187, 187)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 538, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)))
-                .addContainerGap())
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(198, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 76,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout
+                                                                .createParallelGroup(
+                                                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(dateChooser2,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 158,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(dateChooser1,
+                                                                        javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 158,
+                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addPreferredGap(
+                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(jTextField1,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 538,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(166, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(35, 35, 35)
+                                                .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 28,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(dateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 28,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout
+                                                .createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(19, 19, 19)))
+                                .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(68, Short.MAX_VALUE)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }// GEN-LAST:event_jTextField1ActionPerformed
+
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_resetBtnActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_resetBtnActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -152,15 +287,19 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
         }
-        //</editor-fold>
+        // </editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -171,11 +310,11 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.lms.dataSaleCRUD.ui.Button button1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private com.toedter.calendar.JDateChooser dateChooser1;
+    private com.toedter.calendar.JDateChooser dateChooser2;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private java.awt.Label label1;
+    private com.lms.custom.Button resetBtn;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
