@@ -2,16 +2,13 @@ package com.lms.auth;
 
 import java.awt.Dimension;
 
-import com.formdev.flatlaf.FlatLaf;
 import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.AuthService;
 
 public class Application extends javax.swing.JFrame {
 
     private static Application app;
-    private final com.lms.auth.form.Login LoginForm;
-    private final com.lms.auth.form.ResetPw ResetPwForm;
-    private final com.lms.auth.form.SignUp SignUpForm;
+    private final com.lms.auth.form.AuthView AuthView;
 
     public Application() {
 
@@ -21,14 +18,12 @@ public class Application extends javax.swing.JFrame {
         initComponents();
         setSize(new Dimension(960, 540));
         // setLocationRelativeTo(null);
-        LoginForm = new com.lms.auth.form.Login(authService);
-        ResetPwForm = new com.lms.auth.form.ResetPw(authService);
-        SignUpForm = new com.lms.auth.form.SignUp();
         // setContentPane(LoginForm);
+        AuthView = new com.lms.auth.form.AuthView(authService);
         app = this;
         // app.setLayout(new java.awt.BorderLayout());
         // app.add(app.LoginForm, java.awt.BorderLayout.CENTER);
-        app.setContentPane(app.LoginForm);
+        app.setContentPane(app.AuthView);
         app.pack();
         app.setLocationRelativeTo(null);
     }
@@ -37,27 +32,6 @@ public class Application extends javax.swing.JFrame {
     // component.applyComponentOrientation(app.getComponentOrientation());
     // app.mainForm.showForm(component);
     // }
-
-    public static void login() {
-        app.setContentPane(app.LoginForm);
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
-
-    public static void resetPw() {
-        app.setContentPane(app.ResetPwForm);
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
-
-    public static void signUp() {
-        app.setContentPane(app.SignUpForm);
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
