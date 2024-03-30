@@ -13,6 +13,17 @@ public class User {
         
     }
 
+    public User(String Id, String Name, String dob, String phoneNumber, String pwd, String gender, boolean isBlock) {
+        this.Id = Id;
+        this.Name = Name;
+        this.dob = dob;
+        this.phoneNumber = phoneNumber;
+        this.pwd = pwd;
+        this.gender = gender;
+        this.isBlock = false;
+    }
+
+
     public void setId(String Id) {
         this.Id = Id;
     }

@@ -7,6 +7,11 @@ public class Customer extends User {
         super();
     }
 
+    public Customer(String Id, String Name, String dob, String phoneNumber, String gender, String pwd, boolean isBlock, boolean isMember) {
+        super(Id, Name, dob, phoneNumber, gender, pwd, isBlock);
+        this.isMember = isMember;
+    }
+
     public void setId(String Id) {
         this.Id = Id;
     }

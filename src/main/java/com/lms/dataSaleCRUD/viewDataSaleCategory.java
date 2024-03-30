@@ -4,11 +4,7 @@
  */
 package com.lms.dataSaleCRUD;
 
-import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
-import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
 import com.lms.dataSaleCRUD.dao.UserDao;
-import com.lms.dataSaleCRUD.entities.Book;
-import com.lms.dataSaleCRUD.entities.Category;
 import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
 
 import java.awt.Color;

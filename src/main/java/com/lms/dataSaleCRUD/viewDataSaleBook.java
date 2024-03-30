@@ -13,9 +13,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.lms.dataSaleCRUD.dao.UserDao;
-// import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
-// import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
-import com.lms.dataSaleCRUD.entities.Book;
 import com.lms.dataSaleCRUD.entities.BookWithRevenue;
 
 public class viewDataSaleBook extends javax.swing.JFrame {
