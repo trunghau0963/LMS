@@ -27,6 +27,7 @@ public class Application extends javax.swing.JFrame {
     private final com.lms.auth.form.Login LoginForm;
     private final com.lms.auth.form.ResetPw ResetPwForm;
     private final com.lms.auth.form.SignUp SignUpForm;
+    private final com.lms.auth.form.AuthView AuthView;
     private Admin admin;
     private Emp emp;
     private static AuthService authService;
@@ -41,6 +42,7 @@ public class Application extends javax.swing.JFrame {
         LoginForm = new com.lms.auth.form.Login(authService);
         ResetPwForm = new com.lms.auth.form.ResetPw(authService);
         SignUpForm = new com.lms.auth.form.SignUp();
+        AuthView = new com.lms.auth.form.AuthView(authService);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         // setLocationRelativeTo(null);
@@ -48,7 +50,7 @@ public class Application extends javax.swing.JFrame {
         app = this;
         admin = new Admin(app);
         emp = new Emp(app);
-        app.setContentPane(app.LoginForm);
+        app.setContentPane(app.AuthView);
         app.pack();
         app.setLocationRelativeTo(null);
 

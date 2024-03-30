@@ -1,6 +1,6 @@
 package com.lms.auth.model;
 
-public class ModelForgot {
+public class LoginModel {
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -8,6 +8,14 @@ public class ModelForgot {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUserType() {
@@ -18,14 +26,16 @@ public class ModelForgot {
         this.userType = userType;
     }
 
-    public ModelForgot(String phoneNumber, String userType) {
+    public LoginModel(String phoneNumber, String password, String userType) {
         this.phoneNumber = phoneNumber;
+        this.password = password;
         this.userType = userType;
     }
 
-    public ModelForgot() {
+    public LoginModel() {
     }
 
     private String phoneNumber;
+    private String password;
     private String userType;
 }

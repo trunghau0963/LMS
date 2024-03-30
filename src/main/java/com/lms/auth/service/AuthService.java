@@ -5,8 +5,8 @@ import java.util.List;
 import com.lms.auth.dal.AuthDao;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
-import com.lms.auth.model.ModelLogin;
-import com.lms.auth.model.ModelRegister;
+import com.lms.auth.model.LoginModel;
+import com.lms.auth.model.RegisterModel;
 
 public class AuthService {
     
@@ -17,12 +17,12 @@ public class AuthService {
     }
 
     public User register(String userName, String phoneNumber, String pw, String userType){
-        ModelRegister newUser = new ModelRegister(userName, phoneNumber, pw, userType);
+        RegisterModel newUser = new RegisterModel(userName, phoneNumber, pw, userType);
         return userDao.register(newUser);
     }
     
     public User logIn(String phoneNumber, String pwd, String userType) {
-        ModelLogin data = new ModelLogin();
+        LoginModel data = new LoginModel();
         data.setPhoneNumber(phoneNumber);
         data.setPassword(pwd);
         data.setUserType(userType);

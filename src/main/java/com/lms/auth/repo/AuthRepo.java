@@ -11,17 +11,17 @@ import com.lms.auth.dal.AuthDao;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
-import com.lms.auth.model.ModelLogin;
-import com.lms.auth.model.ModelRegister;
+import com.lms.auth.model.LoginModel;
+import com.lms.auth.model.RegisterModel;
 import com.lms.connection.JDBCConnection;
 
-public class AuthRepo implements AuthDao {
+public class AuthRepo implements AuthDao{
 
-    public User register(ModelRegister register) {
+    public User register(RegisterModel register) {
         Connection connection = null;
         ResultSet resultSet;
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             if (register.getUserType().equals("Admin")) {
                 resultSet = statement
@@ -80,10 +80,10 @@ public class AuthRepo implements AuthDao {
         return null;
     }
 
-    public User logIn(ModelLogin login) {
+    public User logIn(LoginModel login) {
         Connection connection = null;
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             if (login.getUserType().equals("Admin")) {
                 Admin user = new Admin();
@@ -137,7 +137,7 @@ public class AuthRepo implements AuthDao {
     public User forgotPassword(String phoneNumber, String userType) {
         Connection connection = null;
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             if (userType.equals("Admin")) {
                 Admin user = new Admin();
@@ -186,7 +186,7 @@ public class AuthRepo implements AuthDao {
     public User updatePassword(User user, String newPassword) {
         Connection connection = null;
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             if (user instanceof Admin) {
                 Admin admin = (Admin) user;
@@ -224,7 +224,7 @@ public class AuthRepo implements AuthDao {
         List<Employee> users = new ArrayList<Employee>();
         Connection connection = null;
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
             while (resultSet.next()) {

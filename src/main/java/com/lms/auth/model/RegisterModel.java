@@ -1,8 +1,8 @@
 package com.lms.auth.model;
 
-public class ModelRegister {
+public class RegisterModel {
     
-    public ModelRegister(String name, String phoneNumber, String passwrord, String userType) {
+    public RegisterModel(String name, String phoneNumber, String passwrord, String userType) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.passwrord = passwrord;
