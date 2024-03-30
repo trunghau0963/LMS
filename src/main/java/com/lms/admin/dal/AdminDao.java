@@ -18,4 +18,8 @@ public interface AdminDao {
 
   public List<Admin> getAdmins();
 
+  public User getUserByPhoneNumber(String phoneNumber);
+
+  public User getUserByName(String name);
+
 }

@@ -175,4 +175,15 @@ public class AdminRepo implements AdminDao {
     return users;
   }
 
+
+  public User getUserByPhoneNumber(String phoneNumber) {
+
+    return null;
+  }
+
+  public User getUserByName(String name) {
+
+    return null;
+  }
+
 }
