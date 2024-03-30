@@ -1,14 +1,6 @@
 package com.lms.admin.model;
 
 public class ModelAddUser {
-  
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
 
   public String getFullName() {
     return fullName;
@@ -58,8 +50,9 @@ public class ModelAddUser {
     this.dob = dob;
   }
 
-  public ModelAddUser(String userName, String fullName, String phoneNumber, String password, String userType, String gender, String dob) {
-    this.userName = userName;
+  public ModelAddUser(String fullName, String phoneNumber, String password, String userType, String gender,
+      String dob) {
+
     this.fullName = fullName;
     this.phoneNumber = phoneNumber;
     this.password = password;
@@ -67,8 +60,7 @@ public class ModelAddUser {
     this.gender = gender;
     this.dob = dob;
   }
-  
-  private String userName;
+
   private String fullName;
   private String phoneNumber;
   private String password;

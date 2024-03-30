@@ -11,15 +11,13 @@ import com.lms.admin.model.ModelAddUser;
 public class AdminService {
   private AdminDao adminDao;
 
-
   public AdminService(AdminDao adminDao) {
     this.adminDao = adminDao;
   }
 
+  public User addUser(String phoneNumber, String pw, String userType, String gender, String dob, String fullName) {
 
-
-  public User addUser(String userName, String phoneNumber, String pw, String userType, String gender, String dob, String fullName) {
-    ModelAddUser newUser = new ModelAddUser(userName, fullName, phoneNumber, fullName, userType, gender, dob);
+    ModelAddUser newUser = new ModelAddUser(fullName, phoneNumber, pw, userType, gender, dob);
     return adminDao.addUser(newUser);
   }
 
