@@ -4,8 +4,9 @@
  */
 package com.lms.dataSaleCRUD;
 
-import com.lms.dataSaleCRUD.dao.UserDao;
+import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
+import com.lms.dataSaleCRUD.repo.UserRepo;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -29,8 +30,8 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
         table.getTableHeader().setBackground(new Color(125, 200, 204));
         table.getTableHeader().setForeground(new Color(0, 0, 0));
 
-        UserDao userDao = new UserDao();
-        List<CategoryWithRevenue> categories = userDao.getAllCategories();
+        UserRepo userRepo = new UserRepo();
+        List<CategoryWithRevenue> categories = userRepo.getAllCategories();
         String[] columnNames = { "genreID", "Genre", "TotalRevenue" };
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
@@ -106,8 +107,8 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
                 java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
                 String endDateString = formatter.format(tempDate2);
 
-                UserDao userDao = new UserDao();
-                List<CategoryWithRevenue> categories = userDao.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
+                UserRepo userRepo = new UserRepo();
+                List<CategoryWithRevenue> categories = userRepo.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
 
                 System.out.println(categories.toString());
 
@@ -117,8 +118,8 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
     public void filterByCategory() {
         String filterText = jTextField1.getText();
-        UserDao userDao = new UserDao();
-        List<CategoryWithRevenue> categories = userDao.getAllCategories();
+        UserRepo userRepo = new UserRepo();
+        List<CategoryWithRevenue> categories = userRepo.getAllCategories();
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);

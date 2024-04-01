@@ -1,4 +1,4 @@
-package com.lms.dataSaleCRUD.dao;
+package com.lms.dataSaleCRUD.repo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,16 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.lms.connection.JDBCConnection;
-import com.lms.dataSaleCRUD.entities.Book;
+import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.BookWithRevenue;
-import com.lms.dataSaleCRUD.entities.Category;
 import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
 
-public class UserDao {
+public class UserRepo implements UserDao {
+
     public List<BookWithRevenue> getAllBooks() {
         List<BookWithRevenue> books = new ArrayList<>();
         Connection connection = null;

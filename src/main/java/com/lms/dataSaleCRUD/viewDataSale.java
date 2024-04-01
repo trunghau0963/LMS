@@ -4,17 +4,18 @@ import java.awt.Color;
 import java.util.List;
 
 import com.lms.dataSaleCRUD.component.chart.ModelChart;
-import com.lms.dataSaleCRUD.dao.UserDao;
+import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.Book;
 import com.lms.dataSaleCRUD.entities.BookWithRevenue;
+import com.lms.dataSaleCRUD.repo.UserRepo;
 
 public class viewDataSale extends javax.swing.JFrame {
     public viewDataSale() {
         initComponents();
         getContentPane().setBackground(new Color(250, 250, 250));
 
-        UserDao userDao = new UserDao();
-        List<BookWithRevenue> books = userDao.getAllBooks();
+        UserRepo userRepo = new UserRepo();
+        List<BookWithRevenue> books = userRepo.getAllBooks();
 
         double[] revenueArray1 = new double[] {books.get(0).getTotal_revenue(), books.get(1).getTotal_revenue(), books.get(2).getTotal_revenue(), books.get(3).getTotal_revenue(), books.get(4).getTotal_revenue(), books.get(5).getTotal_revenue()};
 
