@@ -35,6 +35,12 @@ public class AdminService {
     return adminDao.getAdmins();
   }
 
+  public Employee getEmployeeByPhoneNumber(String phoneNumber) {
+    return adminDao.getEmployeeByPhoneNumber(phoneNumber);
+  }
 
+  public Employee getEmployeeByName(String name) {
+    return adminDao.getEmployeeByName(name);
+  }
 
 }

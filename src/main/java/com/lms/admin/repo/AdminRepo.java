@@ -175,15 +175,67 @@ public class AdminRepo implements AdminDao {
     return users;
   }
 
-
-  public User getUserByPhoneNumber(String phoneNumber) {
-
+  public Employee getEmployeeByPhoneNumber(String phoneNumber) {
+    Connection connection = null;
+    ResultSet resultSet;
+    Employee user = new Employee();
+    try {
+      connection = JDBCConnection.getJDBConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM employee WHERE empName = '" + phoneNumber + "'");
+      while (resultSet.next()) {
+        user.setName(resultSet.getString("empName"));
+        user.setPhoneNumber(resultSet.getString("phoneNumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
+        user.setIsBlock(resultSet.getBoolean("isBlock"));
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
     return null;
   }
 
-  public User getUserByName(String name) {
-
+  public Employee getEmployeeByName(String name) {
+    Connection connection = null;
+    ResultSet resultSet;
+    Employee user = new Employee();
+    try {
+      connection = JDBCConnection.getJDBConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM employee WHERE empName = '" + name + "'");
+      while (resultSet.next()) {
+        user.setName(resultSet.getString("empName"));
+        user.setPhoneNumber(resultSet.getString("phoneNumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
+        user.setIsBlock(resultSet.getBoolean("isBlock"));
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
     return null;
   }
-
 }
