@@ -2,6 +2,9 @@ package com.lms.auth.entities;
 
 public class Employee extends User {
 
+    private String pwd;
+    private boolean isBlock = false;
+
     public Employee() {
         super();
     }

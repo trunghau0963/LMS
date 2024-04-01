@@ -1,14 +1,9 @@
 package com.lms.auth.entities;
 
-public class User {
-    protected String Id;
-    protected String Name;
-    protected String dob = null;
-    protected String phoneNumber;
-    protected String gender = null;
+public class Member extends User {
 
-    public User() {
-
+    public Member() {
+        super();
     }
 
     public void setId(String Id) {
@@ -28,7 +23,7 @@ public class User {
     }
 
 
-    public void setGender(String gender) {
+    public void setGender(String gender){
         this.gender = gender;
     }
 
@@ -54,4 +49,5 @@ public class User {
         return gender;
     }
 
+    
 }

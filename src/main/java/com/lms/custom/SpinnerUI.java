@@ -17,7 +17,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicSpinnerUI;
 
-import com.lms.auth.ui.TextField;
+import com.lms.custom.ScrollBarCustom;
 
 public class SpinnerUI extends BasicSpinnerUI {
 
