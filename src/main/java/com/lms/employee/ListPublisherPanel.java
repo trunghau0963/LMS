@@ -395,10 +395,6 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                 }
         }// GEN-LAST:event_searchBtnActionPerformed
 
-        private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton1ActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_jRadioButton1ActionPerformed
-
         public void resetActionPerformed(ActionEvent e) {
                 searchField.setText("");
 

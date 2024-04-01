@@ -232,6 +232,7 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
 
                 javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(this);
                 setLayout(jPanelLayout);
+
                 jPanelLayout.setHorizontalGroup(
                                 jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(jPanelLayout.createSequentialGroup()
@@ -244,40 +245,9 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                                                                                                 .createSequentialGroup()
                                                                                                                 .addGap(57, 57, 57)
                                                                                                                 .addComponent(jScrollPane1,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                652,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                jPanelLayout.createSequentialGroup()
-                                                                                                                                .addContainerGap()
-                                                                                                                                .addComponent(addAuthorBtn)))
-                                                                                .addGroup(jPanelLayout
-                                                                                                .createSequentialGroup()
-                                                                                                .addGap(92, 92, 92)
-                                                                                                .addComponent(searchZone,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                .addGroup(jPanelLayout
-                                                                                                .createSequentialGroup()
-                                                                                                .addGap(308, 308, 308)
-                                                                                                .addComponent(pageTitle)))
-                                                                .addContainerGap(91, Short.MAX_VALUE)));
-                jPanelLayout.setHorizontalGroup(
-                                jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanelLayout.createSequentialGroup()
-                                                                .addGroup(jPanelLayout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                .addGroup(jPanelLayout
-                                                                                                .createParallelGroup(
-                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                .addGroup(jPanelLayout
-                                                                                                                .createSequentialGroup()
-                                                                                                                .addGap(57, 57, 57)
-                                                                                                                .addComponent(jScrollPane1,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                652,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                                Short.MAX_VALUE))
                                                                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                                 jPanelLayout.createSequentialGroup()
                                                                                                                                 .addContainerGap()
@@ -304,15 +274,17 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                                                                                                                 .addGap(34, 34, 34)
                                                                                                                                 .addComponent(sexBtn2)
                                                                                                                                 .addPreferredGap(
-                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+
+                                                                                                                                .addGap(90)
+                                                                                                                                .addComponent(statusBtn1)
                                                                                                                                 .addComponent(statusBtn2)
-                                                                                                                                .addGap(133, 133, 133))
+                                                                                                                                .addGap(133, 133,
+                                                                                                                                                133))
                                                                                                                 .addComponent(searchZone,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                Short.MAX_VALUE))))
                                                                 .addContainerGap(91, Short.MAX_VALUE)));
                 jPanelLayout.setVerticalGroup(
                                 jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,8 +293,8 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                                                 .addGroup(jPanelLayout.createParallelGroup(
                                                                                 javax.swing.GroupLayout.Alignment.TRAILING)
                                                                                 .addComponent(searchZone,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -342,9 +314,9 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                 .addComponent(jScrollPane1,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                Short.MAX_VALUE)
                                                                 .addGap(19, 19, 19)));
 
         }// </editor-fold>//GEN-END:initComponents
