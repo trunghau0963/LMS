@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -11,6 +12,9 @@ import javax.swing.border.EmptyBorder;
 
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
+import com.lms.employee.main.AuthorsPage;
+import com.lms.employee.main.EditProfile;
+import com.lms.employee.main.PublishersPage;
 import com.lms.dashboard.form.other.*;
 
 public class Admin extends javax.swing.JPanel {
@@ -78,6 +82,15 @@ public class Admin extends javax.swing.JPanel {
         listFrame.add(new dashboardForm());
         listFrame.add(new accountForm());
         listFrame.add(new bookForm());
+        listFrame.add(new bookForm());
+        listFrame.add(new PublishersPage());
+        listFrame.add(new AuthorsPage());
+        try {
+            listFrame.add(new EditProfile("17470f3a4f13c023"));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void logOut() {

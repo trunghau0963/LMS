@@ -2,38 +2,27 @@ package com.lms.employee.main;
 
 import java.awt.CardLayout;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.lms.employee.AddPublisherPanel;
 import com.lms.employee.ListPublisherPanel;
 
-public class PublishersPage extends JFrame{
-    private JPanel mainPanel;
+public class PublishersPage extends JPanel{
     private CardLayout cardLayout;
     ListPublisherPanel publishers;
     AddPublisherPanel addPublisher;
 
     public PublishersPage() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
         // Tạo CardLayout
+        super();
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        this.setLayout(cardLayout);
         
-        publishers = new ListPublisherPanel(cardLayout, mainPanel);
-        addPublisher = new AddPublisherPanel(cardLayout, mainPanel);
+        publishers = new ListPublisherPanel(cardLayout, this);
+        addPublisher = new AddPublisherPanel(cardLayout, this);
         
         // Panel trống ban đầu
-        mainPanel.add(publishers, "publishersPage");
-        mainPanel.add(addPublisher, "addPublisher");
-        getContentPane().add(mainPanel);
-
-        pack();
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new PublishersPage();
+        this.add(publishers, "publishersPage");
+        this.add(addPublisher, "addPublisher");
     }
 }

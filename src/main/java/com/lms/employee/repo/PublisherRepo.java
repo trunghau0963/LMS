@@ -17,13 +17,15 @@ public class PublisherRepo implements PublisherDao {
     Connection connection = null;
 
     public PublisherRepo() {
-        connection = JDBCConnection.getJDBConnection();
+        connection = JDBCConnection.getJDBCConnection();
     }
 
     @Override
     public ArrayList<Publisher> getListPublishers() {
         ArrayList<Publisher> publishers = new ArrayList<Publisher>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM publisher ORDER BY publisherName ASC");
             while (resultSet.next()) {
@@ -45,6 +47,8 @@ public class PublisherRepo implements PublisherDao {
     public ArrayList<Publisher> getListPublishers(String isHide){
         ArrayList<Publisher> publishers = new ArrayList<Publisher>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "SELECT * FROM publisher";
 
             if(isHide != null){
@@ -77,6 +81,8 @@ public class PublisherRepo implements PublisherDao {
     public Publisher setVisible(String id, boolean isHide) {
         Publisher publisher = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "UPDATE publisher SET isHide = ? WHERE publisherId = ?";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setBoolean(1, isHide ? false : true);
@@ -108,6 +114,8 @@ public class PublisherRepo implements PublisherDao {
     public ArrayList<Publisher> getPublisherById(String id, String isHide) {
         ArrayList<Publisher> publishers = new ArrayList<Publisher>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             boolean convertIsHide;
 
             String stmt = "SELECT * FROM publisher WHERE publisherId ILIKE ?";
@@ -143,6 +151,8 @@ public class PublisherRepo implements PublisherDao {
     public ArrayList<Publisher> getPublisherByName(String name, String isHide) {
         ArrayList<Publisher> publishers = new ArrayList<Publisher>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             boolean convertIsHide;
 
             String stmt = "SELECT * FROM Publisher WHERE publisherName ILIKE ?";
@@ -179,6 +189,8 @@ public class PublisherRepo implements PublisherDao {
     public ArrayList<Publisher> getPublisherByAddress(String address, String isHide) {
         ArrayList<Publisher> publishers = new ArrayList<Publisher>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             boolean convertIsHide;
 
             String stmt = "SELECT * FROM Publisher WHERE publisherAddress ILIKE ?";
@@ -215,6 +227,8 @@ public class PublisherRepo implements PublisherDao {
     public Publisher editInfo(String id, String name, String address, String isHide) {
         Publisher publisher = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "Update Publisher set publisherName = ?, publisherAddress = ?, isHide = ? Where publisherId = ?";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setString(1, name);
@@ -250,6 +264,8 @@ public class PublisherRepo implements PublisherDao {
     public Publisher addPublisher(String name, String address, String isHide) {
         Publisher publisher = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "INSERT INTO publisher (publisherName, publisherAddress, isHide) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setString(1, name);

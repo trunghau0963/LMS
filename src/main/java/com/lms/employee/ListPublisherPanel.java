@@ -215,7 +215,17 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
                 pageTitle.setText("List Publisher");
 
                 statusBtn1.setText("Hide");
+                statusBtn1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchBtnActionPerformed(evt);
+                        }
+                });
                 statusBtn2.setText("UnHide");
+                statusBtn2.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchBtnActionPerformed(evt);
+                        }
+                });
 
                 statusBtnGroup = new ButtonGroup();
                 statusBtnGroup.add(statusBtn1);
@@ -315,7 +325,7 @@ public class ListPublisherPanel extends javax.swing.JPanel implements ActionList
         private void addPublisherBtnActionPerformed(java.awt.event.ActionEvent evt, CardLayout cobj,
                         JPanel panelParent) {// GEN-FIRST:event_addPublisherBtnActionPerformed
                 // TODO add your handling code here:
-                cobj.next(panelParent);
+                cobj.show(panelParent, "addPublisher");
         }// GEN-LAST:event_addPublisherBtnActionPerformed
 
         private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed

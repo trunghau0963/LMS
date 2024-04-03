@@ -17,13 +17,15 @@ public class EmployeeRepo implements EmployeeDao {
     Connection connection = null;
 
     public EmployeeRepo() {
-        connection = JDBCConnection.getJDBConnection();
+        connection = JDBCConnection.getJDBCConnection();
     }
 
     @Override
     public Employee editInfo(String empId, String empName, String dob, String pwd, String gender) {
         Employee emp = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "Update employee set empName = ?, dob = ?, pwd = ?, gender = ? Where empId = ?";
             PreparedStatement statement = connection.prepareStatement(stmt);
 
@@ -74,6 +76,8 @@ public class EmployeeRepo implements EmployeeDao {
     public Employee getInfoEmpById(String id) {
         Employee emp = new Employee();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "SELECT * FROM employee WHERE empId ILIKE ?";
 
             PreparedStatement statement = connection.prepareStatement(stmt);

@@ -141,7 +141,7 @@ public class AddPublisherPanel extends javax.swing.JPanel {
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt, CardLayout cobj, JPanel mainPanel) {//GEN-FIRST:event_cancelBtnstatusPerformed
         // TODO add your handling code here:
-        cobj.next(mainPanel);
+        cobj.show(mainPanel, "publishersPage");
     }//GEN-LAST:event_cancelBtnstatusPerformed
 
     private void addBtnstatusPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnstatusPerformed

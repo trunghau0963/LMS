@@ -8,35 +8,24 @@ import com.lms.employee.ListAuthorPanel;
 
 import java.awt.*;
 
-public class AuthorsPage extends JFrame {
-    private JPanel mainPanel;
+public class AuthorsPage extends JPanel {
     private CardLayout cardLayout;
     ListAuthorPanel authors;
     AddAuthorPanel addAuthor;
     EditInfoAuthorPanel editAuthor;
 
     public AuthorsPage() {
-        
-        setTitle("Author management");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
         // Tạo CardLayout
+        super();
+
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
-        
-        authors = new ListAuthorPanel(cardLayout, mainPanel);
-        addAuthor = new AddAuthorPanel(cardLayout, mainPanel);
+        this.setLayout(cardLayout);
+
+        authors = new ListAuthorPanel(cardLayout, this);
+        addAuthor = new AddAuthorPanel(cardLayout, this);
         
         // Panel trống ban đầu
-        mainPanel.add(authors, "authorsPage");
-        mainPanel.add(addAuthor, "addAuthor");
-        getContentPane().add(mainPanel);
-
-        pack();
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new AuthorsPage();
+        this.add(authors, "authorsPage");
+        this.add(addAuthor, "addAuthor");
     }
 }

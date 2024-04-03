@@ -2,33 +2,19 @@ package com.lms.employee.main;
 
 import java.awt.CardLayout;
 import java.text.ParseException;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import com.lms.employee.EditProfilePanel;
 
-public class EditProfile extends JFrame {
-    private JPanel mainPanel;
+public class EditProfile extends JPanel {
     private CardLayout cardLayout;
 
-    public EditProfile() throws ParseException {
-        setTitle("Publisher management");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public EditProfile(String id) throws ParseException {
         // Tạo CardLayout
+        super();
         cardLayout = new CardLayout();
-        mainPanel = new JPanel(cardLayout);
+        this.setLayout(cardLayout);
 
-        EditProfilePanel editProfile = new EditProfilePanel("053e09ffa8061a20");
-        mainPanel.add(editProfile, "editProfilePage");
-
-        getContentPane().add(mainPanel);
-        pack();
-        setVisible(true);
-    }
-
-    public static void main(String[] args) throws ParseException {
-        new EditProfile();
+        EditProfilePanel editProfile = new EditProfilePanel(id);
+        this.add(editProfile, "editProfilePage");
     }
 }

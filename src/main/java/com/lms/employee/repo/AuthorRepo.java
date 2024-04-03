@@ -17,13 +17,15 @@ public class AuthorRepo implements AuthorDao {
     Connection connection = null;
 
     public AuthorRepo() {
-        connection = JDBCConnection.getJDBConnection();
+        connection = JDBCConnection.getJDBCConnection();
     }
 
     @Override
     public ArrayList<Author> getListAuthors() {
         ArrayList<Author> authors = new ArrayList<Author>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM author ORDER BY authorName ASC");
             while (resultSet.next()) {
@@ -45,6 +47,8 @@ public class AuthorRepo implements AuthorDao {
     public ArrayList<Author> getListAuthors(String gender, String isHide) {
         ArrayList<Author> authors = new ArrayList<Author>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "SELECT * FROM author";
             stmt += gender != null ? " Where GENDER ILIKE '" + gender + "'" : "";
 
@@ -81,6 +85,8 @@ public class AuthorRepo implements AuthorDao {
     public Author setVisible(String id, boolean isHide) {
         Author author = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "UPDATE author SET isHide = ? WHERE authorId = ?";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setBoolean(1, isHide ? false : true);
@@ -112,6 +118,8 @@ public class AuthorRepo implements AuthorDao {
     public ArrayList<Author> getAuthorById(String id, String gender, String isHide) {
         ArrayList<Author> authors = new ArrayList<Author>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             boolean convertIsHide;
 
             String stmt = "SELECT * FROM author WHERE authorId ILIKE ?";
@@ -149,6 +157,7 @@ public class AuthorRepo implements AuthorDao {
     public ArrayList<Author> getAuthorByName(String name, String gender, String isHide) {
         ArrayList<Author> authors = new ArrayList<Author>();
         try {
+            connection = JDBCConnection.getJDBCConnection();
             boolean convertIsHide;
 
             String stmt = "SELECT * FROM author WHERE authorName ILIKE ?";
@@ -186,6 +195,8 @@ public class AuthorRepo implements AuthorDao {
     public Author addAuthor(String name, String gender, String isHide) {
         Author author = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "INSERT INTO author (authorName, gender, isHide) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setString(1, name);
@@ -221,6 +232,8 @@ public class AuthorRepo implements AuthorDao {
     public Author editInfo(String id, String name, String gender, String isHide) {
         Author author = null;
         try {
+            connection = JDBCConnection.getJDBCConnection();
+
             String stmt = "Update author set authorName = ?, gender = ?, isHide = ? Where authorId = ?";
             PreparedStatement statement = connection.prepareStatement(stmt);
             statement.setString(1, name);

@@ -21,7 +21,7 @@ import com.lms.employee.service.EmployeeService;
  */
 public class EditProfilePanel extends javax.swing.JPanel {
 
-        public EditProfilePanel(String id) throws ParseException {
+        public EditProfilePanel(String id) {
                 this.empDao = new EmployeeRepo();
                 this.empService = new EmployeeService(empDao);
                 this.empInfo = empService.getInfoEmpById(id);
@@ -30,7 +30,7 @@ public class EditProfilePanel extends javax.swing.JPanel {
 
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
-        private void initComponents() throws ParseException {
+        private void initComponents()  {
                 pageLabel = new javax.swing.JLabel();
                 fullNameLabel = new javax.swing.JLabel();
                 fullname = new javax.swing.JTextField();
@@ -49,8 +49,14 @@ public class EditProfilePanel extends javax.swing.JPanel {
                 imageAvatar1 = new com.lms.custom.ImageAvatar();
 
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = format.parse(empInfo.getDob());
-                dateChooser.setDate(date);
+                Date date;
+                try {
+                        date = format.parse(empInfo.getDob());
+                        dateChooser.setDate(date);
+                } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
 
                 setBackground(new java.awt.Color(255, 255, 255));
 

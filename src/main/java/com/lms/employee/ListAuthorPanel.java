@@ -142,14 +142,34 @@ public class ListAuthorPanel extends javax.swing.JPanel implements ActionListene
                 searchZone.add(searchBtnZone, java.awt.BorderLayout.EAST);
 
                 sexBtn1 = new javax.swing.JRadioButton();
+                sexBtn1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchActionPerformed(evt);
+                        }
+                });
                 sexBtn2 = new javax.swing.JRadioButton();
+                sexBtn2.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchActionPerformed(evt);
+                        }
+                });
 
                 sexBtnGroup = new ButtonGroup();
                 sexBtnGroup.add(sexBtn1);
                 sexBtnGroup.add(sexBtn2);
 
                 statusBtn1 = new javax.swing.JRadioButton();
+                statusBtn1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchActionPerformed(evt);
+                        }
+                });
                 statusBtn2 = new javax.swing.JRadioButton();
+                statusBtn2.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                searchActionPerformed(evt);
+                        }
+                });
 
                 statusBtnGroup = new ButtonGroup();
                 statusBtnGroup.add(statusBtn1);
