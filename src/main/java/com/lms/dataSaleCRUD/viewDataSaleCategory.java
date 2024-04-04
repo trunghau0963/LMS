@@ -4,7 +4,6 @@
  */
 package com.lms.dataSaleCRUD;
 
-import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
 import com.lms.dataSaleCRUD.repo.UserRepo;
 
@@ -109,8 +108,6 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
                 UserRepo userRepo = new UserRepo();
                 List<CategoryWithRevenue> categories = userRepo.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
-
-                System.out.println(categories.toString());
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 updateTable(categories, model);
