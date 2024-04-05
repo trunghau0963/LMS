@@ -11,8 +11,8 @@ public class JDBCConnection {
         try {
             Class.forName("org.postgresql.Driver");
 
-            String url = "jdbc:postgresql://localhost:5432/lms";
-            String username = "root"; // replace with your username
+            String url = "jdbc:postgresql://localhost:5432/LibraryManagement";
+            String username = "postgres"; // replace with your username
             String password = "root"; // replace with your password
 
             connection = DriverManager.getConnection(url, username, password);

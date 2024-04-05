@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.book.main.BookView;
+import com.lms.category.main.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
 import com.lms.dashboard.form.other.*;
@@ -77,7 +79,8 @@ public class Admin extends javax.swing.JPanel {
     public void addListFrame() {
         listFrame.add(new dashboardForm());
         listFrame.add(new accountForm());
-        listFrame.add(new bookForm());
+        listFrame.add(new BookView());
+        listFrame.add(new CategoryView());
     }
 
     public void logOut() {
