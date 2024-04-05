@@ -12,6 +12,8 @@ import javax.swing.border.EmptyBorder;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
 import com.lms.dashboard.form.other.*;
+import com.lms.admin.main.InfoPage;
+import com.lms.admin.main.UsersPage;
 
 public class Admin extends javax.swing.JPanel {
 
@@ -76,8 +78,12 @@ public class Admin extends javax.swing.JPanel {
 
     public void addListFrame() {
         listFrame.add(new dashboardForm());
-        listFrame.add(new accountForm());
+        listFrame.add(new UsersPage());
         listFrame.add(new bookForm());
+        listFrame.add(new bookForm());
+        listFrame.add(new bookForm());
+        listFrame.add(new bookForm());
+        listFrame.add(new InfoPage());
     }
 
     public void logOut() {
