@@ -1,8 +1,4 @@
 package com.lms.dataSaleCRUD;
-import com.lms.dataSaleCRUD.dal.UserDao;
-import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
-import com.lms.dataSaleCRUD.repo.UserRepo;
-import com.lms.dataSaleCRUD.service.UserService;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,11 +11,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.lms.dataSaleCRUD.dal.UserDao;
+import com.lms.dataSaleCRUD.entities.CustomerWithRevenue;
+import com.lms.dataSaleCRUD.repo.UserRepo;
+import com.lms.dataSaleCRUD.service.UserService;
 
-public class viewDataSaleCategory extends javax.swing.JFrame {
-    public viewDataSaleCategory() {
+public class viewDataSaleCustomerPanel extends javax.swing.JPanel {
+    public viewDataSaleCustomerPanel() {
         initComponents();
-        getContentPane().setBackground(Color.WHITE);
+
+        initComponents();
+        setBackground(Color.WHITE);
 
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         // table.getTableHeader().setOpaque(false);
@@ -28,9 +30,8 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
         UserDao userDao = new UserRepo();
         UserService userService = new UserService(userDao);
-        
-        List<CategoryWithRevenue> categories = userService.getAllCategories();
-        String[] columnNames = { "genreID", "Genre", "TotalRevenue" };
+        List<CustomerWithRevenue> customers = userService.getAllCustomers();
+        String[] columnNames = { "customerID", "customerName", "TotalRevenue" };
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -39,22 +40,21 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
             }
         };
 
-        // lấy dữ liệu cho bảng
         table.setModel(model);
 
-        updateTable(categories, model);
+        updateTable(customers, model);
 
         jTextField1.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
-                filterByCategory();
+                filterByName();
             }
 
             public void removeUpdate(DocumentEvent e) {
-                filterByCategory();
+                filterByName();
             }
 
             public void insertUpdate(DocumentEvent e) {
-                filterByCategory();
+                filterByName();
             }
         });
 
@@ -86,7 +86,7 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
         resetBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateTable(categories, model);
+                updateTable(customers, model);
 
                 dateChooser1.setDate(null);
                 dateChooser2.setDate(null);
@@ -107,56 +107,67 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
                 UserDao userDao = new UserRepo();
                 UserService userService = new UserService(userDao);
-                
-                List<CategoryWithRevenue> categories = userService.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
+                List<CustomerWithRevenue> customers = userService.getTotalRevenueGroupByCustomerBetweenDate(startDateString, endDateString);
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
-                updateTable(categories, model);
+                updateTable(customers, model);
         }
 
-    public void filterByCategory() {
+    public void filterByName() {
         String filterText = jTextField1.getText();
         UserDao userDao = new UserRepo();
         UserService userService = new UserService(userDao);
-        List<CategoryWithRevenue> categories = userService.getAllCategories();
+        List<CustomerWithRevenue> customers = userService.getAllCustomers();
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        for (CategoryWithRevenue category : categories) {
-            if (category.getGenre().toLowerCase().contains(filterText.toLowerCase())) {
-                model.addRow(new Object[] { category.getGenreId(), category.getGenre(), category.getTotal_revenue() });
+        for (CustomerWithRevenue customer : customers) {
+            if (customer.getName().toLowerCase().contains(filterText.toLowerCase())) {
+                model.addRow(new Object[] { customer.getId(), customer.getName(), customer.getTotal_revenue() });
             }
         }
     }
 
-    public void updateTable(List<CategoryWithRevenue> categories, DefaultTableModel model) {
+    public void updateTable(List<CustomerWithRevenue> customers, DefaultTableModel model) {
         model.setRowCount(0);
 
-        for (CategoryWithRevenue category : categories) {
-            model.addRow(new Object[] { category.getGenreId(), category.getGenre(), category.getTotal_revenue() });
+        for (CustomerWithRevenue customer : customers) {
+            model.addRow(new Object[] { customer.getId(), customer.getName(), customer.getTotal_revenue() });
         }
         table.setModel(model);
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         dateChooser1 = new com.toedter.calendar.JDateChooser();
         dateChooser2 = new com.toedter.calendar.JDateChooser();
         resetBtn = new com.lms.custom.Button();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jTextField1.setToolTipText("");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        dateChooser1.setBackground(new java.awt.Color(255, 255, 255));
+
+        dateChooser2.setBackground(new java.awt.Color(255, 255, 255));
+
+        resetBtn.setBackground(new java.awt.Color(60, 58, 72));
+        resetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        resetBtn.setText("Reset Table");
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -179,31 +190,11 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
         table.setShowGrid(true);
         jScrollPane2.setViewportView(table);
 
-        jTextField1.setToolTipText("");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        dateChooser1.setBackground(new java.awt.Color(255, 255, 255));
-
-        dateChooser2.setBackground(new java.awt.Color(255, 255, 255));
-
-        resetBtn.setBackground(new java.awt.Color(60, 58, 72));
-        resetBtn.setForeground(new java.awt.Color(255, 255, 255));
-        resetBtn.setText("Reset Table");
-        resetBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetBtnActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 955, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,62 +222,18 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
                 .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }// GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_resetBtnActionPerformed
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
         // TODO add your handling code here:
-    }// GEN-LAST:event_resetBtnActionPerformed
+    }//GEN-LAST:event_resetBtnActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
-        }
-        // </editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new viewDataSaleCategory().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser dateChooser1;
