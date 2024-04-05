@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.lms.dataSaleCRUD;
-
+import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
 import com.lms.dataSaleCRUD.repo.UserRepo;
+import com.lms.dataSaleCRUD.service.UserService;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -29,8 +30,10 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
         table.getTableHeader().setBackground(new Color(125, 200, 204));
         table.getTableHeader().setForeground(new Color(0, 0, 0));
 
-        UserRepo userRepo = new UserRepo();
-        List<CategoryWithRevenue> categories = userRepo.getAllCategories();
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        
+        List<CategoryWithRevenue> categories = userService.getAllCategories();
         String[] columnNames = { "genreID", "Genre", "TotalRevenue" };
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
@@ -106,8 +109,10 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
                 java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
                 String endDateString = formatter.format(tempDate2);
 
-                UserRepo userRepo = new UserRepo();
-                List<CategoryWithRevenue> categories = userRepo.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
+                UserDao userDao = new UserRepo();
+                UserService userService = new UserService(userDao);
+                
+                List<CategoryWithRevenue> categories = userService.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 updateTable(categories, model);
@@ -115,8 +120,9 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
     public void filterByCategory() {
         String filterText = jTextField1.getText();
-        UserRepo userRepo = new UserRepo();
-        List<CategoryWithRevenue> categories = userRepo.getAllCategories();
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        List<CategoryWithRevenue> categories = userService.getAllCategories();
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);

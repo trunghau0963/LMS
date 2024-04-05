@@ -4,8 +4,10 @@
  */
 package com.lms.dataSaleCRUD;
 
+import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.CustomerWithRevenue;
 import com.lms.dataSaleCRUD.repo.UserRepo;
+import com.lms.dataSaleCRUD.service.UserService;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -30,8 +32,9 @@ public class viewDataSaleCustomer extends javax.swing.JFrame {
         table.getTableHeader().setBackground(new Color(125, 200, 204));
         table.getTableHeader().setForeground(new Color(0, 0, 0));
 
-        UserRepo userRepo = new UserRepo();
-        List<CustomerWithRevenue> customers = userRepo.getAllCustomers();
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        List<CustomerWithRevenue> customers = userService.getAllCustomers();
         String[] columnNames = { "customerID", "customerName", "TotalRevenue" };
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
@@ -106,8 +109,9 @@ public class viewDataSaleCustomer extends javax.swing.JFrame {
                 java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
                 String endDateString = formatter.format(tempDate2);
 
-                UserRepo userRepo = new UserRepo();
-                List<CustomerWithRevenue> customers = userRepo.getTotalRevenueGroupByCustomerBetweenDate(startDateString, endDateString);
+                UserDao userDao = new UserRepo();
+                UserService userService = new UserService(userDao);
+                List<CustomerWithRevenue> customers = userService.getTotalRevenueGroupByCustomerBetweenDate(startDateString, endDateString);
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 updateTable(customers, model);
@@ -115,8 +119,9 @@ public class viewDataSaleCustomer extends javax.swing.JFrame {
 
     public void filterByName() {
         String filterText = jTextField1.getText();
-        UserRepo userRepo = new UserRepo();
-        List<CustomerWithRevenue> customers = userRepo.getAllCustomers();
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        List<CustomerWithRevenue> customers = userService.getAllCustomers();
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);

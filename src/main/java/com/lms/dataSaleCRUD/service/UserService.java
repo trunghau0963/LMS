@@ -2,8 +2,7 @@ package com.lms.dataSaleCRUD.service;
 
 import java.util.List;
 
-import com.lms.auth.entities.Customer;
-import com.lms.auth.entities.User;
+
 import com.lms.dataSaleCRUD.dal.UserDao;
 import com.lms.dataSaleCRUD.entities.BookWithRevenue;
 import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;

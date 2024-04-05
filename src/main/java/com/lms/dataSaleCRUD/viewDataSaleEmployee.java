@@ -4,29 +4,141 @@
  */
 package com.lms.dataSaleCRUD;
 
-import com.lms.dataSaleCRUD.component.switchButton.ToggleEditor;
-import com.lms.dataSaleCRUD.component.switchButton.ToggleRenderer;
+import com.lms.dataSaleCRUD.dal.UserDao;
+import com.lms.dataSaleCRUD.entities.EmployeeWithRevenue;
+import com.lms.dataSaleCRUD.repo.UserRepo;
+import com.lms.dataSaleCRUD.service.UserService;
+
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
-/**
- *
- * @author PC
- */
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+
 public class viewDataSaleEmployee extends javax.swing.JFrame {
 
-    /**
-     * Creates new form viewDataSaleEmployee
-     */
     public viewDataSaleEmployee() {
         initComponents();
+        getContentPane().setBackground(Color.WHITE);
+
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        table.getTableHeader().setOpaque(false);
-        table.getTableHeader().setBackground(new Color(199, 200, 204));
+        // table.getTableHeader().setOpaque(false);
+        table.getTableHeader().setBackground(new Color(125, 200, 204));
         table.getTableHeader().setForeground(new Color(0, 0, 0));
-        
-        table.getColumnModel().getColumn(4).setCellRenderer(new ToggleRenderer());
-        table.getColumnModel().getColumn(4).setCellEditor(new ToggleEditor());
+
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        List<EmployeeWithRevenue> employees = userService.getAllEmployees();
+        String[] columnNames = { "employeeID", "employeeName", "TotalRevenue" };
+
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table.setModel(model);
+
+        updateTable(employees, model);
+
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                filterByName();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                filterByName();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                filterByName();
+            }
+        });
+
+        dateChooser1.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        if ("date".equals(e.getPropertyName())) {
+                            if (dateChooser1.getDate() != null
+                                    && dateChooser2.getDate() != null) {
+                                filterByDate();
+                            }
+                        }
+                    }
+                });
+
+        dateChooser2.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        if ("date".equals(e.getPropertyName())) {
+                            if (dateChooser1.getDate() != null
+                                    && dateChooser2.getDate() != null) {
+                                filterByDate();
+                            }
+                        }
+                    }
+                });
+
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateTable(employees, model);
+
+                dateChooser1.setDate(null);
+                dateChooser2.setDate(null);
+            }
+        });
+    }
+
+    public void filterByDate() {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+                java.util.Date startDate = dateChooser1.getDate();
+                java.sql.Date tempDate1 = new java.sql.Date(startDate.getTime());
+                String startDateString = formatter.format(tempDate1);
+
+                java.util.Date endDate = dateChooser2.getDate();
+                java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
+                String endDateString = formatter.format(tempDate2);
+
+                UserDao userDao = new UserRepo();
+                UserService userService = new UserService(userDao);
+                List<EmployeeWithRevenue> employees = userService.getTotalRevenueGroupByEmployeeBetweenDate(startDateString, endDateString);
+
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                updateTable(employees, model);
+        }
+
+    public void filterByName() {
+        String filterText = jTextField1.getText();
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        List<EmployeeWithRevenue> employees = userService.getAllEmployees();
+
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        for (EmployeeWithRevenue employee : employees) {
+            if (employee.getName().toLowerCase().contains(filterText.toLowerCase())) {
+                model.addRow(new Object[] { employee.getId(), employee.getName(), employee.getTotal_revenue() });
+            }
+        }
+    }
+
+    public void updateTable(List<EmployeeWithRevenue> employees, DefaultTableModel model) {
+        model.setRowCount(0);
+
+        for (EmployeeWithRevenue employee : employees) {
+            model.addRow(new Object[] { employee.getEmpId(), employee.getEmpName(), employee.getTotal_revenue() });
+        }
+        table.setModel(model);
     }
 
     /**

@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.lms.dataSaleCRUD.entities.BookWithRevenue;
 import com.lms.dataSaleCRUD.repo.UserRepo;
+import com.lms.dataSaleCRUD.service.UserService;
+import com.lms.dataSaleCRUD.dal.UserDao;
 
 public class viewDataSaleBook extends javax.swing.JFrame {
 
@@ -25,8 +27,9 @@ public class viewDataSaleBook extends javax.swing.JFrame {
                 table.getTableHeader().setBackground(new Color(60, 58, 72));
                 table.getTableHeader().setForeground(new Color(0, 0, 0));
 
-                UserRepo userRepo = new UserRepo();
-                List<BookWithRevenue> books = userRepo.getAllBooks();
+                UserDao userDao = new UserRepo();
+                UserService userService = new UserService(userDao);
+                List<BookWithRevenue> books = userService.getAllBooks();
 
                 String[] columnNames = { "bookID", "title", "TotalRevenue" };
                 DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
@@ -103,8 +106,10 @@ public class viewDataSaleBook extends javax.swing.JFrame {
                 java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
                 String endDateString = formatter.format(tempDate2);
 
-                UserRepo userRepo = new UserRepo();
-                List<BookWithRevenue> books = userRepo.getTotalRevenueGroupByBookBetweenDate(startDateString, endDateString);
+                UserDao userDao = new UserRepo();
+                UserService userService = new UserService(userDao);
+
+                List<BookWithRevenue> books = userService.getTotalRevenueGroupByBookBetweenDate(startDateString, endDateString);
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 updateTable(books, model);
@@ -112,8 +117,10 @@ public class viewDataSaleBook extends javax.swing.JFrame {
 
         public void filterByTitle() {
                 String filterText = jTextField1.getText();
-                UserRepo userRepo = new UserRepo();
-                List<BookWithRevenue> books = userRepo.getAllBooks();
+                UserDao userDao = new UserRepo();
+                UserService userService = new UserService(userDao);
+
+                List<BookWithRevenue> books = userService.getAllBooks();
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.setRowCount(0);
