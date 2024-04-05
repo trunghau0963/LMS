@@ -482,6 +482,39 @@ public class ViewListAccount extends javax.swing.JPanel {
 
         }// GEN-LAST:event_jButton2ActionPerformed
 
+        public void reLoad(){
+                List<Employee> users = adminService.getEmployees();
+                DefaultTableModel model = (DefaultTableModel) listAuthor.getModel();
+                model.setRowCount(0);
+                for (Employee user : users) {
+                        model.addRow(new Object[] {
+                                        user.getEmpName(),
+                                        user.getPhoneNumber(),
+                                        user.getDob(),
+                                        user.getPwd(),
+                                        user.getIsBlock() // You can set the initial value for Hide/UnHide column here
+                        });
+                }
+                listAuthor.setModel(model);
+                listAuthor.getColumnModel().getColumn(4).setCellRenderer(new ToggleRenderer());
+                listAuthor.getColumnModel().getColumn(4).setCellEditor(new UsersTableEditor());        
+                
+                List<Admin> admins = adminService.getAdmins();
+                DefaultTableModel model1 = (DefaultTableModel) listAuthor1.getModel();
+                model1.setRowCount(0);
+                for (Admin admin : admins) {
+                        model1.addRow(new Object[] {
+                                        admin.getAdminName(),
+                                        admin.getPhoneNumber(),
+                                        admin.getPwd(),
+                                        admin.getDob(),
+                        });
+                }
+                listAuthor1.setModel(model1);
+
+        }       
+
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton jButton1;
         private javax.swing.JButton jButton2;

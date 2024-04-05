@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class UsersPage extends JPanel {
   private CardLayout cardLayout;
-  ViewListAccount viewListAccount;
+  public static ViewListAccount viewListAccount;
   public AddUser addUser;
 
   public UsersPage() {
@@ -25,6 +25,5 @@ public class UsersPage extends JPanel {
     add(viewListAccount, "viewListAccount");
     add(addUser, "addUser");
   }
-
   
 }

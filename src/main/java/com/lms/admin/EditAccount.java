@@ -13,6 +13,7 @@ import com.lms.admin.repo.AdminRepo;
 import com.lms.admin.service.AdminService;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
+import com.lms.admin.main.UsersPage;
 
 /**
  *
@@ -236,6 +237,8 @@ public class EditAccount extends javax.swing.JPanel {
         if (isSucess) {
             JOptionPane.showMessageDialog(this, "Edit account successfully");
             this.resetTextFields();
+            UsersPage.viewListAccount.reLoad();
+            
         } else {
             JOptionPane.showMessageDialog(this, "Edit account failed");
             this.resetTextFields();

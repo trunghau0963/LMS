@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.lms.admin.main.UsersPage;
+
 import com.lms.auth.entities.*;
 import com.lms.admin.dal.AdminDao;
 import com.lms.admin.repo.AdminRepo;
@@ -333,7 +335,7 @@ public class AddUser extends javax.swing.JPanel {
                         if (newUser != null) {
                                 JOptionPane.showMessageDialog(null, "User added successfully");
                                 this.resetFields();
-                                
+                                UsersPage.viewListAccount.reLoad();
                         } else {
                                 JOptionPane.showMessageDialog(null, "User not added");
                                 this.resetFields();
