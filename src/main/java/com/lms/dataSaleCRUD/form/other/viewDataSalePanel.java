@@ -1,4 +1,4 @@
-package com.lms.dataSaleCRUD;
+package com.lms.dataSaleCRUD.form.other;
 
 import java.awt.Color;
 import java.util.List;

@@ -1,6 +1,11 @@
-package com.lms.dataSaleCRUD;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package com.lms.dataSaleCRUD.form.other;
+
 import com.lms.dataSaleCRUD.dal.UserDao;
-import com.lms.dataSaleCRUD.entities.CategoryWithRevenue;
+import com.lms.dataSaleCRUD.entities.EmployeeWithRevenue;
 import com.lms.dataSaleCRUD.repo.UserRepo;
 import com.lms.dataSaleCRUD.service.UserService;
 
@@ -15,9 +20,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+public class viewDataSaleEmployee extends javax.swing.JFrame {
 
-public class viewDataSaleCategory extends javax.swing.JFrame {
-    public viewDataSaleCategory() {
+    public viewDataSaleEmployee() {
         initComponents();
         getContentPane().setBackground(Color.WHITE);
 
@@ -28,9 +33,8 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
         UserDao userDao = new UserRepo();
         UserService userService = new UserService(userDao);
-        
-        List<CategoryWithRevenue> categories = userService.getAllCategories();
-        String[] columnNames = { "genreID", "Genre", "TotalRevenue" };
+        List<EmployeeWithRevenue> employees = userService.getAllEmployees();
+        String[] columnNames = { "employeeID", "employeeName", "TotalRevenue" };
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -39,22 +43,21 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
             }
         };
 
-        // lấy dữ liệu cho bảng
         table.setModel(model);
 
-        updateTable(categories, model);
+        updateTable(employees, model);
 
         jTextField1.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
-                filterByCategory();
+                filterByName();
             }
 
             public void removeUpdate(DocumentEvent e) {
-                filterByCategory();
+                filterByName();
             }
 
             public void insertUpdate(DocumentEvent e) {
-                filterByCategory();
+                filterByName();
             }
         });
 
@@ -86,7 +89,7 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
         resetBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateTable(categories, model);
+                updateTable(employees, model);
 
                 dateChooser1.setDate(null);
                 dateChooser2.setDate(null);
@@ -107,34 +110,33 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
 
                 UserDao userDao = new UserRepo();
                 UserService userService = new UserService(userDao);
-                
-                List<CategoryWithRevenue> categories = userService.getTotalRevenueGroupByCategoryBetweenDate(startDateString, endDateString);
+                List<EmployeeWithRevenue> employees = userService.getTotalRevenueGroupByEmployeeBetweenDate(startDateString, endDateString);
 
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
-                updateTable(categories, model);
+                updateTable(employees, model);
         }
 
-    public void filterByCategory() {
+    public void filterByName() {
         String filterText = jTextField1.getText();
         UserDao userDao = new UserRepo();
         UserService userService = new UserService(userDao);
-        List<CategoryWithRevenue> categories = userService.getAllCategories();
+        List<EmployeeWithRevenue> employees = userService.getAllEmployees();
 
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        for (CategoryWithRevenue category : categories) {
-            if (category.getGenre().toLowerCase().contains(filterText.toLowerCase())) {
-                model.addRow(new Object[] { category.getGenreId(), category.getGenre(), category.getTotal_revenue() });
+        for (EmployeeWithRevenue employee : employees) {
+            if (employee.getName().toLowerCase().contains(filterText.toLowerCase())) {
+                model.addRow(new Object[] { employee.getId(), employee.getName(), employee.getTotal_revenue() });
             }
         }
     }
 
-    public void updateTable(List<CategoryWithRevenue> categories, DefaultTableModel model) {
+    public void updateTable(List<EmployeeWithRevenue> employees, DefaultTableModel model) {
         model.setRowCount(0);
 
-        for (CategoryWithRevenue category : categories) {
-            model.addRow(new Object[] { category.getGenreId(), category.getGenre(), category.getTotal_revenue() });
+        for (EmployeeWithRevenue employee : employees) {
+            model.addRow(new Object[] { employee.getEmpId(), employee.getEmpName(), employee.getTotal_revenue() });
         }
         table.setModel(model);
     }
@@ -145,7 +147,6 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -172,14 +173,13 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "bookId", "category", "TotalRevenue"
+                "bookId", "title", "TotalRevenue"
             }
         ));
         table.setRowHeight(30);
         table.setShowGrid(true);
         jScrollPane2.setViewportView(table);
 
-        jTextField1.setToolTipText("");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -203,19 +203,16 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(dateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(jTextField1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -223,40 +220,36 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateChooser2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }// GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_resetBtnActionPerformed
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
         // TODO add your handling code here:
-    }// GEN-LAST:event_resetBtnActionPerformed
+    }//GEN-LAST:event_resetBtnActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -266,24 +259,20 @@ public class viewDataSaleCategory extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleEmployee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleEmployee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleEmployee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(viewDataSaleCategory.class.getName()).log(java.util.logging.Level.SEVERE,
-                    null, ex);
+            java.util.logging.Logger.getLogger(viewDataSaleEmployee.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        // </editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new viewDataSaleCategory().setVisible(true);
+                new viewDataSaleEmployee().setVisible(true);
             }
         });
     }
