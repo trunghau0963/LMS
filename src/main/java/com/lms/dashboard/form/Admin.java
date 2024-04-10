@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.lms.book.main.BookView;
-import com.lms.category.main.CategoryView;
+import com.lms.bookCRUD.main.BookView;
+import com.lms.categoryCRUD.main.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
 import com.lms.dashboard.form.other.*;

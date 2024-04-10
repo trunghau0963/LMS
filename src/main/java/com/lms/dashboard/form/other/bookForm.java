@@ -6,9 +6,9 @@ package com.lms.dashboard.form.other;
 
 import java.awt.CardLayout;
 
-import com.lms.book.AddBook;
-import com.lms.book.EditBook;
-import com.lms.book.ListBook;
+import com.lms.bookCRUD.AddBook;
+import com.lms.bookCRUD.EditBook;
+import com.lms.bookCRUD.ListBook;
 
 /**
  *
