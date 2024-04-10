@@ -19,7 +19,7 @@ import com.lms.userCRUD.form.InfoPage;
 import com.lms.userCRUD.form.UsersPage;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.form.other.bookForm;
-import com.lms.dashboard.form.other.dashboardForm;
+import com.lms.dataSaleCRUD.form.dataSaleView;
 import com.lms.dashboard.menu.MenuAdmin;
 
 public class Admin extends javax.swing.JPanel {
@@ -84,13 +84,10 @@ public class Admin extends javax.swing.JPanel {
     }
 
     public void addListFrame() {
-        listFrame.add(new dashboardForm());
-        listFrame.add(new accountForm());
+        listFrame.add(new dataSaleView());
+        listFrame.add(new UsersPage());
         listFrame.add(new BookView());
         listFrame.add(new CategoryView());
-        listFrame.add(new UsersPage());
-        listFrame.add(new bookForm());
-        listFrame.add(new bookForm());
         listFrame.add(new PublishersPage());
         listFrame.add(new AuthorsPage());
         try {
