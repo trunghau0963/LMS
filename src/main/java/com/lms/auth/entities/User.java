@@ -3,14 +3,12 @@ package com.lms.auth.entities;
 public class User {
     protected String Id;
     protected String Name;
-    protected String dob;
+    protected String dob = null;
     protected String phoneNumber;
-    protected String pwd;
-    protected String gender;
-    protected boolean isBlock;
+    protected String gender = null;
 
     public User() {
-        
+
     }
 
     public void setId(String Id) {
@@ -29,17 +27,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
 
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public void setIsBlock(boolean isBlock) {
-        this.isBlock = isBlock;
-    }
 
     public String getId() {
         return Id;
@@ -57,17 +49,9 @@ public class User {
         return phoneNumber;
     }
 
-    public String getPwd() {
-        return pwd;
-    }
 
     public String getGender() {
         return gender;
     }
 
-    public boolean isIsBlock() {
-        return isBlock;
-    }
-    
-    
 }
