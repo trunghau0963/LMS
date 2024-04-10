@@ -21,7 +21,7 @@ public class UserRepo implements UserDao {
         List<BookWithRevenue> books = new ArrayList<>();
         Connection connection = null;
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement
                     .executeQuery(
@@ -64,7 +64,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT id.bookId AS book_id, b.title AS book_title, SUM(id.cost) AS total_revenue " +
                             "FROM invoice_detail id " +
@@ -110,7 +110,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement
                     .executeQuery("SELECT c.genreId, c.genre, SUM(id.cost) AS \"total_Revenue\"\r\n" + //
@@ -149,7 +149,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT c.genreId AS genreId, c.genre AS genre, SUM(id.cost) AS total_Revenue\r\n" + //
                             "FROM invoice_detail id\r\n" + //
@@ -198,7 +198,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement
                     .executeQuery(
@@ -238,7 +238,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT m.memberId AS customerId, m.memberName AS customerName, SUM(id.cost) AS total_revenue\r\n" + //
                             "FROM invoice_detail id\r\n" + //
@@ -285,7 +285,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement
                     .executeQuery(
@@ -325,7 +325,7 @@ public class UserRepo implements UserDao {
         Connection connection = null;
 
         try {
-            connection = JDBCConnection.getJDBConnection();
+            connection = JDBCConnection.getJDBCConnection();
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT e.empId AS empId, e.empName AS empName, SUM(id.cost) AS total_revenue\r\n" + //
                             "FROM invoice_detail id\r\n" + //
