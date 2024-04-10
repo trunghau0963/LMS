@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.authorCRUD.main.AuthorsPage;
+import com.lms.authorCRUD.main.EditProfile;
+import com.lms.publisherCRUD.main.PublishersPage;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.form.other.bookForm;
 import com.lms.dashboard.menu.MenuEmp;
-import com.lms.employee.main.AuthorsPage;
-import com.lms.employee.main.EditProfile;
-import com.lms.employee.main.PublishersPage;
 
 public class Emp extends javax.swing.JPanel {
 
