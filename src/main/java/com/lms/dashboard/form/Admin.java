@@ -13,15 +13,18 @@ import javax.swing.border.EmptyBorder;
 import com.lms.authorCRUD.main.AuthorsPage;
 import com.lms.authorCRUD.main.EditProfile;
 import com.lms.publisherCRUD.main.PublishersPage;
+import com.lms.UserCRUD.form.InfoPage;
+import com.lms.UserCRUD.form.UsersPage;
 import com.lms.dashboard.application.Application;
+import com.lms.dashboard.form.other.bookForm;
+import com.lms.dashboard.form.other.dashboardForm;
 import com.lms.dashboard.menu.MenuAdmin;
-import com.lms.dashboard.form.other.*;
 
 public class Admin extends javax.swing.JPanel {
 
     int height;
     int weight;
-    int widthMenu = 165;
+    int widthMenu = 166;
     boolean isMenuOpen = false;
     private MainForm mainForm;
     private MenuAdmin menuAdmin;
@@ -40,7 +43,7 @@ public class Admin extends javax.swing.JPanel {
             public void componentResized(ComponentEvent e) {
                 height = e.getComponent().getHeight();
                 weight = e.getComponent().getWidth();
-                // System.out.println(weight + " " + height);
+                System.out.println(weight + " " + height);
             }
 
             public void componentHidden(ComponentEvent e) {
@@ -80,7 +83,7 @@ public class Admin extends javax.swing.JPanel {
 
     public void addListFrame() {
         listFrame.add(new dashboardForm());
-        listFrame.add(new accountForm());
+        listFrame.add(new UsersPage());
         listFrame.add(new bookForm());
         listFrame.add(new bookForm());
         listFrame.add(new PublishersPage());
@@ -91,10 +94,13 @@ public class Admin extends javax.swing.JPanel {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        listFrame.add(new bookForm());
+        listFrame.add(new bookForm());
+        listFrame.add(new InfoPage());
     }
 
     public void logOut() {
-        app.logOut();
+        // app.logOut();
     }
 
     public void changeFrame(int index) {
@@ -107,7 +113,7 @@ public class Admin extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         bgPanel = new javax.swing.JPanel();
@@ -121,32 +127,37 @@ public class Admin extends javax.swing.JPanel {
         javax.swing.GroupLayout bgPanelLayout = new javax.swing.GroupLayout(bgPanel);
         bgPanel.setLayout(bgPanelLayout);
         bgPanelLayout.setHorizontalGroup(
-                bgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(bgPanelLayout.createSequentialGroup()
-                                .addComponent(scrollMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 44,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(916, Short.MAX_VALUE)));
+            bgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bgPanelLayout.createSequentialGroup()
+                .addComponent(scrollMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(916, Short.MAX_VALUE))
+        );
         bgPanelLayout.setVerticalGroup(
-                bgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(scrollMenu1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE));
+            bgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollMenu1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout bgLayout = new javax.swing.GroupLayout(bg);
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
-                bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 960, Short.MAX_VALUE));
+            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1080, Short.MAX_VALUE)
+        );
         bgLayout.setVerticalGroup(
-                bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 540, Short.MAX_VALUE));
+            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 540, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(bg));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bg)
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(bg));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bg)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     public void openAndCloseButton(java.awt.event.ActionEvent evt) {
@@ -165,7 +176,7 @@ public class Admin extends javax.swing.JPanel {
     public void openMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = 42; i <= widthMenu; i++) {
+                for (int i = 42; i <= widthMenu; i += 4) {
                     try {
                         menuAdmin.setIsRunning(true);
                         Thread.sleep(0, 1);
@@ -185,7 +196,7 @@ public class Admin extends javax.swing.JPanel {
     public void closeMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = widthMenu; i > 42; i--) {
+                for (int i = widthMenu; i >= 42; i -= 4) {
                     menuAdmin.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);

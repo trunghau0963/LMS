@@ -65,9 +65,11 @@ CREATE TABLE sheet_detail(
 
 CREATE TABLE book(
 	bookId CHAR(14) DEFAULT substr(md5(random()::text), 1, 14) PRIMARY KEY,
+	bookEdition INT,
 	publisherId CHAR(9) NOT NULL,
 	title VARCHAR(128) NOT NULL,
 	salePrice FLOAT DEFAULT 0,
+	quantity INT DEFAULT 0,
 	isHide BOOLEAN DEFAULT FALSE
 );
 
@@ -85,6 +87,7 @@ CREATE TABLE book_category(
 
 CREATE TABLE invoice(
 	invoiceId CHAR(15) DEFAULT substr(md5(random()::text), 1, 15) PRIMARY KEY,
+	empId CHAR(16),
 	memberId CHAR(16) NOT NULL,
 	saleDate Date NOT NULL,
 	total FLOAT DEFAULT 0
@@ -94,20 +97,10 @@ CREATE TABLE invoice_detail(
 	invoiceId CHAR(15),
 	bookId CHAR(14),
 	quantity INT,
-	amount FLOAT,
+	cost FLOAT,
 	PRIMARY KEY (invoiceId, bookId)
 );
 
-CREATE TABLE borrowed_detail(
-	borrowedId CHAR(15) DEFAULT substr(md5(random()::text), 1, 15),
-	memberId CHAR(16),
-	bookId CHAR(14),
-	quantity INT NOT NULL,
-	issueDate DATE NOT NULL,
-	returnDate DATE,
-	borrowedStatus VARCHAR(128) NOT NULL,
-	PRIMARY KEY (borrowedId, bookId)
-);
 
 ALTER TABLE sheet ADD CONSTRAINT sheet_emp FOREIGN KEY (responsible) REFERENCES employee(empId);
 ALTER TABLE sheet_detail ADD CONSTRAINT sheetDetail_sheet FOREIGN KEY (sheetId) REFERENCES sheet(sheetId);
@@ -119,16 +112,14 @@ ALTER TABLE book_category ADD CONSTRAINT authorBook_book FOREIGN KEY (bookId) RE
 ALTER TABLE book_category ADD CONSTRAINT bookCategory_book FOREIGN KEY (bookId) REFERENCES book(bookId);
 ALTER TABLE book_category ADD CONSTRAINT bookCategory_category FOREIGN KEY (genreId) REFERENCES category(genreId);
 ALTER TABLE invoice ADD CONSTRAINT invoice_member FOREIGN KEY (memberId) REFERENCES member(memberId);
+ALTER TABLE invoice ADD CONSTRAINT invoice_employee FOREIGN KEY (empId) REFERENCES employee(empId);
 ALTER TABLE invoice_detail ADD CONSTRAINT invoiceDetail_invoice FOREIGN KEY (invoiceId) REFERENCES invoice(invoiceId);
 ALTER TABLE invoice_detail ADD CONSTRAINT invoiceDetail_book FOREIGN KEY (bookId) REFERENCES book(bookId);
-ALTER TABLE borrowed_detail ADD CONSTRAINT borrowedDetail_member FOREIGN KEY (memberId) REFERENCES member(memberId);
-ALTER TABLE borrowed_detail ADD CONSTRAINT borrowedDetail_book FOREIGN KEY (bookId) REFERENCES book(bookId);
 
 ALTER TABLE employee ADD CONSTRAINT CHECK_GENRE_1 CHECK(gender IN ('male', 'female'));
 ALTER TABLE member ADD CONSTRAINT CHECK_GENRE_2 CHECK(gender IN ('male', 'female'));
 ALTER TABLE author ADD CONSTRAINT CHECK_GENRE_3 CHECK(gender IN ('male', 'female'));
 ALTER TABLE administrator ADD CONSTRAINT CHECK_GENRE_4 CHECK(gender IN ('male', 'female'));
-ALTER TABLE borrowed_detail ADD CONSTRAINT CHECK_borrowedStatus CHECK(borrowedStatus IN ('borrowing', 'returned'));
 
 ALTER TABLE employee ADD CONSTRAINT CHECK_AGE_1 CHECK(DOB < CURRENT_DATE);
 ALTER TABLE member ADD CONSTRAINT CHECK_AGE_2 CHECK(DOB < CURRENT_DATE);
@@ -144,282 +135,89 @@ ALTER TABLE invoice_detail ADD CONSTRAINT CHECK_quantity_IN_invoiceDetail CHECK(
 ALTER TABLE sheet_detail ADD CONSTRAINT CHECK_quantity_IN_book CHECK(quantity >= 0);
 ALTER TABLE sheet_detail ADD CONSTRAINT CHECK_importPrice_IN_book CHECK(importPrice >= 0);
 ALTER TABLE sheet ADD CONSTRAINT CHECK_totalCost_IN_book CHECK(totalCost >= 0);
+ALTER TABLE book ADD CONSTRAINT CHECK_bookEdition CHECK(bookEdition >= 1);
 
 
 --Trigger
-CREATE OR REPLACE FUNCTION trg_book_sold()
+CREATE OR REPLACE FUNCTION trg_after_invoiceDetail_add()
 RETURNS TRIGGER AS $$
 DECLARE
     book_id CHAR(14);
-	sheet_id CHAR(14);
     book_quantity INT;
 BEGIN
     FOR book_id, book_quantity IN SELECT NEW.bookId, NEW.quantity
     LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE sd.bookId = book_id and book_quantity <= sd.quantity
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-        UPDATE sheet_detail 
+		UPDATE book
 		SET quantity = quantity - book_quantity
-		WHERE bookId = book_id and sheetId = sheet_id;
-
+		where book_id = bookId;
     END LOOP;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_book_sold
+CREATE OR REPLACE TRIGGER trg_after_invoiceDetail_add
 AFTER INSERT ON invoice_detail
 FOR EACH ROW
-EXECUTE FUNCTION trg_book_sold();
+EXECUTE FUNCTION trg_after_invoiceDetail_add();
 
-CREATE OR REPLACE FUNCTION trg_book_return()
+CREATE OR REPLACE FUNCTION trg_after_invoiceDetail_remove()
 RETURNS TRIGGER AS $$
 DECLARE
     book_id CHAR(14);
-	sheet_id CHAR(14);
     book_quantity INT;
 BEGIN
     FOR book_id, book_quantity IN SELECT OLD.bookId, OLD.quantity
     LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-        UPDATE sheet_detail 
+		UPDATE book
 		SET quantity = quantity + book_quantity
-		WHERE book_id = book_id and sheetId = sheet_id;
+		where book_id = bookId;
     END LOOP;
 
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_book_return
+CREATE OR REPLACE TRIGGER trg_after_invoiceDetail_remove
 AFTER DELETE ON invoice_detail
 FOR EACH ROW
-EXECUTE FUNCTION trg_book_return();
+EXECUTE FUNCTION trg_after_invoiceDetail_remove();
 
-CREATE OR REPLACE FUNCTION trg_book_update()
+CREATE OR REPLACE FUNCTION trg_after_invoiceDetail_update()
 RETURNS TRIGGER AS $$
 DECLARE
 	invoice_id CHAR(15);
     book_id CHAR(14);
-	sheet_id CHAR(14);
     book_quantity_old INT;
     book_quantity_new INT;
 BEGIN
-    FOR invoice_id, book_id, book_quantity_old IN SELECT OLD.invoiceId, OLD.bookId, OLD.quantity
+    FOR invoice_id, book_id, book_quantity_old, book_quantity_new IN SELECT OLD.invoiceId, OLD.bookId, OLD.quantity, NEW.quantity
     LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-		SELECT quantity INTO book_quantity_new 
-		FROM invoice_detail
-		WHERE invoice_id = sd.invoiceId and book_id = bookId;
-
-        UPDATE sheet_detail 
+		UPDATE book
 		SET quantity = quantity + book_quantity_old - book_quantity_new
-		WHERE book_id = book_id and sheetId = sheet_id;
-
+		where book_id = bookId;
     END LOOP;
 
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_book_update
+CREATE OR REPLACE TRIGGER trg_after_invoiceDetail_update
 AFTER UPDATE OF quantity ON invoice_detail
 FOR EACH ROW
-EXECUTE FUNCTION trg_book_update();
+EXECUTE FUNCTION trg_after_invoiceDetail_update();
 
 
-
-
-CREATE OR REPLACE FUNCTION trg_borrowedDetail_borrowed()
+CREATE OR REPLACE FUNCTION trg_after_sheetDetail_insert()
 RETURNS TRIGGER AS $$
 DECLARE
-    book_id CHAR(14);
-	sheet_id CHAR(14);
-    book_quantity INT;
+    sheet_id CHAR(15);
+	book_id CHAR(14);
+	import_price FLOAT;
+	max_price FLOAT;
+	amount INT;
 BEGIN
-    FOR book_id, book_quantity IN SELECT NEW.bookId, NEW.quantity WHERE NEW.borrowedStatus = 'borrowing'
-    LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE sd.bookId = book_id and book_quantity <= sd.quantity
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-        UPDATE sheet_detail 
-		SET quantity = quantity - book_quantity
-		WHERE book_id = book_id and sheetId = sheet_id;
-
-    END LOOP;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER trg_borrowedDetail_borrowed
-AFTER INSERT ON borrowed_detail
-FOR EACH ROW
-EXECUTE FUNCTION trg_borrowedDetail_borrowed();
-
-
-CREATE OR REPLACE FUNCTION trg_borrowedDetail_delete()
-RETURNS TRIGGER AS $$
-DECLARE
-    book_id CHAR(14);
-	sheet_id CHAR(14);
-    book_quantity INT;
-BEGIN
-    FOR book_id, book_quantity IN SELECT OLD.bookId, OLD.quantity WHERE NEW.borrowedStatus = 'borrowing'
-    LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-        UPDATE sheet_detail 
-		SET quantity = quantity + book_quantity
-		WHERE book_id = book_id and sheetId = sheet_id;
-    END LOOP;
-
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER trg_borrowedDetail_delete
-AFTER DELETE ON borrowed_detail
-FOR EACH ROW
-EXECUTE FUNCTION trg_borrowedDetail_delete();
-
-CREATE OR REPLACE FUNCTION trg_borrowedDetail_changeQuantity()
-RETURNS TRIGGER AS $$
-DECLARE
-	borrowed_id CHAR(15);
-    book_id CHAR(14);
-	sheet_id CHAR(14);
-    book_quantity_old INT;
-    book_quantity_new INT;
-BEGIN
-    FOR borrowed_id, book_id, book_quantity_old IN SELECT OLD.borrowedId, OLD.bookId, OLD.quantity where OLD.borrowedStatus = 'borrowing'
-    LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-		SELECT quantity INTO book_quantity_new 
-		FROM borrowed_detail
-		WHERE borrowed_id = sd.borrowedId and book_id = bookId;
-
-        UPDATE sheet_detail 
-		SET quantity = quantity + book_quantity_old - book_quantity_new
-		WHERE book_id = book_id and sheetId = sheet_id;
-
-    END LOOP;
-
-	FOR borrowed_id, book_id, book_quantity_old IN SELECT OLD.borrowedId, OLD.bookId, OLD.quantity where OLD.borrowedStatus = 'returned'
-    LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-		SELECT quantity INTO book_quantity_new 
-		FROM borrowed_detail
-		WHERE borrowed_id = sd.borrowedId and book_id = bookId;
-
-        UPDATE sheet_detail 
-		SET quantity = quantity - book_quantity_old + book_quantity_new
-		WHERE book_id = book_id and sheetId = sheet_id;
-
-    END LOOP;
-
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER trg_borrowedDetail_changeQuantity
-AFTER UPDATE OF quantity ON borrowed_detail
-FOR EACH ROW
-EXECUTE FUNCTION trg_borrowedDetail_changeQuantity();
-
-CREATE OR REPLACE FUNCTION trg_borrowedDetail_changeStatus()
-RETURNS TRIGGER AS $$
-DECLARE
-	borrowed_id CHAR(15);
-    book_id CHAR(14);
-	sheet_id CHAR(14);
-    book_quantity INT;
-BEGIN
-    FOR borrowed_id, book_id, book_quantity IN SELECT OLD.borrowedId, OLD.bookId, OLD.quantity where OLD.borrowedStatus = 'borrowing'
-    LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-        UPDATE sheet_detail 
-		SET quantity = quantity + book_quantity
-		WHERE book_id = book_id and sheetId = sheet_id;
-
-    END LOOP;
-
-	FOR borrowed_id, book_id, book_quantity IN SELECT OLD.borrowedId, OLD.bookId, OLD.quantity where OLD.borrowedStatus = 'returned'
-    LOOP
-		SELECT sd.sheetId INTO sheet_id 
-		FROM sheet_detail sd
-		JOIN sheet s on s.sheetId = sd.sheetId
-		WHERE book_id = sd.bookId
-		ORDER BY importDate DESC
-        LIMIT 1; 
-
-        UPDATE sheet_detail 
-		SET quantity = quantity - book_quantity
-		WHERE book_id = book_id and sheetId = sheet_id;
-
-    END LOOP;
-
-    RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE TRIGGER trg_borrowedDetail_changeStatus
-AFTER UPDATE OF borrowedStatus ON borrowed_detail
-FOR EACH ROW
-EXECUTE FUNCTION trg_borrowedDetail_changeStatus();
-
-
-CREATE OR REPLACE FUNCTION trg_sheet_totalCost()
-RETURNS TRIGGER AS $$
-DECLARE
-    sheetId CHAR(15);
-BEGIN
-    FOR sheetId IN SELECT NEW.sheetId
+    FOR sheet_id, import_price, book_id, amount IN SELECT NEW.sheetId, NEW.importPrice, NEW.bookId, NEW.quantity
     LOOP
         UPDATE sheet
         SET totalCost = ROUND(CAST(COALESCE((
@@ -427,19 +225,127 @@ BEGIN
             FROM sheet_detail ind
             WHERE sheet.sheetId = ind.sheetId
         ), 0) AS numeric), 2);
+
+		UPDATE book
+        SET quantity = quantity + amount
+        WHERE bookId = book_id;
+
+
+		SELECT importPrice INTO max_price
+		FROM sheet_detail sd
+		WHERE SD.sheetId = sheet_id AND book_id = sd.bookId
+		ORDER BY importPrice DESC
+		LIMIT 1;
+
+        UPDATE book
+        SET salePrice = ROUND(CAST(COALESCE((
+            max_price
+        ), 0) AS numeric) * 1.1, 2)
+        WHERE bookId = book_id;
+
     END LOOP;
 
-    RETURN NULL;
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_sheet_totalCost
-AFTER INSERT OR UPDATE OR DELETE ON sheet_detail
+CREATE OR REPLACE TRIGGER trg_after_sheetDetail_insert
+AFTER INSERT ON sheet_detail
 FOR EACH ROW
-EXECUTE FUNCTION trg_sheet_totalCost(); 
+EXECUTE FUNCTION trg_after_sheetDetail_insert(); 
+
+CREATE OR REPLACE FUNCTION trg_after_sheetDetail_update()
+RETURNS TRIGGER AS $$
+DECLARE
+    sheet_id CHAR(15);
+	book_id CHAR(14);
+	import_price FLOAT;
+	max_price FLOAT;
+	amount_old INT;
+	amount_new INT;
+BEGIN
+    FOR sheet_id, import_price, book_id, amount_new, amount_old IN SELECT NEW.sheetId, NEW.importPrice, NEW.bookId, NEW.quantity, OLD.quantity
+    LOOP
+        UPDATE sheet
+        SET totalCost = ROUND(CAST(COALESCE((
+            SELECT SUM(quantity * importPrice)
+            FROM sheet_detail ind
+            WHERE sheet.sheetId = ind.sheetId
+        ), 0) AS numeric), 2);
+
+		UPDATE book
+        SET quantity = quantity + (amount_new - amount_old)
+        WHERE bookId = book_id;
+
+		SELECT importPrice INTO max_price
+		FROM sheet_detail sd
+		WHERE SD.sheetId = sheet_id AND book_id = sd.bookId
+		ORDER BY importPrice DESC
+		LIMIT 1;
+
+        UPDATE book
+        SET salePrice = ROUND(CAST(COALESCE((
+            max_price
+        ), 0) AS numeric) * 1.1, 2)
+        WHERE bookId = book_id;
+
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_after_sheetDetail_update
+AFTER UPDATE ON sheet_detail
+FOR EACH ROW
+EXECUTE FUNCTION trg_after_sheetDetail_update(); 
+
+CREATE OR REPLACE FUNCTION trg_after_sheetDetail_delete()
+RETURNS TRIGGER AS $$
+DECLARE
+    sheet_id CHAR(15);
+	book_id CHAR(14);
+	import_price FLOAT;
+	max_price FLOAT;
+	amount INT;
+BEGIN
+    FOR sheet_id, import_price, book_id, amount IN SELECT NEW.sheetId, NEW.importPrice, NEW.bookId, NEW.quantity
+    LOOP
+        UPDATE sheet
+        SET totalCost = ROUND(CAST(COALESCE((
+            SELECT SUM(quantity * importPrice)
+            FROM sheet_detail ind
+            WHERE sheet.sheetId = ind.sheetId
+        ), 0) AS numeric), 2);
+
+		UPDATE book
+        SET quantity = quantity - amount
+        WHERE bookId = book_id;
 
 
-CREATE OR REPLACE FUNCTION trg_book_salePrice()
+		SELECT importPrice INTO max_price
+		FROM sheet_detail sd
+		WHERE SD.sheetId = sheet_id AND book_id = sd.bookId
+		ORDER BY importPrice DESC
+		LIMIT 1;
+
+        UPDATE book
+        SET salePrice = ROUND(CAST(COALESCE((
+            max_price
+        ), 0) AS numeric) * 1.1, 2)
+        WHERE bookId = book_id;
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_after_sheetDetail_delete
+AFTER DELETE ON sheet_detail
+FOR EACH ROW
+EXECUTE FUNCTION trg_after_sheetDetail_delete(); 
+
+CREATE OR REPLACE FUNCTION trg_after_book_insert()
 RETURNS TRIGGER AS $$
 DECLARE
 	book_id CHAR(14);
@@ -451,33 +357,78 @@ BEGIN
         FROM sheet_detail sd
 		JOIN sheet s ON sd.sheetId = s.sheetId
         WHERE sd.bookId = NEW.bookId
-        ORDER BY s.importDate DESC
+        ORDER BY sd.importPrice DESC
         LIMIT 1;
 
         UPDATE book
-        SET salePrice = ROUND(new_sale_price * 1.1, 2)
-        WHERE bookId = book_id;
+		SET salePrice = CASE WHEN new_sale_price IS NULL THEN 0
+                    		ELSE ROUND(CAST(COALESCE((
+            new_sale_price
+        ), 0) AS numeric) * 1.1, 2)
+                		END
+		WHERE bookId = book_id;
     END LOOP;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_book_salePrice
+CREATE OR REPLACE TRIGGER trg_after_book_insert
 AFTER INSERT ON BOOK
 FOR EACH ROW
-EXECUTE FUNCTION trg_book_salePrice();
+EXECUTE FUNCTION trg_after_book_insert();
 
-CREATE OR REPLACE TRIGGER trg_book_salePrice
-AFTER INSERT OR UPDATE OF importPrice ON sheet_detail
+CREATE OR REPLACE FUNCTION trg_after_book_update()
+RETURNS TRIGGER AS $$
+DECLARE
+	book_id CHAR(14);
+	sale_price FLOAT;
+BEGIN
+    FOR book_id, sale_price IN SELECT NEW.bookId, NEW.salePrice
+    LOOP
+        UPDATE invoice_detail
+		SET cost = sale_price
+		WHERE bookId = book_id;
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_after_book_update
+AFTER UPDATE of salePrice ON BOOK
 FOR EACH ROW
-EXECUTE FUNCTION trg_book_salePrice();
+EXECUTE FUNCTION trg_after_book_update();
 
-CREATE OR REPLACE FUNCTION trg_invoiceDetail_amount()
+CREATE OR REPLACE FUNCTION trg_before_book_insert()
+RETURNS TRIGGER AS $$
+DECLARE
+	book_id CHAR(14);
+	book_edition INT;
+	book_title varchar(128);
+BEGIN
+    FOR book_id, book_title, book_edition IN SELECT NEW.bookId, NEW.title, NEW.bookEdition
+    LOOP
+        IF exists(select 1 from book where book_edition = bookEdition and book_title ILIKE title) THEN
+			RAISE EXCEPTION 'The book which has title: %, edition: %  already exists', NEW.title, NEW.bookEdition;
+        	RETURN NULL;
+		END IF;
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trg_before_book_insert
+BEFORE INSERT ON BOOK
+FOR EACH ROW
+EXECUTE FUNCTION trg_before_book_insert();
+
+CREATE OR REPLACE FUNCTION trg_after_invoiceDetail_updateOrInsert()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE invoice_detail
-    SET amount = ROUND(CAST((
+    SET cost = ROUND(CAST((
 		quantity * (
 			SELECT salePrice FROM book 
 			WHERE invoice_detail.bookId = book.bookId
@@ -488,13 +439,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_invoiceDetail_quantity
+CREATE OR REPLACE TRIGGER trg_after_invoiceDetail_updateOrInsert
 AFTER UPDATE OF quantity OR INSERT ON invoice_detail
 FOR EACH ROW
-EXECUTE FUNCTION trg_invoiceDetail_amount();
+EXECUTE FUNCTION trg_after_invoiceDetail_updateOrInsert();
 
 
-CREATE OR REPLACE FUNCTION trg_invoice_totalCost()
+CREATE OR REPLACE FUNCTION trg_after_invoice_insert()
 RETURNS TRIGGER AS $$
 DECLARE
     invoiceId CHAR(15);
@@ -503,7 +454,7 @@ BEGIN
     LOOP
         UPDATE invoice
         SET total = ROUND(CAST(COALESCE((
-            SELECT SUM(amount)
+            SELECT SUM(cost)
             FROM invoice_detail ind
             WHERE invoice.invoiceId = ind.invoiceId
         ), 0) AS numeric), 2);
@@ -513,15 +464,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_invoice_totalCost
+CREATE OR REPLACE TRIGGER trg_after_invoice_insert
 AFTER INSERT ON invoice
 FOR EACH ROW
-EXECUTE FUNCTION trg_invoice_totalCost(); 
+EXECUTE FUNCTION trg_after_invoice_insert(); 
 
-CREATE OR REPLACE TRIGGER trg_invoice_totalCost
+CREATE OR REPLACE TRIGGER trg_after_invoiceDetail_insert
 AFTER INSERT OR DELETE OR UPDATE ON invoice_detail
 FOR EACH ROW
-EXECUTE FUNCTION trg_invoice_totalCost();
+EXECUTE FUNCTION trg_after_invoice_insert();
 
 --Sample data
 CREATE OR REPLACE FUNCTION insertEmp(
@@ -596,6 +547,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION insertBook(
 	_publisherId CHAR(9),
 	_title VARCHAR(128),
+	_edition INT,
 	_isHide BOOLEAN
 ) RETURNS void
 AS $$
@@ -603,10 +555,12 @@ BEGIN
 	INSERT INTO book(
 	publisherId,
 	title,
+	bookEdition,
 	isHide)
 	VALUES (
 	_publisherId,
 	_title,
+	_edition,
 	_isHide);
 END;
 $$ LANGUAGE plpgsql;
@@ -692,14 +646,15 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION insertInvoice(
     _memberId CHAR(16),
+	_empId char(16),
     _saleDate DATE
 ) RETURNS CHAR(15)
 AS $$
 DECLARE
     NewInvoiceId CHAR(15);
 BEGIN
-    INSERT INTO invoice(memberId, saleDate)
-    VALUES (_memberId, _saleDate)
+    INSERT INTO invoice(memberId, empId, saleDate)
+    VALUES (_memberId, _empId, _saleDate)
     RETURNING invoiceId INTO NewInvoiceId;
 
     RETURN NewInvoiceId;
@@ -715,27 +670,6 @@ AS $$
 BEGIN
 	INSERT INTO invoice_detail(invoiceId, BookId, quantity)
 	VALUES (_invoiceId, _bookId, _quantity);
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION insertBorrowedDetail(
-	_memberId CHAR(16),
-	_bookId CHAR(14),
-	_quantity INT,
-	_issueDate DATE,
-	_returnDate DATE,
-	_borrowedStatus VARCHAR(128)
-) RETURNS void
-AS $$
-BEGIN
-	INSERT INTO borrowed_detail(memberId, bookId, quantity, issueDate, returnDate, borrowedStatus)
-	VALUES (
-		_memberId,
-		_bookId,
-		_quantity,
-		_issueDate,
-		_returnDate,
-		_borrowedStatus);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -830,39 +764,49 @@ BEGIN
     SELECT publisherId INTO publisher_id_4 FROM publisher WHERE publisherName = 'Top Print';
     SELECT publisherId INTO publisher_id_5 FROM publisher WHERE publisherName = 'New Age Publishers';
 
-	PERFORM insertBook(publisher_id_1, 'Harry Potter and the Sorcerer\''s Stone', false);
-	PERFORM insertBook(publisher_id_2, 'A Game of Thrones', true);
-	PERFORM insertBook(publisher_id_3, 'Murder on the Orient Express', false);
-	PERFORM insertBook(publisher_id_4, 'Pride and Prejudice', true);
-	PERFORM insertBook(publisher_id_5, 'The Shining', false);
-	PERFORM insertBook(publisher_id_1, 'The Hobbit', false);
-	PERFORM insertBook(publisher_id_2, 'The Da Vinci Code', true);
-	PERFORM insertBook(publisher_id_3, 'To Kill a Mockingbird', false);
-	PERFORM insertBook(publisher_id_4, 'The Catcher in the Rye', false);
-	PERFORM insertBook(publisher_id_5, 'One Hundred Years of Solitude', true);
-	PERFORM insertBook(publisher_id_1, 'The Old Man and the Sea', false);
-	PERFORM insertBook(publisher_id_2, 'The Handmaid\''s Tale', true);
-	PERFORM insertBook(publisher_id_3, 'Charlie and the Chocolate Factory', false);
-	PERFORM insertBook(publisher_id_4, 'Moby-Dick', false);
-	PERFORM insertBook(publisher_id_5, 'War and Peace', true);
+	PERFORM insertBook(publisher_id_1, 'Harry Potter and the Sorcerer''s Stone', 1, false);
+	PERFORM insertBook(publisher_id_1, 'Harry Potter and the Sorcerer''s Stone', 2, false);
+	PERFORM insertBook(publisher_id_2, 'A Game of Thrones', 1, true);
+	PERFORM insertBook(publisher_id_3, 'Murder on the Orient Express', 1, false);
+	PERFORM insertBook(publisher_id_4, 'Pride and Prejudice', 1, true);
+	PERFORM insertBook(publisher_id_5, 'The Shining', 1, false);
+	PERFORM insertBook(publisher_id_1, 'The Hobbit', 1, false);
+	PERFORM insertBook(publisher_id_1, 'The Hobbit', 2, false);
+	PERFORM insertBook(publisher_id_2, 'The Da Vinci Code', 1, true);
+	PERFORM insertBook(publisher_id_3, 'To Kill a Mockingbird', 1, false);
+	PERFORM insertBook(publisher_id_4, 'The Catcher in the Rye', 1, false);
+	PERFORM insertBook(publisher_id_5, 'One Hundred Years of Solitude', 1, true);
+	PERFORM insertBook(publisher_id_5, 'One Hundred Years of Solitude', 2, true);
+	PERFORM insertBook(publisher_id_1, 'The Old Man and the Sea', 1, false);
+	PERFORM insertBook(publisher_id_2, 'The Handmaid''s Tale', 1, true);
+	PERFORM insertBook(publisher_id_2, 'The Handmaid''s Tale', 2, true);
+	PERFORM insertBook(publisher_id_2, 'The Handmaid''s Tale', 3, true);
+	PERFORM insertBook(publisher_id_3, 'Charlie and the Chocolate Factory', 1, false);
+	PERFORM insertBook(publisher_id_4, 'Moby-Dick', 1, false);
+	PERFORM insertBook(publisher_id_5, 'War and Peace', 1, true);
 
 	RETURN;
 END $$;
 
 DO $$ 
 DECLARE 
-    bookId_1 CHAR(14);
+    bookId_1_1 CHAR(14);
+    bookId_1_2 CHAR(14);
     bookId_2 CHAR(14);
     bookId_3 CHAR(14);
     bookId_4 CHAR(14);
     bookId_5 CHAR(14);
-    bookId_6 CHAR(14);
+    bookId_6_1 CHAR(14);
+    bookId_6_2 CHAR(14);
     bookId_7 CHAR(14);
     bookId_8 CHAR(14);
     bookId_9 CHAR(14);
-    bookId_10 CHAR(14);
+    bookId_10_1 CHAR(14);
+    bookId_10_2 CHAR(14);
     bookId_11 CHAR(14);
-    bookId_12 CHAR(14);
+    bookId_12_1 CHAR(14);
+    bookId_12_2 CHAR(14);
+    bookId_12_3 CHAR(14);
     bookId_13 CHAR(14);
     bookId_14 CHAR(14);
     bookId_15 CHAR(14);
@@ -888,18 +832,23 @@ DECLARE
     genreId_19 CHAR(3);
     genreId_20 CHAR(3);
 BEGIN
-    SELECT bookId INTO bookId_1 FROM book WHERE title = 'Harry Potter and the Sorcerer\''s Stone';
+    SELECT bookId INTO bookId_1_1 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 1;
+    SELECT bookId INTO bookId_1_2 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 2;
     SELECT bookId INTO bookId_2 FROM book WHERE title = 'A Game of Thrones';
     SELECT bookId INTO bookId_3 FROM book WHERE title = 'Murder on the Orient Express';
     SELECT bookId INTO bookId_4 FROM book WHERE title = 'Pride and Prejudice';
     SELECT bookId INTO bookId_5 FROM book WHERE title = 'The Shining';
-    SELECT bookId INTO bookId_6 FROM book WHERE title = 'The Hobbit';
+    SELECT bookId INTO bookId_6_1 FROM book WHERE title = 'The Hobbit' and bookEdition = 1;
+    SELECT bookId INTO bookId_6_2 FROM book WHERE title = 'The Hobbit' and bookEdition = 2;
     SELECT bookId INTO bookId_7 FROM book WHERE title = 'The Da Vinci Code';
     SELECT bookId INTO bookId_8 FROM book WHERE title = 'To Kill a Mockingbird';
     SELECT bookId INTO bookId_9 FROM book WHERE title = 'The Catcher in the Rye';
-    SELECT bookId INTO bookId_10 FROM book WHERE title = 'One Hundred Years of Solitude';
+    SELECT bookId INTO bookId_10_1 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 1;
+    SELECT bookId INTO bookId_10_2 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 2;
     SELECT bookId INTO bookId_11 FROM book WHERE title = 'The Old Man and the Sea';
-    SELECT bookId INTO bookId_12 FROM book WHERE title = 'The Handmaid\''s Tale';
+    SELECT bookId INTO bookId_12_1 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 1;
+    SELECT bookId INTO bookId_12_2 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 2;
+    SELECT bookId INTO bookId_12_3 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 3;
     SELECT bookId INTO bookId_13 FROM book WHERE title = 'Charlie and the Chocolate Factory';
     SELECT bookId INTO bookId_14 FROM book WHERE title = 'Moby-Dick';
     SELECT bookId INTO bookId_15 FROM book WHERE title = 'War and Peace';
@@ -925,31 +874,55 @@ BEGIN
     SELECT genreId INTO genreId_19 FROM category WHERE genre = 'Philosophy';
     SELECT genreId INTO genreId_20 FROM category WHERE genre = 'Science';
 
-	PERFORM insertBookCategory(genreId_1, bookId_1);
-	PERFORM insertBookCategory(genreId_2, bookId_1);
-	PERFORM insertBookCategory(genreId_3, bookId_1);
+	PERFORM insertBookCategory(genreId_1, bookId_1_1);
+	PERFORM insertBookCategory(genreId_2, bookId_1_1);
+	PERFORM insertBookCategory(genreId_3, bookId_1_1);
+	PERFORM insertBookCategory(genreId_1, bookId_1_2);
+	PERFORM insertBookCategory(genreId_2, bookId_1_2);
+	PERFORM insertBookCategory(genreId_3, bookId_1_2);
+
 	PERFORM insertBookCategory(genreId_1, bookId_2);
 	PERFORM insertBookCategory(genreId_3, bookId_2);
 	PERFORM insertBookCategory(genreId_2, bookId_3);
 	PERFORM insertBookCategory(genreId_5, bookId_4);
 	PERFORM insertBookCategory(genreId_6, bookId_5);
 	PERFORM insertBookCategory(genreId_7, bookId_5);
-	PERFORM insertBookCategory(genreId_8, bookId_6);
+
+	PERFORM insertBookCategory(genreId_8, bookId_6_1);
+	PERFORM insertBookCategory(genreId_8, bookId_6_2);
+
 	PERFORM insertBookCategory(genreId_8, bookId_7);
 	PERFORM insertBookCategory(genreId_9, bookId_7);
 	PERFORM insertBookCategory(genreId_10, bookId_7);
 	PERFORM insertBookCategory(genreId_12, bookId_7);
+
 	PERFORM insertBookCategory(genreId_14, bookId_8);
+
 	PERFORM insertBookCategory(genreId_16, bookId_9);
 	PERFORM insertBookCategory(genreId_17, bookId_9);
-	PERFORM insertBookCategory(genreId_18, bookId_10);
+
+	PERFORM insertBookCategory(genreId_18, bookId_10_1);
+	PERFORM insertBookCategory(genreId_18, bookId_10_2);
+
 	PERFORM insertBookCategory(genreId_19, bookId_11);
-	PERFORM insertBookCategory(genreId_14, bookId_12);
-	PERFORM insertBookCategory(genreId_15, bookId_12);
-	PERFORM insertBookCategory(genreId_20, bookId_12);
+
+	PERFORM insertBookCategory(genreId_14, bookId_12_1);
+	PERFORM insertBookCategory(genreId_15, bookId_12_1);
+	PERFORM insertBookCategory(genreId_20, bookId_12_1);
+
+	PERFORM insertBookCategory(genreId_14, bookId_12_2);
+	PERFORM insertBookCategory(genreId_15, bookId_12_2);
+	PERFORM insertBookCategory(genreId_20, bookId_12_2);
+
+	PERFORM insertBookCategory(genreId_14, bookId_12_3);
+	PERFORM insertBookCategory(genreId_15, bookId_12_3);
+	PERFORM insertBookCategory(genreId_20, bookId_12_3);
+
 	PERFORM insertBookCategory(genreId_9, bookId_13);
+
 	PERFORM insertBookCategory(genreId_3, bookId_14);
 	PERFORM insertBookCategory(genreId_8, bookId_14);
+
 	PERFORM insertBookCategory(genreId_12, bookId_15);
 	PERFORM insertBookCategory(genreId_14, bookId_15);
 	PERFORM insertBookCategory(genreId_16, bookId_15);
@@ -959,18 +932,23 @@ END $$;
 
 DO $$ 
 DECLARE 
-    bookId_1 CHAR(14);
+    bookId_1_1 CHAR(14);
+    bookId_1_2 CHAR(14);
     bookId_2 CHAR(14);
     bookId_3 CHAR(14);
     bookId_4 CHAR(14);
     bookId_5 CHAR(14);
-    bookId_6 CHAR(14);
+    bookId_6_1 CHAR(14);
+    bookId_6_2 CHAR(14);
     bookId_7 CHAR(14);
     bookId_8 CHAR(14);
     bookId_9 CHAR(14);
-    bookId_10 CHAR(14);
+    bookId_10_1 CHAR(14);
+    bookId_10_2 CHAR(14);
     bookId_11 CHAR(14);
-    bookId_12 CHAR(14);
+    bookId_12_1 CHAR(14);
+    bookId_12_2 CHAR(14);
+    bookId_12_3 CHAR(14);
     bookId_13 CHAR(14);
     bookId_14 CHAR(14);
     bookId_15 CHAR(14);
@@ -986,18 +964,23 @@ DECLARE
     authorId_9 CHAR(16);
     authorId_10 CHAR(16);
 BEGIN
-    SELECT bookId INTO bookId_1 FROM book WHERE title = 'Harry Potter and the Sorcerer\''s Stone';
+    SELECT bookId INTO bookId_1_1 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 1;
+    SELECT bookId INTO bookId_1_2 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 2;
     SELECT bookId INTO bookId_2 FROM book WHERE title = 'A Game of Thrones';
     SELECT bookId INTO bookId_3 FROM book WHERE title = 'Murder on the Orient Express';
     SELECT bookId INTO bookId_4 FROM book WHERE title = 'Pride and Prejudice';
     SELECT bookId INTO bookId_5 FROM book WHERE title = 'The Shining';
-    SELECT bookId INTO bookId_6 FROM book WHERE title = 'The Hobbit';
+    SELECT bookId INTO bookId_6_1 FROM book WHERE title = 'The Hobbit' and bookEdition = 1;
+    SELECT bookId INTO bookId_6_2 FROM book WHERE title = 'The Hobbit' and bookEdition = 2;
     SELECT bookId INTO bookId_7 FROM book WHERE title = 'The Da Vinci Code';
     SELECT bookId INTO bookId_8 FROM book WHERE title = 'To Kill a Mockingbird';
     SELECT bookId INTO bookId_9 FROM book WHERE title = 'The Catcher in the Rye';
-    SELECT bookId INTO bookId_10 FROM book WHERE title = 'One Hundred Years of Solitude';
+    SELECT bookId INTO bookId_10_1 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 1;
+    SELECT bookId INTO bookId_10_2 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 2;
     SELECT bookId INTO bookId_11 FROM book WHERE title = 'The Old Man and the Sea';
-    SELECT bookId INTO bookId_12 FROM book WHERE title = 'The Handmaid\''s Tale';
+    SELECT bookId INTO bookId_12_1 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 1;
+    SELECT bookId INTO bookId_12_2 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 2;
+    SELECT bookId INTO bookId_12_3 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 3;
     SELECT bookId INTO bookId_13 FROM book WHERE title = 'Charlie and the Chocolate Factory';
     SELECT bookId INTO bookId_14 FROM book WHERE title = 'Moby-Dick';
     SELECT bookId INTO bookId_15 FROM book WHERE title = 'War and Peace';
@@ -1014,16 +997,21 @@ BEGIN
     SELECT authorId INTO authorId_10 FROM author WHERE authorName = 'Gabriel Garcia Marquez';
    
 
-	PERFORM insertAuthorBook(authorId_1, bookId_1);
-	PERFORM insertAuthorBook(authorId_2, bookId_1);
-	PERFORM insertAuthorBook(authorId_3, bookId_1);
+	PERFORM insertAuthorBook(authorId_1, bookId_1_1);
+	PERFORM insertAuthorBook(authorId_2, bookId_1_1);
+	PERFORM insertAuthorBook(authorId_3, bookId_1_1);
+	PERFORM insertAuthorBook(authorId_1, bookId_1_2);
+	PERFORM insertAuthorBook(authorId_2, bookId_1_2);
+	PERFORM insertAuthorBook(authorId_3, bookId_1_2);
+
 	PERFORM insertAuthorBook(authorId_1, bookId_2);
 	PERFORM insertAuthorBook(authorId_3, bookId_2);
 	PERFORM insertAuthorBook(authorId_2, bookId_3);
 	PERFORM insertAuthorBook(authorId_5, bookId_4);
 	PERFORM insertAuthorBook(authorId_6, bookId_5);
 	PERFORM insertAuthorBook(authorId_7, bookId_5);
-	PERFORM insertAuthorBook(authorId_8, bookId_6);
+	PERFORM insertAuthorBook(authorId_8, bookId_6_1);
+	PERFORM insertAuthorBook(authorId_8, bookId_6_2);
 	PERFORM insertAuthorBook(authorId_8, bookId_7);
 	PERFORM insertAuthorBook(authorId_9, bookId_7);
 	PERFORM insertAuthorBook(authorId_10, bookId_7);
@@ -1031,14 +1019,25 @@ BEGIN
 	PERFORM insertAuthorBook(authorId_4, bookId_8);
 	PERFORM insertAuthorBook(authorId_6, bookId_9);
 	PERFORM insertAuthorBook(authorId_7, bookId_9);
-	PERFORM insertAuthorBook(authorId_8, bookId_10);
+
+	PERFORM insertAuthorBook(authorId_8, bookId_10_1);
+	PERFORM insertAuthorBook(authorId_8, bookId_10_2);
+
 	PERFORM insertAuthorBook(authorId_9, bookId_11);
-	PERFORM insertAuthorBook(authorId_4, bookId_12);
-	PERFORM insertAuthorBook(authorId_5, bookId_12);
-	PERFORM insertAuthorBook(authorId_10, bookId_12);
+
+	PERFORM insertAuthorBook(authorId_4, bookId_12_1);
+	PERFORM insertAuthorBook(authorId_5, bookId_12_1);
+	PERFORM insertAuthorBook(authorId_10, bookId_12_1);
+
+	PERFORM insertAuthorBook(authorId_4, bookId_12_2);
+	PERFORM insertAuthorBook(authorId_5, bookId_12_2);
+	PERFORM insertAuthorBook(authorId_10, bookId_12_2);
+
 	PERFORM insertAuthorBook(authorId_9, bookId_13);
+
 	PERFORM insertAuthorBook(authorId_3, bookId_14);
 	PERFORM insertAuthorBook(authorId_8, bookId_14);
+
 	PERFORM insertAuthorBook(authorId_2, bookId_15);
 	PERFORM insertAuthorBook(authorId_4, bookId_15);
 	PERFORM insertAuthorBook(authorId_6, bookId_15);
@@ -1082,18 +1081,23 @@ DECLARE
 	sheetId_8 CHAR(14);
 	sheetId_9 CHAR(14);
 
-	bookId_1 CHAR(14);
+	bookId_1_1 CHAR(14);
+    bookId_1_2 CHAR(14);
     bookId_2 CHAR(14);
     bookId_3 CHAR(14);
     bookId_4 CHAR(14);
     bookId_5 CHAR(14);
-    bookId_6 CHAR(14);
+    bookId_6_1 CHAR(14);
+    bookId_6_2 CHAR(14);
     bookId_7 CHAR(14);
     bookId_8 CHAR(14);
     bookId_9 CHAR(14);
-    bookId_10 CHAR(14);
+    bookId_10_1 CHAR(14);
+    bookId_10_2 CHAR(14);
     bookId_11 CHAR(14);
-    bookId_12 CHAR(14);
+    bookId_12_1 CHAR(14);
+    bookId_12_2 CHAR(14);
+    bookId_12_3 CHAR(14);
     bookId_13 CHAR(14);
     bookId_14 CHAR(14);
     bookId_15 CHAR(14);
@@ -1104,42 +1108,55 @@ BEGIN
     SELECT sheetId INTO sheetId_4 FROM sheet WHERE importDate = '2023-03-20';
     SELECT sheetId INTO sheetId_5 FROM sheet WHERE importDate = '2023-03-25';
 
-	SELECT bookId INTO bookId_1 FROM book WHERE title = 'Harry Potter and the Sorcerer\''s Stone';
+	SELECT bookId INTO bookId_1_1 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 1;
+    SELECT bookId INTO bookId_1_2 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 2;
     SELECT bookId INTO bookId_2 FROM book WHERE title = 'A Game of Thrones';
     SELECT bookId INTO bookId_3 FROM book WHERE title = 'Murder on the Orient Express';
     SELECT bookId INTO bookId_4 FROM book WHERE title = 'Pride and Prejudice';
     SELECT bookId INTO bookId_5 FROM book WHERE title = 'The Shining';
-    SELECT bookId INTO bookId_6 FROM book WHERE title = 'The Hobbit';
+    SELECT bookId INTO bookId_6_1 FROM book WHERE title = 'The Hobbit' and bookEdition = 1;
+    SELECT bookId INTO bookId_6_2 FROM book WHERE title = 'The Hobbit' and bookEdition = 2;
     SELECT bookId INTO bookId_7 FROM book WHERE title = 'The Da Vinci Code';
     SELECT bookId INTO bookId_8 FROM book WHERE title = 'To Kill a Mockingbird';
     SELECT bookId INTO bookId_9 FROM book WHERE title = 'The Catcher in the Rye';
-    SELECT bookId INTO bookId_10 FROM book WHERE title = 'One Hundred Years of Solitude';
+    SELECT bookId INTO bookId_10_1 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 1;
+    SELECT bookId INTO bookId_10_2 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 2;
     SELECT bookId INTO bookId_11 FROM book WHERE title = 'The Old Man and the Sea';
-    SELECT bookId INTO bookId_12 FROM book WHERE title = 'The Handmaid\''s Tale';
+    SELECT bookId INTO bookId_12_1 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 1;
+    SELECT bookId INTO bookId_12_2 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 2;
+    SELECT bookId INTO bookId_12_3 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 3;
     SELECT bookId INTO bookId_13 FROM book WHERE title = 'Charlie and the Chocolate Factory';
     SELECT bookId INTO bookId_14 FROM book WHERE title = 'Moby-Dick';
     SELECT bookId INTO bookId_15 FROM book WHERE title = 'War and Peace';
 
-	PERFORM insertSheetDetail(sheetId_1, bookId_1, 300, 20);
+	PERFORM insertSheetDetail(sheetId_1, bookId_1_1, 300, 20);
 	PERFORM insertSheetDetail(sheetId_1, bookId_2, 250, 25);
 	PERFORM insertSheetDetail(sheetId_1, bookId_3, 100, 15.25);
 	PERFORM insertSheetDetail(sheetId_1, bookId_4, 800, 18);
 
 	PERFORM insertSheetDetail(sheetId_2, bookId_5, 400, 30);
-	PERFORM insertSheetDetail(sheetId_2, bookId_6, 210, 16);
+	PERFORM insertSheetDetail(sheetId_2, bookId_1_2, 480, 25);
+	PERFORM insertSheetDetail(sheetId_2, bookId_6_1, 210, 16);
 
 	PERFORM insertSheetDetail(sheetId_3, bookId_7, 320, 24);
 	PERFORM insertSheetDetail(sheetId_3, bookId_8, 430, 20);
 	PERFORM insertSheetDetail(sheetId_3, bookId_9, 560, 28);
+	PERFORM insertSheetDetail(sheetId_3, bookId_6_2, 145, 21);
+	PERFORM insertSheetDetail(sheetId_3, bookId_12_1, 256, 12.5);
 
-	PERFORM insertSheetDetail(sheetId_4, bookId_10, 800, 32);
+	PERFORM insertSheetDetail(sheetId_4, bookId_10_1, 800, 32);
 	PERFORM insertSheetDetail(sheetId_4, bookId_11, 750, 19.50);
-	PERFORM insertSheetDetail(sheetId_4, bookId_12, 1000, 18.50);
+	PERFORM insertSheetDetail(sheetId_4, bookId_12_1, 1000, 18.50);
+	PERFORM insertSheetDetail(sheetId_4, bookId_12_2, 320, 14);
 
+	PERFORM insertSheetDetail(sheetId_5, bookId_1_1, 50, 26);
+	PERFORM insertSheetDetail(sheetId_5, bookId_10_2, 750, 46);
+	PERFORM insertSheetDetail(sheetId_5, bookId_2, 50, 26);
+	PERFORM insertSheetDetail(sheetId_5, bookId_12_3, 160, 18);
 	PERFORM insertSheetDetail(sheetId_5, bookId_13, 300, 26.50);
 	PERFORM insertSheetDetail(sheetId_5, bookId_14, 100, 22.50);
 	PERFORM insertSheetDetail(sheetId_5, bookId_15, 50, 26);
-	
+
 	RETURN;
 END $$;
 
@@ -1177,34 +1194,59 @@ DECLARE
     invoiceId_19 CHAR(15);
     invoiceId_20 CHAR(15);
 
-	bookId_1 CHAR(14);
+	bookId_1_1 CHAR(14);
+    bookId_1_2 CHAR(14);
     bookId_2 CHAR(14);
     bookId_3 CHAR(14);
     bookId_4 CHAR(14);
     bookId_5 CHAR(14);
-    bookId_6 CHAR(14);
+    bookId_6_1 CHAR(14);
+    bookId_6_2 CHAR(14);
     bookId_7 CHAR(14);
     bookId_8 CHAR(14);
     bookId_9 CHAR(14);
-    bookId_10 CHAR(14);
+    bookId_10_1 CHAR(14);
+    bookId_10_2 CHAR(14);
     bookId_11 CHAR(14);
-    bookId_12 CHAR(14);
+    bookId_12_1 CHAR(14);
+    bookId_12_2 CHAR(14);
+    bookId_12_3 CHAR(14);
     bookId_13 CHAR(14);
     bookId_14 CHAR(14);
     bookId_15 CHAR(14);
+
+	emp_id_1 CHAR(16);
+    emp_id_2 CHAR(16);
+    emp_id_3 CHAR(16);
+    emp_id_4 CHAR(16);
+    emp_id_5 CHAR(16);
+    emp_id_6 CHAR(16);
 BEGIN
-	SELECT bookId INTO bookId_1 FROM book WHERE title = 'Harry Potter and the Sorcerer\''s Stone';
+
+	SELECT empId INTO emp_id_1 FROM employee WHERE empName = 'John Doe';
+    SELECT empId INTO emp_id_2 FROM employee WHERE empName = 'Chris Anderson';
+    SELECT empId INTO emp_id_3 FROM employee WHERE empName = 'Catherine Smith';
+    SELECT empId INTO emp_id_4 FROM employee WHERE empName = 'Ryan Turner';
+    SELECT empId INTO emp_id_5 FROM employee WHERE empName = 'Alex Miller';
+    SELECT empId INTO emp_id_6 FROM employee WHERE empName = 'Brandon Davis';
+
+	SELECT bookId INTO bookId_1_1 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 1;
+    SELECT bookId INTO bookId_1_2 FROM book WHERE title = 'Harry Potter and the Sorcerer''s Stone' and bookEdition = 2;
     SELECT bookId INTO bookId_2 FROM book WHERE title = 'A Game of Thrones';
     SELECT bookId INTO bookId_3 FROM book WHERE title = 'Murder on the Orient Express';
     SELECT bookId INTO bookId_4 FROM book WHERE title = 'Pride and Prejudice';
     SELECT bookId INTO bookId_5 FROM book WHERE title = 'The Shining';
-    SELECT bookId INTO bookId_6 FROM book WHERE title = 'The Hobbit';
+    SELECT bookId INTO bookId_6_1 FROM book WHERE title = 'The Hobbit' and bookEdition = 1;
+    SELECT bookId INTO bookId_6_2 FROM book WHERE title = 'The Hobbit' and bookEdition = 2;
     SELECT bookId INTO bookId_7 FROM book WHERE title = 'The Da Vinci Code';
     SELECT bookId INTO bookId_8 FROM book WHERE title = 'To Kill a Mockingbird';
     SELECT bookId INTO bookId_9 FROM book WHERE title = 'The Catcher in the Rye';
-    SELECT bookId INTO bookId_10 FROM book WHERE title = 'One Hundred Years of Solitude';
+    SELECT bookId INTO bookId_10_1 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 1;
+    SELECT bookId INTO bookId_10_2 FROM book WHERE title = 'One Hundred Years of Solitude' and bookEdition = 2;
     SELECT bookId INTO bookId_11 FROM book WHERE title = 'The Old Man and the Sea';
-    SELECT bookId INTO bookId_12 FROM book WHERE title = 'The Handmaid\''s Tale';
+    SELECT bookId INTO bookId_12_1 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 1;
+    SELECT bookId INTO bookId_12_2 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 2;
+    SELECT bookId INTO bookId_12_3 FROM book WHERE title = 'The Handmaid''s Tale' and bookEdition = 3;
     SELECT bookId INTO bookId_13 FROM book WHERE title = 'Charlie and the Chocolate Factory';
     SELECT bookId INTO bookId_14 FROM book WHERE title = 'Moby-Dick';
     SELECT bookId INTO bookId_15 FROM book WHERE title = 'War and Peace';
@@ -1220,45 +1262,46 @@ BEGIN
     SELECT memberId INTO memberId_9 FROM member WHERE memberName = 'Madison Smith';
     SELECT memberId INTO memberId_10 FROM member WHERE memberName = 'Caleb Johnson';
    
-	SELECT insertInvoice(memberId_2, '2023-03-05') INTO invoiceId_2;
-	PERFORM insertInvoiceDetail(invoiceId_2, bookId_1, 2);
+	SELECT insertInvoice(memberId_2, emp_id_1, '2023-03-05') INTO invoiceId_2;
+	PERFORM insertInvoiceDetail(invoiceId_2, bookId_1_2, 2);
 	PERFORM insertInvoiceDetail(invoiceId_2, bookId_2, 1);
 	PERFORM insertInvoiceDetail(invoiceId_2, bookId_3, 1);
-	PERFORM insertInvoiceDetail(invoiceId_2, bookId_6, 1);
+	PERFORM insertInvoiceDetail(invoiceId_2, bookId_6_1, 1);
 	PERFORM insertInvoiceDetail(invoiceId_2, bookId_7, 2);
 	PERFORM insertInvoiceDetail(invoiceId_2, bookId_8, 1);
 
-	SELECT insertInvoice(memberId_3, '2023-03-10') INTO invoiceId_3;
+	SELECT insertInvoice(memberId_3, emp_id_1, '2023-03-10') INTO invoiceId_3;
 	PERFORM insertInvoiceDetail(invoiceId_3, bookId_3, 1);
 	PERFORM insertInvoiceDetail(invoiceId_3, bookId_5, 1);
-	PERFORM insertInvoiceDetail(invoiceId_3, bookId_6, 1);
+	PERFORM insertInvoiceDetail(invoiceId_3, bookId_6_2, 1);
 	PERFORM insertInvoiceDetail(invoiceId_3, bookId_7, 3);
 	PERFORM insertInvoiceDetail(invoiceId_3, bookId_14, 1);
 	PERFORM insertInvoiceDetail(invoiceId_3, bookId_15, 1);
 
-	SELECT insertInvoice(memberId_4, '2023-03-15') INTO invoiceId_4;
+	SELECT insertInvoice(memberId_4, emp_id_2, '2023-03-15') INTO invoiceId_4;
+	PERFORM insertInvoiceDetail(invoiceId_4, bookId_10_2, 3);
 	PERFORM insertInvoiceDetail(invoiceId_4, bookId_11, 1);
 	PERFORM insertInvoiceDetail(invoiceId_4, bookId_13, 1);
 	
-	SELECT insertInvoice(memberId_5, '2023-03-20') INTO invoiceId_5;
-	PERFORM insertInvoiceDetail(invoiceId_5, bookId_1, 1);
+	SELECT insertInvoice(memberId_5, emp_id_3, '2023-03-20') INTO invoiceId_5;
+	PERFORM insertInvoiceDetail(invoiceId_5, bookId_1_1, 1);
 	PERFORM insertInvoiceDetail(invoiceId_5, bookId_3, 1);
 	PERFORM insertInvoiceDetail(invoiceId_5, bookId_9, 1);
-	PERFORM insertInvoiceDetail(invoiceId_5, bookId_12, 3);
+	PERFORM insertInvoiceDetail(invoiceId_5, bookId_12_3, 3);
 	PERFORM insertInvoiceDetail(invoiceId_5, bookId_13, 1);
 	PERFORM insertInvoiceDetail(invoiceId_5, bookId_15, 1);
 
-	SELECT insertInvoice(memberId_6, '2023-03-25') INTO invoiceId_6;
+	SELECT insertInvoice(memberId_6, emp_id_4, '2023-03-25') INTO invoiceId_6;
 	PERFORM insertInvoiceDetail(invoiceId_6, bookId_3, 2);
 	PERFORM insertInvoiceDetail(invoiceId_6, bookId_5, 2);
-	PERFORM insertInvoiceDetail(invoiceId_6, bookId_6, 2);
+	PERFORM insertInvoiceDetail(invoiceId_6, bookId_6_1, 2);
 
-	SELECT insertInvoice(memberId_7, '2023-03-30') INTO invoiceId_7;
+	SELECT insertInvoice(memberId_7, emp_id_5, '2023-03-30') INTO invoiceId_7;
 	PERFORM insertInvoiceDetail(invoiceId_7, bookId_7, 1);
 	PERFORM insertInvoiceDetail(invoiceId_7, bookId_14, 2);
 	PERFORM insertInvoiceDetail(invoiceId_7, bookId_15, 3);
 
-	SELECT insertInvoice(memberId_8, '2023-04-02') INTO invoiceId_8;
+	SELECT insertInvoice(memberId_8, emp_id_6, '2023-04-02') INTO invoiceId_8;
 	PERFORM insertInvoiceDetail(invoiceId_8, bookId_2, 1);
 	PERFORM insertInvoiceDetail(invoiceId_8, bookId_3, 2);
 	PERFORM insertInvoiceDetail(invoiceId_8, bookId_4, 1);
@@ -1266,26 +1309,12 @@ BEGIN
 	PERFORM insertInvoiceDetail(invoiceId_8, bookId_8, 1);
 	PERFORM insertInvoiceDetail(invoiceId_8, bookId_9, 3);
 
-	SELECT insertInvoice(memberId_9, '2023-04-07') INTO invoiceId_9;
+	SELECT insertInvoice(memberId_9, emp_id_2, '2023-04-07') INTO invoiceId_9;
 	PERFORM insertInvoiceDetail(invoiceId_9, bookId_3, 1);
 	
-	SELECT insertInvoice(memberId_10, '2023-04-12') INTO invoiceId_10;
+	SELECT insertInvoice(memberId_10, emp_id_1, '2023-04-12') INTO invoiceId_10;
 	PERFORM insertInvoiceDetail(invoiceId_10, bookId_3, 1);
 	PERFORM insertInvoiceDetail(invoiceId_10, bookId_15, 1);
-
-
-	PERFORM insertBorrowedDetail(memberId_1, bookId_1, 1, '2023-05-15', '2023-06-15', 'returned');
-	PERFORM insertBorrowedDetail(memberId_1, bookId_3, 1, '2023-05-15', '2023-06-15', 'returned');
-    PERFORM insertBorrowedDetail(memberId_2, bookId_5, 2, '2023-07-20', NULL, 'borrowing');
-    PERFORM insertBorrowedDetail(memberId_2, bookId_6, 2, '2023-07-20', NULL, 'borrowing');
-    PERFORM insertBorrowedDetail(memberId_3, bookId_1, 1, '2023-08-10', NULL, 'borrowing');
-    PERFORM insertBorrowedDetail(memberId_3, bookId_9, 1, '2023-08-10', NULL, 'borrowing');
-    PERFORM insertBorrowedDetail(memberId_4, bookId_3, 1, '2023-09-05', '2023-10-05', 'returned');
-    PERFORM insertBorrowedDetail(memberId_4, bookId_8, 1, '2023-09-05', '2023-10-05', 'returned');
-    PERFORM insertBorrowedDetail(memberId_5, bookId_4, 1, '2023-10-20', NULL, 'borrowing');
-    PERFORM insertBorrowedDetail(memberId_5, bookId_7, 1, '2023-10-20', NULL, 'borrowing');
-    PERFORM insertBorrowedDetail(memberId_6, bookId_2, 1, '2023-11-15', '2023-12-15', 'returned');
-    PERFORM insertBorrowedDetail(memberId_6, bookId_10, 1, '2023-11-15', '2023-12-15', 'returned');
 
 	RETURN;
 END $$;

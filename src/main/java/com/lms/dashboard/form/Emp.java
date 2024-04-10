@@ -19,7 +19,7 @@ import com.lms.dashboard.menu.MenuEmp;
 
 public class Emp extends javax.swing.JPanel {
 
-    int widthMenu = 165;
+    int widthMenu = 166;
     int height;
     int weight;
     boolean isMenuOpen = false;
@@ -94,7 +94,7 @@ public class Emp extends javax.swing.JPanel {
     }
 
     public void logOut() {
-        app.logOut();
+        // app.logOut();
     }
 
     public void changeFrame(int index) {
@@ -146,7 +146,7 @@ public class Emp extends javax.swing.JPanel {
     public void openMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = 42; i <= widthMenu; i++) {
+                for (int i = 42; i <= widthMenu; i += 4) {
                     menuEmp.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);
@@ -166,7 +166,7 @@ public class Emp extends javax.swing.JPanel {
     public void closeMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = widthMenu; i > 42; i--) {
+                for (int i = widthMenu; i > 42; i -= 4) {
                     menuEmp.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);
