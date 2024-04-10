@@ -1,11 +1,11 @@
-package com.lms.employee.SwitchButton;
+package com.lms.publisherCRUD.SwitchButton;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 public class ToggleRenderer implements TableCellRenderer {
-    private JToggleButton button = new JToggleButton("false");
+    private JToggleButton button = new JToggleButton("Unhide");
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -15,7 +15,7 @@ public class ToggleRenderer implements TableCellRenderer {
                   
                     button.setSelected(temp);
                   
-                    button.setText(Boolean.toString(temp));
+                    button.setText(Boolean.toString(temp).equals("true") ? "Hide" : "Unhide");
                 } else {
                     button.setSelected(false); // or handle this case differently
                 }

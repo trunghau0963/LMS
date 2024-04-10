@@ -4,11 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.authorCRUD.main.AuthorsPage;
+import com.lms.authorCRUD.main.EditProfile;
+import com.lms.publisherCRUD.main.PublishersPage;
 import com.lms.UserCRUD.form.InfoPage;
 import com.lms.UserCRUD.form.UsersPage;
 import com.lms.dashboard.application.Application;
@@ -82,6 +86,14 @@ public class Admin extends javax.swing.JPanel {
         listFrame.add(new UsersPage());
         listFrame.add(new bookForm());
         listFrame.add(new bookForm());
+        listFrame.add(new PublishersPage());
+        listFrame.add(new AuthorsPage());
+        try {
+            listFrame.add(new EditProfile("17470f3a4f13c023"));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         listFrame.add(new bookForm());
         listFrame.add(new bookForm());
         listFrame.add(new InfoPage());
