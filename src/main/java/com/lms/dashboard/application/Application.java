@@ -1,10 +1,6 @@
 package com.lms.dashboard.application;
 
 import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -14,7 +10,6 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.util.FontUtils;
 import com.lms.auth.entities.User;
-import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.AuthService;
 import com.lms.dashboard.form.Admin;
 import com.lms.dashboard.form.Emp;
@@ -42,9 +37,9 @@ public class Application extends javax.swing.JFrame {
         // setLocationRelativeTo(null);
 
         app = this;
-        admin = new Admin(app);
-        emp = new Emp(app);
-        app.setContentPane(app.AuthView);
+        admin = new Admin(this);
+        emp = new Emp(this);
+        app.setContentPane(app.admin);
         app.pack();
         app.setLocationRelativeTo(null);
 
@@ -77,30 +72,6 @@ public class Application extends javax.swing.JFrame {
     //     reader.close();
     // }
 
-    public static void login() {
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
-
-    public static void logOut(){
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
-
-    public static void resetPw() {
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
-
-    public static void signUp() {
-        // app.pack();
-        // app.setLocationRelativeTo(null);
-        FlatLaf.updateUI();
-    }
-
     public static void dashboardAdmin() {
         app.setContentPane(app.admin);
         // app.pack();
@@ -122,7 +93,7 @@ public class Application extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -461,11 +432,13 @@ public class Application extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 960, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1080, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 517, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 517, Short.MAX_VALUE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

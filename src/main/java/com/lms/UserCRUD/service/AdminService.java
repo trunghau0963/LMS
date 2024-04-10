@@ -1,0 +1,58 @@
+package com.lms.userCRUD.service;
+
+import java.util.List;
+
+import com.lms.auth.entities.Admin;
+import com.lms.auth.entities.Employee;
+import com.lms.auth.entities.User;
+import com.lms.userCRUD.dal.AdminDao;
+import com.lms.userCRUD.model.ModelAddUser;
+import com.lms.userCRUD.model.ModelEditAccount;
+
+public class AdminService {
+  private AdminDao adminDao;
+
+  public AdminService(AdminDao adminDao) {
+    this.adminDao = adminDao;
+  }
+
+  public User addUser(String phoneNumber, String pw, String userType, String gender, String dob, String fullName) {
+
+    ModelAddUser newUser = new ModelAddUser(fullName, phoneNumber, pw, userType, gender, dob);
+    return adminDao.addUser(newUser);
+  }
+
+  public boolean editAccount(String phoneNumber, String pw, String fullName, String dob, String gender) {
+    ModelEditAccount editUser = new ModelEditAccount(fullName, phoneNumber, dob, gender, pw);
+    return adminDao.editAccount(editUser);
+  }
+
+  public List<Employee> getEmployees() {
+    return adminDao.getEmployees();
+  }
+
+  public List<Admin> getAdmins() {
+    return adminDao.getAdmins();
+  }
+
+  public Employee getEmployeeByPhoneNumber(String phoneNumber) {
+    return adminDao.getEmployeeByPhoneNumber(phoneNumber);
+  }
+
+  public Employee getEmployeeByName(String name) {
+    return adminDao.getEmployeeByName(name);
+  }
+
+  public Admin getAdminByPhoneNumber(String phoneNumber) {
+    return adminDao.getAdminByPhoneNumber(phoneNumber);
+  }
+
+  public Admin getAdminByName(String name) {
+    return adminDao.getAdminByName(name);
+  }
+
+  public boolean toggleBlockUser(String phoneNumber, boolean isBlocked) {
+    return adminDao.toggleBlock(phoneNumber, isBlocked);
+  }
+
+}

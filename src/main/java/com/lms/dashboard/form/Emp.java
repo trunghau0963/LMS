@@ -4,18 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.authorCRUD.main.AuthorsPage;
+import com.lms.authorCRUD.main.EditProfile;
+import com.lms.publisherCRUD.main.PublishersPage;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.form.other.bookForm;
 import com.lms.dashboard.menu.MenuEmp;
 
 public class Emp extends javax.swing.JPanel {
 
-    int widthMenu = 165;
+    int widthMenu = 166;
     int height;
     int weight;
     boolean isMenuOpen = false;
@@ -71,22 +75,32 @@ public class Emp extends javax.swing.JPanel {
 
         bg.add(scrollMenu, BorderLayout.WEST);
         bg.add(scrollBody, BorderLayout.CENTER);
-    
+
     }
 
     public void addListFrame() {
         listFrame.add(new bookForm());
+        listFrame.add(new bookForm());
+        listFrame.add(new PublishersPage());
+        listFrame.add(new AuthorsPage());
+        try {
+            listFrame.add(new EditProfile("17470f3a4f13c023"));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        listFrame.add(new bookForm());
+
     }
 
     public void logOut() {
-        app.logOut();
+        // app.logOut();
     }
 
     public void changeFrame(int index) {
         System.out.println(index);
         mainForm.showForm(listFrame.get(index));
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -132,7 +146,7 @@ public class Emp extends javax.swing.JPanel {
     public void openMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = 42; i <= widthMenu; i++) {
+                for (int i = 42; i <= widthMenu; i += 4) {
                     menuEmp.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);
@@ -152,7 +166,7 @@ public class Emp extends javax.swing.JPanel {
     public void closeMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = widthMenu; i > 42; i--) {
+                for (int i = widthMenu; i > 42; i -= 4) {
                     menuEmp.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);

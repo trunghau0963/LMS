@@ -31,7 +31,6 @@ public class AuthView extends javax.swing.JPanel {
 
         txtPhoneNumberLogin.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your phone number");
         txtPassLogin.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
-        selectionRoleLogin.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Select your role");
 
         txtPassLogin.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
         txtPassLogin.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true; showClearButton: true;");
@@ -71,15 +70,15 @@ public class AuthView extends javax.swing.JPanel {
         rememberCheckbok = new javax.swing.JCheckBox();
         txtPhoneNumberLogin = new javax.swing.JTextField();
         txtPassLogin = new javax.swing.JPasswordField();
-        selectionRoleLogin = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         phoneLable = new javax.swing.JLabel();
         passLabel = new javax.swing.JLabel();
-        roleLabel = new javax.swing.JLabel();
         signInButton = new javax.swing.JButton();
         errorPhone = new javax.swing.JLabel();
         errorPass = new javax.swing.JLabel();
-        errorRole = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        roleButton = new com.lms.auth.ui.ToggleButton();
+        manualLabel = new javax.swing.JLabel();
         panelSignup = new javax.swing.JPanel();
         formSignUp = new javax.swing.JPanel();
         textPhoneNumber = new javax.swing.JTextField();
@@ -119,8 +118,8 @@ public class AuthView extends javax.swing.JPanel {
 
         setLayout(new java.awt.CardLayout());
 
-        signInLabel.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        signInLabel.setText("Sign In");
+        signInLabel.setFont(new java.awt.Font("Segoe UI", 1, 34)); // NOI18N
+        signInLabel.setText("Sign in to Account");
 
         signUpLabel.setText("Don't have a account ?");
 
@@ -147,17 +146,11 @@ public class AuthView extends javax.swing.JPanel {
             }
         });
 
-        selectionRoleLogin.setEditable(true);
-        selectionRoleLogin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Employee" }));
-        selectionRoleLogin.setSelectedIndex(-1);
-
         phoneLable.setText("Phone Number");
 
         passLabel.setText("Password");
 
-        roleLabel.setText("Role");
-
-        signInButton.setBackground(new java.awt.Color(64, 68, 237));
+        signInButton.setBackground(new java.awt.Color(156, 63, 243));
         signInButton.setForeground(new java.awt.Color(255, 255, 255));
         signInButton.setText("Sign In");
         signInButton.addActionListener(new java.awt.event.ActionListener() {
@@ -170,13 +163,27 @@ public class AuthView extends javax.swing.JPanel {
 
         errorPass.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        errorRole.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jSeparator3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSeparator3.setPreferredSize(new java.awt.Dimension(50, 20));
+
+        manualLabel.setText("switch button to admin login");
 
         javax.swing.GroupLayout formLoginLayout = new javax.swing.GroupLayout(formLogin);
         formLogin.setLayout(formLoginLayout);
         formLoginLayout.setHorizontalGroup(
             formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
+            .addGroup(formLoginLayout.createSequentialGroup()
+                .addComponent(passLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(errorPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(signInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(formLoginLayout.createSequentialGroup()
+                .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(signInLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPhoneNumberLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                    .addComponent(txtPassLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
             .addGroup(formLoginLayout.createSequentialGroup()
                 .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(formLoginLayout.createSequentialGroup()
@@ -187,41 +194,39 @@ public class AuthView extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(forgotPwButton))
                             .addGroup(formLoginLayout.createSequentialGroup()
-                                .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(signInLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(formLoginLayout.createSequentialGroup()
-                                        .addGap(32, 32, 32)
-                                        .addComponent(signUpLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(signUpChangeButton)))
+                                .addGap(32, 32, 32)
+                                .addComponent(signUpLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(signUpChangeButton)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(formLoginLayout.createSequentialGroup()
                         .addComponent(phoneLable, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(errorPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(errorPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(formLoginLayout.createSequentialGroup()
+                        .addGap(124, 124, 124)
+                        .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(roleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(formLoginLayout.createSequentialGroup()
-                .addComponent(roleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(errorRole, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(formLoginLayout.createSequentialGroup()
-                .addComponent(passLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(errorPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(formLoginLayout.createSequentialGroup()
-                .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPhoneNumberLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPassLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectionRoleLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(signInButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, formLoginLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(manualLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
         );
         formLoginLayout.setVerticalGroup(
             formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(formLoginLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(signInLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(roleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(manualLabel)
+                .addGap(29, 29, 29)
                 .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phoneLable, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorPhone))
@@ -233,13 +238,7 @@ public class AuthView extends javax.swing.JPanel {
                     .addComponent(errorPass))
                 .addGap(7, 7, 7)
                 .addComponent(txtPassLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(roleLabel)
-                    .addComponent(errorRole))
-                .addGap(4, 4, 4)
-                .addComponent(selectionRoleLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(12, 12, 12)
                 .addGroup(formLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(forgotPwButton)
                     .addComponent(rememberCheckbok))
@@ -258,21 +257,17 @@ public class AuthView extends javax.swing.JPanel {
         panelLogin.setLayout(panelLoginLayout);
         panelLoginLayout.setHorizontalGroup(
             panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 960, Short.MAX_VALUE)
-            .addGroup(panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelLoginLayout.createSequentialGroup()
-                    .addGap(0, 328, Short.MAX_VALUE)
-                    .addComponent(formLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 328, Short.MAX_VALUE)))
+            .addGroup(panelLoginLayout.createSequentialGroup()
+                .addGap(0, 328, Short.MAX_VALUE)
+                .addComponent(formLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 327, Short.MAX_VALUE))
         );
         panelLoginLayout.setVerticalGroup(
             panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-            .addGroup(panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelLoginLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(formLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(panelLoginLayout.createSequentialGroup()
+                .addGap(0, 26, Short.MAX_VALUE)
+                .addComponent(formLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         add(panelLogin, "login");
@@ -591,6 +586,10 @@ public class AuthView extends javax.swing.JPanel {
         add(panelVerify, "verify");
     }// </editor-fold>//GEN-END:initComponents
 
+    private void rememberCheckbokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rememberCheckbokActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rememberCheckbokActionPerformed
+
     private void signInChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_signInChangeButtonActionPerformed
         CardLayout cardLayout = (CardLayout) this.getLayout();
         cardLayout.show(this, "login");
@@ -607,17 +606,18 @@ public class AuthView extends javax.swing.JPanel {
         cardLayout.show(this, "search");
     }// GEN-LAST:event_forgotPwButtonActionPerformed
 
-    private void rememberCheckbokActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_rememberCheckbokActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_rememberCheckbokActionPerformed
-
     private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_signInButtonActionPerformed
         String user = txtPhoneNumberLogin.getText().trim();
         String pass = String.valueOf(txtPassLogin.getPassword());
         String role = "";
-        if (selectionRoleLogin.getSelectedItem() != null) {
-            role = selectionRoleLogin.getSelectedItem().toString();
+        if (roleButton.isSelected()) {
+            role = "Admin";
+        } else {
+            role = "Employee";
         }
+        // if (selectionRoleLogin.getSelectedItem() != null) {
+        //     role = selectionRoleLogin.getSelectedItem().toString();
+        // }
         boolean action = true;
 
         if (user.equals("")) {
@@ -634,23 +634,11 @@ public class AuthView extends javax.swing.JPanel {
             }
             action = false;
         }
-        if (role.equals("") || role == null || !role.equals("Admin") && !role.equals("Employee")) {
-            System.out.println(role);
-            errorRole.setText("Please select role");
-            errorRole.setForeground(new java.awt.Color(255, 0, 0));
-            if (action) {
-                txtPassLogin.grabFocus();
-            }
-            action = false;
-        }
         if (!user.equals("")) {
             errorPhone.setText("");
         }
         if (!pass.equals("")) {
             errorPass.setText("");
-        }
-        if (role.equals("Admin") || role.equals("Employee")) {
-            errorRole.setText("");
         }
 
         System.out.println(user + " " + pass + " " + role);
@@ -687,13 +675,11 @@ public class AuthView extends javax.swing.JPanel {
                         Application.setUserInformation(userLogin);
                         txtPhoneNumberLogin.setText("");
                         txtPassLogin.setText("");
-                        selectionRoleLogin.setSelectedIndex(-1);
                     } else if (finalRole.equals("Employee")) {
                         Application.dashboardUser();
                         Application.setUserInformation(userLogin);
                         txtPhoneNumberLogin.setText("");
                         txtPassLogin.setText("");
-                        selectionRoleLogin.setSelectedIndex(-1);
                     }
                 }
             });
@@ -818,7 +804,6 @@ public class AuthView extends javax.swing.JPanel {
     private javax.swing.JLabel errorNewPw;
     private javax.swing.JLabel errorPass;
     private javax.swing.JLabel errorPhone;
-    private javax.swing.JLabel errorRole;
     private javax.swing.JLabel errorVerify;
     private javax.swing.JPanel forgotPanel1;
     private javax.swing.JButton forgotPwButton;
@@ -833,7 +818,9 @@ public class AuthView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel manualLabel;
     private javax.swing.JPanel panelForgotPw;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JPanel panelSignup;
@@ -843,9 +830,8 @@ public class AuthView extends javax.swing.JPanel {
     private javax.swing.JLabel phoneLable;
     private javax.swing.JCheckBox rememberCheckbok;
     private javax.swing.JLabel resetPwTitle;
-    private javax.swing.JLabel roleLabel;
+    private com.lms.auth.ui.ToggleButton roleButton;
     private javax.swing.JButton searchAccountButton;
-    private javax.swing.JComboBox<String> selectionRoleLogin;
     private javax.swing.JButton signInButton;
     private javax.swing.JButton signInChangeButton;
     private javax.swing.JLabel signInLabel;

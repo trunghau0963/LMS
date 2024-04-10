@@ -113,8 +113,7 @@
             <groupId>com.toedter</groupId>
             <artifactId>jcalendar</artifactId>
             <version>1.4</version>
-        </dependency>
-        
+      </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-fonts-roboto</artifactId>
@@ -133,8 +132,6 @@
             <version>3.4</version>
             <scope>runtime</scope>
         </dependency>
-
-
     </dependencies>
     <name>lms</name>
 </project>
