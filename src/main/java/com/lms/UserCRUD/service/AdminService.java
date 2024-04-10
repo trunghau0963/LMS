@@ -1,13 +1,13 @@
-package com.lms.UserCRUD.service;
+package com.lms.userCRUD.service;
 
 import java.util.List;
 
-import com.lms.UserCRUD.dal.AdminDao;
-import com.lms.UserCRUD.model.ModelAddUser;
-import com.lms.UserCRUD.model.ModelEditAccount;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
+import com.lms.userCRUD.dal.AdminDao;
+import com.lms.userCRUD.model.ModelAddUser;
+import com.lms.userCRUD.model.ModelEditAccount;
 
 public class AdminService {
   private AdminDao adminDao;

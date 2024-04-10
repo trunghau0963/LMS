@@ -1,11 +1,11 @@
-package com.lms.UserCRUD.form;
+package com.lms.userCRUD.form;
 
 import java.awt.CardLayout;
 
 import javax.swing.*;
 
-import com.lms.UserCRUD.form.other.EditAccount;
-import com.lms.UserCRUD.form.other.ViewInformation;
+import com.lms.userCRUD.form.other.EditAccount;
+import com.lms.userCRUD.form.other.ViewInformation;
 
 public class InfoPage extends JPanel {
   private CardLayout cardLayout;

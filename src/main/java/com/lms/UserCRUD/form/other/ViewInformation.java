@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 
-package com.lms.UserCRUD.form.other;
+package com.lms.userCRUD.form.other;
 
 import java.awt.CardLayout;
 import javax.swing.JPanel;

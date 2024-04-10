@@ -1,9 +1,9 @@
-package com.lms.UserCRUD.form;
+package com.lms.userCRUD.form;
 
 import javax.swing.*;
 
-import com.lms.UserCRUD.form.other.AddUser;
-import com.lms.UserCRUD.form.other.ViewListAccount;
+import com.lms.userCRUD.form.other.AddUser;
+import com.lms.userCRUD.form.other.ViewListAccount;
 
 import java.awt.*;
 

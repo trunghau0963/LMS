@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.lms.UserCRUD.form.other;
+package com.lms.userCRUD.form.other;
 
 import java.awt.CardLayout;
 import java.text.SimpleDateFormat;
@@ -10,11 +10,11 @@ import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.lms.UserCRUD.dal.AdminDao;
-import com.lms.UserCRUD.form.UsersPage;
-import com.lms.UserCRUD.repo.AdminRepo;
-import com.lms.UserCRUD.service.AdminService;
 import com.lms.auth.entities.User;
+import com.lms.userCRUD.dal.AdminDao;
+import com.lms.userCRUD.form.UsersPage;
+import com.lms.userCRUD.repo.AdminRepo;
+import com.lms.userCRUD.service.AdminService;
 
 /**
  *
