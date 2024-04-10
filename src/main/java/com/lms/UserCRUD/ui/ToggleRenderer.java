@@ -1,4 +1,4 @@
-package com.lms.admin.SwitchButton;
+package com.lms.UserCRUD.ui;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;

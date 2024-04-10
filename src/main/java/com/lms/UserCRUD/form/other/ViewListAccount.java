@@ -2,11 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.lms.admin;
-
-import com.lms.admin.dal.AdminDao;
-import com.lms.admin.repo.AdminRepo;
-import com.lms.admin.service.AdminService;
+package com.lms.UserCRUD.form.other;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -24,11 +20,14 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.lms.UserCRUD.dal.AdminDao;
+import com.lms.UserCRUD.repo.AdminRepo;
+import com.lms.UserCRUD.service.AdminService;
+import com.lms.UserCRUD.ui.ToggleRenderer;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 
-import com.lms.admin.SwitchButton.ToggleRenderer;
-
+/**
 /**
  *
  * @author DungMinh
@@ -69,6 +68,8 @@ public class ViewListAccount extends javax.swing.JPanel {
 
         AdminService adminService;
         AdminDao adminDao;
+        CardLayout cardLayout;
+        JPanel panelParent;
 
         public ViewListAccount(CardLayout cardLayout, JPanel panelParent) {
 
@@ -112,6 +113,7 @@ public class ViewListAccount extends javax.swing.JPanel {
                 setSize(800, 540);
 
                 listAuthor.setBackground(new java.awt.Color(231, 226, 226));
+                listAuthor.setForeground(new java.awt.Color(0,102,102));
                 listAuthor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
                 List<Employee> users = adminService.getEmployees();
 
@@ -170,7 +172,7 @@ public class ViewListAccount extends javax.swing.JPanel {
 
                 jScrollPane2.setViewportView(jTextPane1);
 
-                jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/admin/search.png"))); // NOI18N
+                jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/UserCRUD/search.png"))); // NOI18N
                 jButton2.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButton2ActionPerformed(evt);
@@ -205,6 +207,7 @@ public class ViewListAccount extends javax.swing.JPanel {
                                                                 Short.MAX_VALUE));
 
                 listAuthor1.setBackground(new java.awt.Color(231, 226, 226));
+                listAuthor1.setForeground(new java.awt.Color(0,102,102));
                 listAuthor1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
                 List<Admin> admins = adminService.getAdmins();
@@ -253,7 +256,7 @@ public class ViewListAccount extends javax.swing.JPanel {
 
                 jScrollPane5.setViewportView(jTextPane3);
 
-                jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/admin/search.png"))); // NOI18N
+                jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/UserCRUD/search.png"))); // NOI18N
                 jButton5.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButton5ActionPerformed(evt);
@@ -534,7 +537,5 @@ public class ViewListAccount extends javax.swing.JPanel {
         private javax.swing.JTextPane jTextPane3;
         private javax.swing.JTable listAuthor;
         private javax.swing.JTable listAuthor1;
-        CardLayout cardLayout;
-        JPanel panelParent;
         // End of variables declaration//GEN-END:variables
 }

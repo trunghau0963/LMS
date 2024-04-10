@@ -1,4 +1,4 @@
-package com.lms.admin.model;
+package com.lms.UserCRUD.model;
 
 public class ModelAddUser {
 
