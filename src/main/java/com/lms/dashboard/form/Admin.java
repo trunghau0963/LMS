@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.bookCRUD.main.BookView;
+import com.lms.categoryCRUD.main.CategoryView;
 import com.lms.authorCRUD.main.AuthorsPage;
 import com.lms.authorCRUD.main.EditProfile;
 import com.lms.publisherCRUD.main.PublishersPage;
@@ -83,6 +85,9 @@ public class Admin extends javax.swing.JPanel {
 
     public void addListFrame() {
         listFrame.add(new dashboardForm());
+        listFrame.add(new accountForm());
+        listFrame.add(new BookView());
+        listFrame.add(new CategoryView());
         listFrame.add(new UsersPage());
         listFrame.add(new bookForm());
         listFrame.add(new bookForm());
