@@ -17,12 +17,17 @@ import com.lms.dataSaleCRUD.repo.UserRepo;
 import com.lms.dataSaleCRUD.service.UserService;
 
 public class viewDataSaleCustomerPanel extends javax.swing.JPanel {
-    public viewDataSaleCustomerPanel() {
-        initComponents();
+    private java.awt.CardLayout cardLayout;
+    private javax.swing.JPanel panelParent;
 
+    public viewDataSaleCustomerPanel(java.awt.CardLayout cardLayout, javax.swing.JPanel panelParent) {
+        this.cardLayout = cardLayout;
+        this.panelParent = panelParent; 
         initComponents();
-        setBackground(Color.WHITE);
+        init();
+    }
 
+    private void init() {
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         // table.getTableHeader().setOpaque(false);
         table.getTableHeader().setBackground(new Color(125, 200, 204));
@@ -95,23 +100,24 @@ public class viewDataSaleCustomerPanel extends javax.swing.JPanel {
     }
 
     public void filterByDate() {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-                java.util.Date startDate = dateChooser1.getDate();
-                java.sql.Date tempDate1 = new java.sql.Date(startDate.getTime());
-                String startDateString = formatter.format(tempDate1);
+        java.util.Date startDate = dateChooser1.getDate();
+        java.sql.Date tempDate1 = new java.sql.Date(startDate.getTime());
+        String startDateString = formatter.format(tempDate1);
 
-                java.util.Date endDate = dateChooser2.getDate();
-                java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
-                String endDateString = formatter.format(tempDate2);
+        java.util.Date endDate = dateChooser2.getDate();
+        java.sql.Date tempDate2 = new java.sql.Date(endDate.getTime());
+        String endDateString = formatter.format(tempDate2);
 
-                UserDao userDao = new UserRepo();
-                UserService userService = new UserService(userDao);
-                List<CustomerWithRevenue> customers = userService.getTotalRevenueGroupByCustomerBetweenDate(startDateString, endDateString);
+        UserDao userDao = new UserRepo();
+        UserService userService = new UserService(userDao);
+        List<CustomerWithRevenue> customers = userService.getTotalRevenueGroupByCustomerBetweenDate(startDateString,
+                endDateString);
 
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                updateTable(customers, model);
-        }
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        updateTable(customers, model);
+    }
 
     public void filterByName() {
         String filterText = jTextField1.getText();
@@ -139,35 +145,111 @@ public class viewDataSaleCustomerPanel extends javax.swing.JPanel {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel9 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanel6 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
-        dateChooser1 = new com.toedter.calendar.JDateChooser();
+        jPanel5 = new javax.swing.JPanel();
         dateChooser2 = new com.toedter.calendar.JDateChooser();
-        resetBtn = new com.lms.custom.Button();
+        dateChooser1 = new com.toedter.calendar.JDateChooser();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        returnButton = new javax.swing.JButton();
+        resetBtn = new com.lms.dataSaleCRUD.ui.Button();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
+        jPanel9.setLayout(new javax.swing.BoxLayout(jPanel9, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel3.setPreferredSize(new java.awt.Dimension(800, 60));
+
+        jPanel8.setMinimumSize(new java.awt.Dimension(100, 60));
+        jPanel8.setPreferredSize(new java.awt.Dimension(100, 60));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(100, 40));
+        jPanel8.add(jComboBox1);
+
+        jPanel3.add(jPanel8);
+
+        jPanel6.setPreferredSize(new java.awt.Dimension(500, 60));
 
         jTextField1.setToolTipText("");
+        jTextField1.setPreferredSize(new java.awt.Dimension(500, 40));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
             }
         });
+        jPanel6.add(jTextField1);
 
-        dateChooser1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.add(jPanel6);
+
+        jPanel5.setPreferredSize(new java.awt.Dimension(130, 60));
 
         dateChooser2.setBackground(new java.awt.Color(255, 255, 255));
+        dateChooser2.setMaxSelectableDate(null);
+        dateChooser2.setMinSelectableDate(null);
+        dateChooser2.setPreferredSize(new java.awt.Dimension(110, 20));
+        jPanel5.add(dateChooser2);
 
-        resetBtn.setBackground(new java.awt.Color(60, 58, 72));
-        resetBtn.setForeground(new java.awt.Color(255, 255, 255));
-        resetBtn.setText("Reset Table");
-        resetBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetBtnActionPerformed(evt);
-            }
-        });
+        dateChooser1.setBackground(new java.awt.Color(255, 255, 255));
+        dateChooser1.setMaxSelectableDate(null);
+        dateChooser1.setMinSelectableDate(null);
+        dateChooser1.setPreferredSize(new java.awt.Dimension(110, 20));
+        jPanel5.add(dateChooser1);
+
+        jPanel3.add(jPanel5);
+
+        jPanel9.add(jPanel3);
+
+        jPanel7.setPreferredSize(new java.awt.Dimension(951, 60));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setText("Customer Data Sale List");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 935, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel7Layout.createSequentialGroup()
+                    .addGap(0, 268, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addGap(0, 268, Short.MAX_VALUE)))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel7Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jPanel9.add(jPanel7);
+
+        add(jPanel9, java.awt.BorderLayout.PAGE_START);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 40, 1, 40));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 400));
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -190,57 +272,80 @@ public class viewDataSaleCustomerPanel extends javax.swing.JPanel {
         table.setShowGrid(true);
         jScrollPane2.setViewportView(table);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 955, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(dateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(jTextField1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 857, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 857, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(dateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateChooser2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resetBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE))
         );
+
+        jPanel1.add(jPanel2);
+
+        jPanel4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 60, 20));
+
+        returnButton.setText("Return");
+        returnButton.setPreferredSize(new java.awt.Dimension(150, 40));
+        returnButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                returnButtonActionPerformed(evt);
+            }
+        });
+        jPanel4.add(returnButton);
+
+        resetBtn.setBackground(new java.awt.Color(60, 58, 72));
+        resetBtn.setForeground(new java.awt.Color(255, 255, 255));
+        resetBtn.setText("Reset Table");
+        resetBtn.setPreferredSize(new java.awt.Dimension(150, 40));
+        resetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBtnActionPerformed(evt);
+            }
+        });
+        jPanel4.add(resetBtn);
+
+        jPanel1.add(jPanel4);
+
+        add(jPanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }// GEN-LAST:event_jTextField1ActionPerformed
 
-    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
+    private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_resetBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_resetBtnActionPerformed
+    }// GEN-LAST:event_resetBtnActionPerformed
 
+    private void returnButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_returnButtonActionPerformed
+        cardLayout.show(panelParent, "viewDataSalePanel");
+    }// GEN-LAST:event_returnButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser dateChooser1;
     private com.toedter.calendar.JDateChooser dateChooser2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private com.lms.custom.Button resetBtn;
+    private com.lms.dataSaleCRUD.ui.Button resetBtn;
+    private javax.swing.JButton returnButton;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

@@ -12,7 +12,7 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 import com.lms.userCRUD.dal.AdminDao;
-import com.lms.userCRUD.form.UsersPage;
+import com.lms.userCRUD.form.UsersView;
 import com.lms.userCRUD.repo.AdminRepo;
 import com.lms.userCRUD.service.AdminService;
 
@@ -59,7 +59,7 @@ public class EditAccount extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         saveButton = new javax.swing.JButton();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        imageAvatar1 = new com.lms.custom.ImageAvatar();
+        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -238,7 +238,7 @@ public class EditAccount extends javax.swing.JPanel {
         if (isSucess) {
             JOptionPane.showMessageDialog(this, "Edit account successfully");
             this.resetTextFields();
-            UsersPage.viewListAccount.reLoad();
+            UsersView.viewListAccount.reLoad();
             
         } else {
             JOptionPane.showMessageDialog(this, "Edit account failed");
@@ -259,7 +259,7 @@ public class EditAccount extends javax.swing.JPanel {
     private javax.swing.JTextField contacttxt;
     private javax.swing.JTextField fullNametxt;
     private javax.swing.JComboBox<String> genderChoose;
-    private com.lms.custom.ImageAvatar imageAvatar1;
+    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel10;

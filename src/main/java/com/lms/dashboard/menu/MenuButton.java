@@ -200,9 +200,9 @@ public class MenuButton extends javax.swing.JPanel {
 
     public void isSelected(boolean selected) {
         if (selected) {
-            buttonIcon.setBackground(new java.awt.Color(106, 81, 227));
-            buttonName.setBackground(new java.awt.Color(106, 81, 227));
-            setBackground(new java.awt.Color(106, 81, 227));
+            buttonIcon.setBackground(new java.awt.Color(156, 63, 243));
+            buttonName.setBackground(new java.awt.Color(156, 63, 243));
+            setBackground(new java.awt.Color(156, 63, 243));
         } else {
             buttonIcon.setBackground(UIManager.getColor("Button.background"));
             buttonName.setBackground(UIManager.getColor("Button.background"));

@@ -2,25 +2,24 @@ package com.lms.dashboard.form;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
-import com.lms.bookCRUD.main.BookView;
+import com.lms.authorCRUD.form.AuthorsView;
+import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.main.CategoryView;
-import com.lms.authorCRUD.main.AuthorsPage;
-import com.lms.authorCRUD.main.EditProfile;
-import com.lms.publisherCRUD.main.PublishersPage;
-import com.lms.userCRUD.form.InfoPage;
-import com.lms.userCRUD.form.UsersPage;
 import com.lms.dashboard.application.Application;
-import com.lms.dashboard.form.other.bookForm;
-import com.lms.dataSaleCRUD.form.dataSaleView;
 import com.lms.dashboard.menu.MenuAdmin;
+import com.lms.dataSaleCRUD.form.dataSaleView;
+import com.lms.dataSaleCRUD.repo.UserRepo;
+import com.lms.dataSaleCRUD.service.UserService;
+import com.lms.publisherCRUD.form.PublishersView;
+import com.lms.userCRUD.form.InfoPage;
+import com.lms.userCRUD.form.UsersView;
 
 public class Admin extends javax.swing.JPanel {
 
@@ -34,12 +33,15 @@ public class Admin extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollBody;
     private static Application app;
     public ArrayList<JPanel> listFrame = new ArrayList<JPanel>();
+    private UserService userService;
 
     public Admin(Application app) {
         this.app = app;
+        UserRepo userRepo = new UserRepo();
+        this.userService = new UserService(userRepo);
         initComponents();
         init();
-        // setSize(new Dimension(w, h));
+
         this.addComponentListener(new ComponentListener() {
 
             public void componentResized(ComponentEvent e) {
@@ -62,11 +64,12 @@ public class Admin extends javax.swing.JPanel {
     public void init() {
         addListFrame();
         setBorder(new EmptyBorder(0, 5, 10, 10));
+        bg.setLayout(new BorderLayout());
         // layout = new MigLayout("fill", "0[]0[100%, fill]0", "0[fill, top]0");
         // bg.setLayout(layout);
-        bg.setLayout(new BorderLayout());
         // bg.setSize(new Dimension(960, 560));
         mainForm = new MainForm();
+        mainForm.showForm(listFrame.get(0));
         menuAdmin = new MenuAdmin(this);
         scrollMenu = new javax.swing.JScrollPane();
         scrollMenu.setBackground(new java.awt.Color(39, 38, 44));
@@ -85,20 +88,20 @@ public class Admin extends javax.swing.JPanel {
 
     public void addListFrame() {
         listFrame.add(new dataSaleView());
-        listFrame.add(new UsersPage());
+        listFrame.add(new UsersView());
         listFrame.add(new BookView());
         listFrame.add(new CategoryView());
-        listFrame.add(new PublishersPage());
-        listFrame.add(new AuthorsPage());
-        try {
-            listFrame.add(new EditProfile("17470f3a4f13c023"));
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        listFrame.add(new bookForm());
-        listFrame.add(new bookForm());
+        listFrame.add(new PublishersView());
+        listFrame.add(new AuthorsView());
         listFrame.add(new InfoPage());
+        // try {
+        // listFrame.add(new EditProfile("17470f3a4f13c023"));
+        // } catch (ParseException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+        // listFrame.add(new bookForm());
+        // listFrame.add(new bookForm());
     }
 
     public void logOut() {
@@ -115,35 +118,17 @@ public class Admin extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bgPanel = new javax.swing.JPanel();
-        scrollMenu1 = new javax.swing.JScrollPane();
-        menuAdmin1 = new com.lms.dashboard.menu.MenuAdmin();
         bg = new javax.swing.JLayeredPane();
-
-        scrollMenu1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollMenu1.setViewportView(menuAdmin1);
-
-        javax.swing.GroupLayout bgPanelLayout = new javax.swing.GroupLayout(bgPanel);
-        bgPanel.setLayout(bgPanelLayout);
-        bgPanelLayout.setHorizontalGroup(
-            bgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(bgPanelLayout.createSequentialGroup()
-                .addComponent(scrollMenu1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(916, Short.MAX_VALUE))
-        );
-        bgPanelLayout.setVerticalGroup(
-            bgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollMenu1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
-        );
 
         javax.swing.GroupLayout bgLayout = new javax.swing.GroupLayout(bg);
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1080, Short.MAX_VALUE)
+            .addGap(0, 929, Short.MAX_VALUE)
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +139,10 @@ public class Admin extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bg)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(bg)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,8 +206,5 @@ public class Admin extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;
-    private javax.swing.JPanel bgPanel;
-    private com.lms.dashboard.menu.MenuAdmin menuAdmin1;
-    private javax.swing.JScrollPane scrollMenu1;
     // End of variables declaration//GEN-END:variables
 }

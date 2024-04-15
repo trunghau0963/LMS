@@ -10,12 +10,16 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.lms.authorCRUD.main.AuthorsPage;
-import com.lms.authorCRUD.main.EditProfile;
-import com.lms.publisherCRUD.main.PublishersPage;
+import com.lms.authorCRUD.form.AuthorsView;
+import com.lms.authorCRUD.form.EditProfile;
+import com.lms.bookCRUD.form.BookView;
+import com.lms.categoryCRUD.main.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.form.other.bookForm;
 import com.lms.dashboard.menu.MenuEmp;
+import com.lms.importCRUD.Import1;
+import com.lms.publisherCRUD.form.PublishersView;
+import com.lms.userCRUD.form.InfoPage;
 
 public class Emp extends javax.swing.JPanel {
 
@@ -40,7 +44,7 @@ public class Emp extends javax.swing.JPanel {
             public void componentResized(ComponentEvent e) {
                 height = e.getComponent().getHeight();
                 weight = e.getComponent().getWidth();
-                // System.out.println(weight + " " + height);
+                System.out.println(weight + " " + height);
             }
 
             public void componentHidden(ComponentEvent e) {
@@ -79,18 +83,12 @@ public class Emp extends javax.swing.JPanel {
     }
 
     public void addListFrame() {
-        listFrame.add(new bookForm());
-        listFrame.add(new bookForm());
-        listFrame.add(new PublishersPage());
-        listFrame.add(new AuthorsPage());
-        try {
-            listFrame.add(new EditProfile("17470f3a4f13c023"));
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        listFrame.add(new bookForm());
-
+        listFrame.add(new BookView());
+        listFrame.add(new CategoryView());
+        listFrame.add(new PublishersView());
+        listFrame.add(new AuthorsView());
+        listFrame.add(new InfoPage());
+        listFrame.add(new Import1());
     }
 
     public void logOut() {
@@ -104,7 +102,7 @@ public class Emp extends javax.swing.JPanel {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         bg = new javax.swing.JLayeredPane();
@@ -112,22 +110,26 @@ public class Emp extends javax.swing.JPanel {
         javax.swing.GroupLayout bgLayout = new javax.swing.GroupLayout(bg);
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
-                bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 954, Short.MAX_VALUE));
+            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 954, Short.MAX_VALUE)
+        );
         bgLayout.setVerticalGroup(
-                bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 540, Short.MAX_VALUE));
+            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 540, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(bg)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bg))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(bg, javax.swing.GroupLayout.Alignment.TRAILING));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(bg, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     public void openAndCloseButton(java.awt.event.ActionEvent evt) {

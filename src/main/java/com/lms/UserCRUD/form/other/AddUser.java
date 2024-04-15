@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import com.lms.auth.entities.User;
 import com.lms.userCRUD.dal.AdminDao;
-import com.lms.userCRUD.form.UsersPage;
+import com.lms.userCRUD.form.UsersView;
 import com.lms.userCRUD.repo.AdminRepo;
 import com.lms.userCRUD.service.AdminService;
 
@@ -66,7 +66,7 @@ public class AddUser extends javax.swing.JPanel {
         saveButton = new javax.swing.JButton();
         roleChoose = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        imageAvatar1 = new com.lms.custom.ImageAvatar();
+        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
 
@@ -224,11 +224,11 @@ public class AddUser extends javax.swing.JPanel {
                     .addComponent(genderChoose, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                     .addComponent(contacttxt))
                 .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(roleChoose, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
@@ -244,26 +244,7 @@ public class AddUser extends javax.swing.JPanel {
                 .addGap(37, 37, 37))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        add(jPanel1);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
@@ -312,7 +293,7 @@ public class AddUser extends javax.swing.JPanel {
             if (newUser != null) {
                 JOptionPane.showMessageDialog(null, "User added successfully");
                 this.resetFields();
-                UsersPage.viewListAccount.reLoad();
+                UsersView.viewListAccount.reLoad();
             } else {
                 JOptionPane.showMessageDialog(null, "User not added");
                 this.resetFields();
@@ -338,7 +319,7 @@ public class AddUser extends javax.swing.JPanel {
     private javax.swing.JTextField contacttxt;
     private javax.swing.JTextField fullNametxt;
     private javax.swing.JComboBox<String> genderChoose;
-    private com.lms.custom.ImageAvatar imageAvatar1;
+    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel10;

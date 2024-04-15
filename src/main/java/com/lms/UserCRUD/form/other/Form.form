@@ -291,7 +291,7 @@
             <Property name="text" type="java.lang.String" value="Role"/>
           </Properties>
         </Component>
-        <Container class="com.lms.custom.ImageAvatar" name="imageAvatar1">
+        <Container class="com.lms.userCRUD.ui.ImageAvatar" name="imageAvatar1">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Upload"/>
           </Properties>

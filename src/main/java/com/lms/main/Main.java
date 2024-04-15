@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.AuthService;
 import com.lms.dashboard.application.Application;
@@ -17,8 +17,10 @@ public class Main {
         FlatRobotoFont.install();
         UIManager.put("defaultFont", new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
         UIManager.put("TextComponent.arc", 10);
-        UIManager.put("", 10);
+        UIManager.put("Table.arc", 10);
         UIManager.put("Button.arc", 10);
+        UIManager.put("Table.showCellFocusIndicator", true);
+
 
         AuthRepo authRepo = new AuthRepo();
         AuthService authService = new AuthService(authRepo);
@@ -29,7 +31,7 @@ public class Main {
         // login.pack();
         // login.setLocationRelativeTo(null);
         
-        FlatDarkLaf.setup();
+        FlatLightLaf.setup();
         
         Application application = new Application(authService);
         application.setSize(960, 580);
