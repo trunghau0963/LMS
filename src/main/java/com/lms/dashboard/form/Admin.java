@@ -5,19 +5,23 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import com.lms.authorCRUD.form.AuthorsView;
 import com.lms.bookCRUD.form.BookView;
-import com.lms.categoryCRUD.main.CategoryView;
+import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
 import com.lms.dataSaleCRUD.form.dataSaleView;
 import com.lms.dataSaleCRUD.repo.UserRepo;
 import com.lms.dataSaleCRUD.service.UserService;
 import com.lms.publisherCRUD.form.PublishersView;
+import com.lms.publisherCRUD.form.other.ListPublisherPanel;
+import com.lms.bookCRUD.dal.BookDao;
+import com.lms.bookCRUD.service.BookService;
 import com.lms.userCRUD.form.InfoPage;
 import com.lms.userCRUD.form.UsersView;
 
@@ -31,9 +35,11 @@ public class Admin extends javax.swing.JPanel {
     private MenuAdmin menuAdmin;
     private javax.swing.JScrollPane scrollMenu;
     private javax.swing.JScrollPane scrollBody;
+    private javax.swing.JToolBar toolbar;
     private static Application app;
     public ArrayList<JPanel> listFrame = new ArrayList<JPanel>();
     private UserService userService;
+
 
     public Admin(Application app) {
         this.app = app;
@@ -71,17 +77,20 @@ public class Admin extends javax.swing.JPanel {
         mainForm = new MainForm();
         mainForm.showForm(listFrame.get(0));
         menuAdmin = new MenuAdmin(this);
+        toolbar = new javax.swing.JToolBar();
         scrollMenu = new javax.swing.JScrollPane();
-        scrollMenu.setBackground(new java.awt.Color(39, 38, 44));
         scrollMenu.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollMenu.setViewportView(menuAdmin);
         scrollMenu.setPreferredSize(new Dimension(widthMenu, bg.getHeight()));
-
+        scrollMenu.setBorder(null);
+        toolbar.add(scrollMenu);
+        
         scrollBody = new javax.swing.JScrollPane();
         scrollBody.setPreferredSize(new Dimension(bg.getWidth() - scrollMenu.getWidth(), bg.getHeight()));
         scrollBody.setViewportView(mainForm);
+        scrollBody.setBorder(null);
 
-        bg.add(scrollMenu, BorderLayout.WEST);
+        bg.add(toolbar, BorderLayout.WEST);
         bg.add(scrollBody, BorderLayout.CENTER);
 
     }
@@ -128,7 +137,7 @@ public class Admin extends javax.swing.JPanel {
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 929, Short.MAX_VALUE)
+            .addGap(0, 1049, Short.MAX_VALUE)
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,7 +175,7 @@ public class Admin extends javax.swing.JPanel {
     public void openMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = 42; i <= widthMenu; i += 4) {
+                for (int i = 40; i <= widthMenu; i += 9) {
                     try {
                         menuAdmin.setIsRunning(true);
                         Thread.sleep(0, 1);
@@ -174,6 +183,8 @@ public class Admin extends javax.swing.JPanel {
                         menuAdmin.setSize(new Dimension(i, bg.getHeight()));
                         scrollBody.setBounds(i, 0, weight - i, bg.getHeight());
                         mainForm.setSize(new Dimension(weight - i, bg.getHeight()));
+                        // mainForm.revalidate();
+                        // mainForm.repaint();
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
@@ -186,7 +197,7 @@ public class Admin extends javax.swing.JPanel {
     public void closeMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = widthMenu; i >= 42; i -= 4) {
+                for (int i = widthMenu; i >= 40; i -= 9) {
                     menuAdmin.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);
@@ -194,6 +205,8 @@ public class Admin extends javax.swing.JPanel {
                         menuAdmin.setSize(new Dimension(i, bg.getHeight()));
                         scrollBody.setBounds(i, 0, weight - i, bg.getHeight());
                         mainForm.setSize(new Dimension(weight - i, bg.getHeight()));
+                        // mainForm.revalidate();
+                        // mainForm.repaint();
 
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();

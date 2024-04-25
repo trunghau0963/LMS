@@ -80,7 +80,7 @@ public class Application extends javax.swing.JFrame {
     }
 
     public static void dashboardUser() {
-        app.setContentPane(app.emp);
+        app.setContentPane(app.admin);
         // app.pack();
         // app.setLocationRelativeTo(null);
         FlatLaf.updateUI();

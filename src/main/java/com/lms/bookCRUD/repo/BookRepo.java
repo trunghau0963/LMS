@@ -100,6 +100,76 @@ public class BookRepo implements BookDao {
         return books;
     }
 
+    public List<Book> findAvailableBooks() {
+        List<Book> books = new ArrayList<>();
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql = "SELECT * FROM book WHERE quantity > 0 AND isHide = false";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getString("bookId"));
+                book.setTitle(resultSet.getString("title"));
+                book.setEdition(resultSet.getInt("bookEdition"));
+                book.setQuantity(resultSet.getInt("quantity"));
+                book.setPublisherId(resultSet.getString("publisherId"));
+                book.setSalePrice(resultSet.getFloat("salePrice"));
+                book.setIsHide(resultSet.getBoolean("isHide"));
+                books.add(book);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return books;
+    }
+
+    public List<Book> findUnavailableBooks() {
+        List<Book> books = new ArrayList<>();
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql = "SELECT * FROM book WHERE quantity = 0 OR isHide = true";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getString("bookId"));
+                book.setTitle(resultSet.getString("title"));
+                book.setEdition(resultSet.getInt("bookEdition"));
+                book.setQuantity(resultSet.getInt("quantity"));
+                book.setPublisherId(resultSet.getString("publisherId"));
+                book.setSalePrice(resultSet.getFloat("salePrice"));
+                book.setIsHide(resultSet.getBoolean("isHide"));
+                books.add(book);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return books;
+    }
+
+    public boolean isHide(String bookId) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql = "SELECT isHide FROM book WHERE bookId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, bookId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getBoolean("isHide");
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public boolean add(Book newBook) {
         try {

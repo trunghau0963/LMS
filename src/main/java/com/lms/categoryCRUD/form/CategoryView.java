@@ -1,8 +1,8 @@
-package com.lms.categoryCRUD.main;
+package com.lms.categoryCRUD.form;
 
 import javax.swing.*;
 
-import com.lms.categoryCRUD.ListBookCategory;
+import com.lms.categoryCRUD.form.other.ListBookCategory;
 
 import java.awt.*;
 

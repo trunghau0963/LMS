@@ -7,6 +7,7 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.lms.auth.dal.AuthDao;
 import com.lms.auth.repo.AuthRepo;
 import com.lms.auth.service.AuthService;
 import com.lms.dashboard.application.Application;
@@ -22,8 +23,8 @@ public class Main {
         UIManager.put("Table.showCellFocusIndicator", true);
 
 
-        AuthRepo authRepo = new AuthRepo();
-        AuthService authService = new AuthService(authRepo);
+        AuthDao authDao = new AuthRepo();
+        AuthService authService = new AuthService(authDao);
         FlatSVGIcon icon = new FlatSVGIcon("svg/logo.svg");
         
         // Login login = new Login(authService);

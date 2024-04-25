@@ -13,12 +13,12 @@ import javax.swing.border.EmptyBorder;
 import com.lms.authorCRUD.form.AuthorsView;
 import com.lms.authorCRUD.form.EditProfile;
 import com.lms.bookCRUD.form.BookView;
-import com.lms.categoryCRUD.main.CategoryView;
+import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
-import com.lms.dashboard.form.other.bookForm;
 import com.lms.dashboard.menu.MenuEmp;
 import com.lms.importCRUD.Import1;
 import com.lms.publisherCRUD.form.PublishersView;
+import com.lms.publisherCRUD.form.other.ListPublisherPanel;
 import com.lms.userCRUD.form.InfoPage;
 
 public class Emp extends javax.swing.JPanel {
@@ -31,6 +31,7 @@ public class Emp extends javax.swing.JPanel {
     private MenuEmp menuEmp;
     private javax.swing.JScrollPane scrollMenu;
     private javax.swing.JScrollPane scrollBody;
+    private javax.swing.JToolBar toolbar;
     private static Application app;
     public ArrayList<JPanel> listFrame = new ArrayList<JPanel>();
 
@@ -67,15 +68,18 @@ public class Emp extends javax.swing.JPanel {
         // bg.setSize(new Dimension(960, 560));
         mainForm = new MainForm();
         menuEmp = new MenuEmp(this);
+        toolbar = new javax.swing.JToolBar();
         scrollMenu = new javax.swing.JScrollPane();
         scrollMenu.setBackground(new java.awt.Color(39, 38, 44));
         scrollMenu.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollMenu.setViewportView(menuEmp);
         scrollMenu.setPreferredSize(new Dimension(widthMenu, bg.getHeight()));
-
+        toolbar.add(scrollMenu);
+        
         scrollBody = new javax.swing.JScrollPane();
         scrollBody.setPreferredSize(new Dimension(bg.getWidth() - scrollMenu.getWidth(), bg.getHeight()));
         scrollBody.setViewportView(mainForm);
+        scrollBody.setBorder(null);
 
         bg.add(scrollMenu, BorderLayout.WEST);
         bg.add(scrollBody, BorderLayout.CENTER);
@@ -111,7 +115,7 @@ public class Emp extends javax.swing.JPanel {
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 954, Short.MAX_VALUE)
+            .addGap(0, 1074, Short.MAX_VALUE)
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,7 +152,7 @@ public class Emp extends javax.swing.JPanel {
     public void openMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = 42; i <= widthMenu; i += 4) {
+                for (int i = 40; i <= widthMenu; i += 9) {
                     menuEmp.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);
@@ -168,7 +172,7 @@ public class Emp extends javax.swing.JPanel {
     public void closeMenuBar() {
         new Thread(new Runnable() {
             public void run() {
-                for (int i = widthMenu; i > 42; i -= 4) {
+                for (int i = widthMenu; i > 40; i -= 9) {
                     menuEmp.setIsRunning(true);
                     try {
                         Thread.sleep(0, 1);

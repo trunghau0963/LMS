@@ -1,24 +1,22 @@
-package com.lms.bookCRUD.SwitchButton;
+package com.lms.bookCRUD.ui;
 
-import javax.swing.*;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.JToggleButton;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 
-public class ToggleRenderer implements TableCellRenderer {
+public class EditToggleRenderer implements TableCellRenderer {
     private JToggleButton button = new JToggleButton("");
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
             int row, int column) {
         if (value instanceof Boolean) {
-            boolean temp = (Boolean) value;
-
-            button.setSelected(temp);
-
-            button.setText(temp ? "Hide" : "Show");
+            button.setSelected((Boolean) value);
         } else {
             button.setSelected(false); // or handle this case differently
         }
+        button.setText("Edit");
         return button;
     }
 }

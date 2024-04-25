@@ -1,4 +1,4 @@
-package com.lms.bookCRUD.SwitchButton;
+package com.lms.bookCRUD.ui;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;

@@ -1,11 +1,13 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.lms.publisherCRUD.form.other;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -25,455 +27,430 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.lms.publisherCRUD.SwitchButton.ToggleRenderer;
 import com.lms.publisherCRUD.dal.PublisherDao;
 import com.lms.publisherCRUD.entities.Publisher;
 import com.lms.publisherCRUD.repo.PublisherRepo;
 import com.lms.publisherCRUD.service.PublisherService;
 
-/**
- *
- * @Publisher Van Vinh
- * 
- * 
- */
 class PublishersTableEditor extends AbstractCellEditor implements TableCellEditor {
-        private JToggleButton button = new JToggleButton("Unhide");
-        PublisherDao pubDao = new PublisherRepo();
-        PublisherService pubService = new PublisherService(pubDao);
+    private JToggleButton button = new JToggleButton("Unhide");
+    PublisherDao pubDao = new PublisherRepo();
+    PublisherService pubService = new PublisherService(pubDao);
 
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-                        int column) {
-                String id = table.getValueAt(row, 0).toString();
-                boolean isHide = (boolean) table.getValueAt(row, 3);
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+            int column) {
+        String id = table.getValueAt(row, 0).toString();
+        boolean isHide = (boolean) table.getValueAt(row, 3);
 
-                pubService.setVisible(id, isHide);
+        pubService.setVisible(id, isHide);
 
-                button.addActionListener(e -> {
-                        stopCellEditing();
-                        fireEditingStopped();
-                });
+        button.addActionListener(e -> {
+            stopCellEditing();
+            fireEditingStopped();
+        });
 
-                return button;
-        }
+        return button;
+    }
 
-        @Override
-        public Object getCellEditorValue() {
-                return button.isSelected();
-        }
+    @Override
+    public Object getCellEditorValue() {
+        return button.isSelected();
+    }
 }
 
-public class ListPublisherPanel extends javax.swing.JPanel implements ActionListener {
-        /**
-         * Creates new form ListPublisher
-         */
-        public ListPublisherPanel(CardLayout cobj, JPanel panelParent) {
-                initComponents();
+public class ListPublisherPanel extends javax.swing.JPanel {
 
-                this.panelParent = panelParent;
-                this.pubDao = new PublisherRepo();
-                this.pubService = new PublisherService(pubDao);
-                this.cardLayout = cobj;
+    private CardLayout cardLayout;
+    private JPanel panelParent;
+    private PublisherService pubService;
+    private PublisherDao pubDao;
 
-                ArrayList<Publisher> publishers = pubService.getListPublishers();
-                DefaultTableModel model = (DefaultTableModel) listPublisher.getModel();
+    public ListPublisherPanel(CardLayout cobj, JPanel panelParent) {
+        initComponents();
+        this.panelParent = panelParent;
+        this.pubDao = new PublisherRepo();
+        this.pubService = new PublisherService(pubDao);
+        this.cardLayout = cobj;
+        init();
+    }
 
-                for (Publisher publisher : publishers) {
-                        Object[] rowData = {
-                                        publisher.getPublisherId(),
-                                        publisher.getPublisherName(),
-                                        publisher.getPublisherAddress(),
-                                        publisher.isHide()
-                        };
+    private void init() {
+        searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search...");
+        searchButton.setIcon(new FlatSVGIcon("svg/search.svg"));
+        filterButton.setIcon(new FlatSVGIcon("svg/filter.svg"));
+        ArrayList<Publisher> publishers = pubService.getListPublishers();
+        DefaultTableModel model = new DefaultTableModel(
+            new Object[][] {},
+            new String[] { "Publisher Id", "Publisher Name", "Publisher Address", "Hide/UnHide" }
+        ) {
+            boolean[] canEdit = new boolean[] { false, false, false, true };
+    
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
 
-                        model.addRow(rowData);
+        reloadTable(model, publishers);
+        
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(publisherList.getModel());
+        publisherList.setRowSorter(sorter);
+
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
+
+        for (int i = 0; i < publisherList.getColumnCount(); i++) {
+                sortKeys.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
+        }
+        sorter.setSortKeys(sortKeys);
+    }
+
+    public void reloadTable(DefaultTableModel tblModel, ArrayList<Publisher> publishersModels) {
+        customTable(publisherList);
+
+        tblModel.setRowCount(0);
+        for (Publisher publisher : publishersModels) {
+            Object[] rowData = {
+                    publisher.getPublisherId(),
+                    publisher.getPublisherName(),
+                    publisher.getPublisherAddress(),
+                    publisher.isHide()
+            };
+
+            tblModel.addRow(rowData);
+        }
+
+        publisherList.setModel(tblModel);
+
+        publisherList.setColumnSelectionAllowed(true);
+        publisherList.getAccessibleContext().setAccessibleName("");
+        publisherList.getAccessibleContext().setAccessibleDescription("");
+        publisherList.getAccessibleContext().setAccessibleParent(this);
+        publisherList.getColumnModel().getColumn(3).setCellRenderer(new ToggleRenderer());
+        publisherList.getColumnModel().getColumn(3).setCellEditor(new PublishersTableEditor());
+        publisherList.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                        rowSelectedAction(e);
+                }
+        });
+    }
+
+    private void customTable(javax.swing.JTable table) {
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        table.getTableHeader().setBackground(new Color(125, 200, 204));
+        table.getTableHeader().setForeground(new Color(0, 0, 0));
+        table.setRowHeight(30);
+        table.setShowGrid(true);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel9 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jPanel19 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel20 = new javax.swing.JPanel();
+        addPublisherButton = new javax.swing.JButton();
+        jPanel12 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        filterButton = new javax.swing.JButton();
+        searchOption = new javax.swing.JComboBox<>();
+        jPanel15 = new javax.swing.JPanel();
+        searchField = new javax.swing.JTextField();
+        jPanel16 = new javax.swing.JPanel();
+        searchButton = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        publisherList = new javax.swing.JTable();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
+        jPanel9.setLayout(new javax.swing.BoxLayout(jPanel9, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 1, 40));
+        jPanel11.setPreferredSize(new java.awt.Dimension(800, 60));
+        jPanel11.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setText("Publisher List");
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 618, Short.MAX_VALUE)
+            .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 68, Short.MAX_VALUE)
+            .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel19Layout.createSequentialGroup()
+                    .addGap(14, 14, 14)
+                    .addComponent(jLabel1)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+
+        jPanel11.add(jPanel19, java.awt.BorderLayout.CENTER);
+
+        jPanel20.setPreferredSize(new java.awt.Dimension(100, 50));
+
+        addPublisherButton.setBackground(new java.awt.Color(153, 153, 153));
+        addPublisherButton.setForeground(new java.awt.Color(255, 255, 255));
+        addPublisherButton.setText("Add New");
+        addPublisherButton.setPreferredSize(new java.awt.Dimension(100, 40));
+        addPublisherButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPublisherButtonActionPerformed(evt);
+            }
+        });
+        jPanel20.add(addPublisherButton);
+
+        jPanel11.add(jPanel20, java.awt.BorderLayout.EAST);
+
+        jPanel9.add(jPanel11);
+
+        jPanel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 40, 1, 40));
+        jPanel12.setPreferredSize(new java.awt.Dimension(800, 70));
+        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 40));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel14.setPreferredSize(new java.awt.Dimension(150, 40));
+
+        filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
+        filterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterButtonActionPerformed(evt);
+            }
+        });
+        jPanel14.add(filterButton);
+
+        searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
+        searchOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchOptionActionPerformed(evt);
+            }
+        });
+        jPanel14.add(searchOption);
+
+        jPanel1.add(jPanel14, java.awt.BorderLayout.WEST);
+
+        jPanel15.setPreferredSize(new java.awt.Dimension(700, 40));
+
+        searchField.setPreferredSize(new java.awt.Dimension(71, 40));
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addGap(8, 8, 8))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel15, java.awt.BorderLayout.CENTER);
+
+        jPanel16.setPreferredSize(new java.awt.Dimension(60, 40));
+        jPanel16.setRequestFocusEnabled(false);
+
+        searchButton.setPreferredSize(new java.awt.Dimension(60, 40));
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+        jPanel16.add(searchButton);
+
+        jPanel1.add(jPanel16, java.awt.BorderLayout.EAST);
+
+        jPanel12.add(jPanel1);
+
+        jPanel9.add(jPanel12);
+
+        add(jPanel9, java.awt.BorderLayout.NORTH);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 40, 40, 40));
+        jPanel4.setPreferredSize(new java.awt.Dimension(800, 600));
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 400));
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
+
+        publisherList.setRowHeight(30);
+        publisherList.setShowGrid(true);
+        jScrollPane2.setViewportView(publisherList);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 720, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 348, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
+        );
+
+        jPanel4.add(jPanel2);
+
+        add(jPanel4, java.awt.BorderLayout.CENTER);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void addPublisherButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_addBookButtonActionPerformed
+        cardLayout.show(panelParent, "addPublisher");
+    }// GEN-LAST:event_addBookButtonActionPerformed
+
+    private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_filterButtonActionPerformed
+
+    private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterSearchActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_filterSearchActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchButtonActionPerformed
+        String key = searchField.getText();
+        String field = searchOption.getSelectedItem().toString();
+
+        String status = null;
+        // status = statusBtn1.isSelected() ? statusBtn1.getText() : status;
+        // status = statusBtn2.isSelected() ? statusBtn2.getText() : status;
+
+        // "ID", "FullName", "Gender", "Hide"
+        if (field.equals("Id")) {
+            ArrayList<Publisher> publishers = pubService.getPublisherById(key, status);
+            DefaultTableModel model = (DefaultTableModel) publisherList.getModel();
+            model.setRowCount(0);
+            for (Publisher publisher : publishers) {
+                Object[] rowData = {
+                        publisher.getPublisherId(),
+                        publisher.getPublisherName(),
+                        publisher.getPublisherAddress(),
+                        publisher.isHide()
+                };
+
+                model.addRow(rowData);
+            }
+        } else if (field.equals("Name")) {
+            ArrayList<Publisher> publishers = pubService.getPublisherByName(key, status);
+            DefaultTableModel model = (DefaultTableModel) publisherList.getModel();
+
+            model.setRowCount(0);
+
+            for (Publisher publisher : publishers) {
+                Object[] rowData = {
+                        publisher.getPublisherId(),
+                        publisher.getPublisherName(),
+                        publisher.getPublisherAddress(),
+                        publisher.isHide()
+                };
+                model.addRow(rowData);
+            }
+        } else if (field.equals("Address")) {
+            ArrayList<Publisher> publishers = pubService.getPublisherByAddress(key, status);
+            DefaultTableModel model = (DefaultTableModel) publisherList.getModel();
+
+            model.setRowCount(0);
+
+            for (Publisher publisher : publishers) {
+                Object[] rowData = {
+                        publisher.getPublisherId(),
+                        publisher.getPublisherName(),
+                        publisher.getPublisherAddress(),
+                        publisher.isHide()
+                };
+                model.addRow(rowData);
+            }
+        } else {
+            ArrayList<Publisher> publishers = pubService.getListPublishers(status);
+            DefaultTableModel model = (DefaultTableModel) publisherList.getModel();
+            model.setRowCount(0);
+            for (Publisher publisher : publishers) {
+                Object[] rowData = {
+                        publisher.getPublisherId(),
+                        publisher.getPublisherName(),
+                        publisher.getPublisherAddress(),
+                        publisher.isHide()
+                };
+                model.addRow(rowData);
+            }
+        }
+    }// GEN-LAST:event_searchButtonActionPerformed
+
+    private void rowSelectedAction(MouseEvent e) {// GEN-FIRST:event_searchOptionActionPerformed
+        if (e.getClickCount() == 2) { // Kiểm tra xem người dùng đã nhấp đúp chuột chưa
+                int row = publisherList.getSelectedRow();
+
+                Publisher publisher = new Publisher();
+                publisher.setPublisherId((String) publisherList.getValueAt(row, 0));
+                publisher.setPublisherName((String) publisherList.getValueAt(row, 1));
+                publisher.setPublisherAddress((String) publisherList.getValueAt(row, 2));
+                publisher.setVisible((Boolean) publisherList.getValueAt(row, 3));
+
+                EditInfoPublisherPanel editInfoPublisherPanel = new EditInfoPublisherPanel(cardLayout,
+                                panelParent, publisher);
+                if (editInfoPublisherPanel != null) {
+                        panelParent.add(editInfoPublisherPanel, "editPublisher");
+                        cardLayout.show(panelParent, "editPublisher");
                 }
         }
 
-        // <editor-fold defaultstate="collapsed" desc="Generated
-        // Code">//GEN-BEGIN:initComponents
-        private void initComponents() {
-                searchPanel = new javax.swing.JPanel();
-                searchBtnPanel = new javax.swing.JPanel();
-                searchField = new javax.swing.JTextField();
-                searchBtn = new javax.swing.JButton();
-                resetBtn = new javax.swing.JButton();
-                searchOption = new javax.swing.JComboBox<>();
-                jScrollPane1 = new javax.swing.JScrollPane();
-                listPublisher = new javax.swing.JTable();
-                addPublisherBtn = new javax.swing.JButton();
-                pageTitle = new javax.swing.JLabel();
-                statusBtn1 = new javax.swing.JRadioButton();
-                statusBtn2 = new javax.swing.JRadioButton();
+}// GEN-LAST:event_searchOptionActionPerfor
 
-                setBackground(new java.awt.Color(255, 255, 255));
-                setPreferredSize(new java.awt.Dimension(800, 630));
-
-                searchPanel.setLayout(new java.awt.BorderLayout());
-                searchBtnPanel.setLayout(new java.awt.BorderLayout());
-
-                searchField.setText("");
-                searchField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                searchField.setPreferredSize(new java.awt.Dimension(400, 28));
-                searchField.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                searchFieldActionPerformed(evt);
-                        }
-                });
-                searchPanel.add(searchField, java.awt.BorderLayout.CENTER);
-                searchField.getAccessibleContext().setAccessibleParent(this);
-
-                searchBtn.setBackground(new java.awt.Color(217, 217, 217));
-                searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/publisherCRUD/search.png"))); // NOI18N
-                searchBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                searchBtn.setPreferredSize(new java.awt.Dimension(75, 23));
-                searchBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                searchBtnActionPerformed(evt);
-                        }
-                });
-                searchBtnPanel.add(searchBtn, java.awt.BorderLayout.CENTER);
-
-                resetBtn.setText("Refesh");
-                resetBtn.setBackground(new java.awt.Color(217, 217, 217));
-                resetBtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                resetBtn.setPreferredSize(new java.awt.Dimension(75, 23));
-                resetBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                resetActionPerformed(evt);
-                        }
-                });
-                searchBtnPanel.add(resetBtn, java.awt.BorderLayout.EAST);
-                searchPanel.add(searchBtnPanel, java.awt.BorderLayout.EAST);
-
-                searchOption.setModel(
-                                new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Id", "Name", "Address" }));
-                searchOption.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                searchOption.setPreferredSize(new java.awt.Dimension(90, 22));
-                searchOption.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                searchOptionActionPerformed(evt);
-                        }
-                });
-                searchPanel.add(searchOption, java.awt.BorderLayout.LINE_START);
-                searchOption.getAccessibleContext().setAccessibleParent(this);
-
-                listPublisher.setBackground(new java.awt.Color(231, 226, 226));
-                listPublisher.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                listPublisher.setModel(new javax.swing.table.DefaultTableModel(
-                                null,
-                                new String[] {
-                                                "Publisher Id", "Publisher Name", "Publisher Address", "Hide/UnHide"
-                                }) {
-                        boolean[] canEdit = new boolean[] {
-                                        false, false, false, true
-                        };
-
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                return canEdit[columnIndex];
-                        }
-                });
-                listPublisher.setGridColor(new java.awt.Color(0, 0, 0));
-                listPublisher.setShowGrid(true);
-                jScrollPane1.setViewportView(listPublisher);
-                listPublisher.getAccessibleContext().setAccessibleName("");
-                listPublisher.getAccessibleContext().setAccessibleDescription("");
-                listPublisher.getAccessibleContext().setAccessibleParent(this);
-                listPublisher.getColumnModel().getColumn(3).setCellRenderer(new ToggleRenderer());
-                listPublisher.getColumnModel().getColumn(3).setCellEditor(new PublishersTableEditor());
-                listPublisher.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                                rowSelectedAction(e);
-                        }
-                });
-
-                // Sorted row
-                TableRowSorter<TableModel> sorter = new TableRowSorter<>(listPublisher.getModel());
-                listPublisher.setRowSorter(sorter);
-
-                List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-
-                for (int i = 0; i < listPublisher.getColumnCount(); i++) {
-                        sortKeys.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
-                }
-                sorter.setSortKeys(sortKeys);
-
-                addPublisherBtn.setBackground(new java.awt.Color(51, 51, 51));
-                addPublisherBtn.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-                addPublisherBtn.setForeground(new java.awt.Color(255, 255, 255));
-                addPublisherBtn.setText("ADD NEW Publisher");
-                addPublisherBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-                addPublisherBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                addPublisherBtnActionPerformed(evt, cardLayout, panelParent);
-                        }
-                });
-
-                pageTitle.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-                pageTitle.setText("List Publisher");
-
-                statusBtn1.setText("Hide");
-                statusBtn1.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                searchBtnActionPerformed(evt);
-                        }
-                });
-                statusBtn2.setText("UnHide");
-                statusBtn2.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                searchBtnActionPerformed(evt);
-                        }
-                });
-
-                statusBtnGroup = new ButtonGroup();
-                statusBtnGroup.add(statusBtn1);
-                statusBtnGroup.add(statusBtn2);
-
-                javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(this);
-                setLayout(jPanel2Layout);
-                jPanel2Layout.setHorizontalGroup(
-                                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                .addGroup(jPanel2Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                .addGroup(jPanel2Layout
-                                                                                                .createParallelGroup(
-                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                .addGroup(jPanel2Layout
-                                                                                                                .createSequentialGroup()
-                                                                                                                .addGap(57, 57, 57)
-                                                                                                                .addComponent(jScrollPane1,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                652,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                jPanel2Layout.createSequentialGroup()
-                                                                                                                                .addContainerGap()
-                                                                                                                                .addComponent(addPublisherBtn,
-                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                150,
-                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                .addGroup(jPanel2Layout
-                                                                                                                .createSequentialGroup()
-                                                                                                                .addGap(92, 92, 92)
-                                                                                                                .addGroup(jPanel2Layout
-                                                                                                                                .createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                                                                false)
-                                                                                                                                .addGroup(jPanel2Layout
-                                                                                                                                                .createSequentialGroup()
-
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                .addComponent(statusBtn1,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                98,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                .addComponent(statusBtn2,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                98,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                                                .addComponent(searchPanel,
-                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                                                                .addGroup(jPanel2Layout
-                                                                                                .createSequentialGroup()
-                                                                                                .addGap(320, 320, 320)
-                                                                                                .addComponent(pageTitle)))
-                                                                .addContainerGap(91, Short.MAX_VALUE)));
-                jPanel2Layout.setVerticalGroup(
-                                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                .addGap(37, 37, 37)
-                                                                .addComponent(searchPanel,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(18, 18, 18)
-                                                                .addGroup(jPanel2Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-
-                                                                                .addComponent(statusBtn1)
-                                                                                .addComponent(statusBtn2))
-                                                                .addPreferredGap(
-                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                Short.MAX_VALUE)
-                                                                .addComponent(pageTitle)
-                                                                .addGap(8, 8, 8)
-                                                                .addComponent(addPublisherBtn)
-                                                                .addPreferredGap(
-                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(jScrollPane1,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(23, 23, 23)));
-
-        }// </editor-fold>//GEN-END:initComponents
-
-        private void addPublisherBtnActionPerformed(java.awt.event.ActionEvent evt, CardLayout cobj,
-                        JPanel panelParent) {// GEN-FIRST:event_addPublisherBtnActionPerformed
-                // TODO add your handling code here:
-                cobj.show(panelParent, "addPublisher");
-        }// GEN-LAST:event_addPublisherBtnActionPerformed
-
-        private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_searchOptionActionPerformed
-
-        private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchFieldActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_searchFieldActionPerformed
-
-        private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchBtnActionPerformed
-                String key = searchField.getText();
-                String field = searchOption.getSelectedItem().toString();
-
-                String status = null;
-                status = statusBtn1.isSelected() ? statusBtn1.getText() : status;
-                status = statusBtn2.isSelected() ? statusBtn2.getText() : status;
-
-                // "ID", "FullName", "Gender", "Hide"
-                if (field.equals("Id")) {
-                        ArrayList<Publisher> publishers = pubService.getPublisherById(key, status);
-                        DefaultTableModel model = (DefaultTableModel) listPublisher.getModel();
-                        model.setRowCount(0);
-                        for (Publisher publisher : publishers) {
-                                Object[] rowData = {
-                                                publisher.getPublisherId(),
-                                                publisher.getPublisherName(),
-                                                publisher.getPublisherAddress(),
-                                                publisher.isHide()
-                                };
-
-                                model.addRow(rowData);
-                        }
-                } else if (field.equals("Name")) {
-                        ArrayList<Publisher> publishers = pubService.getPublisherByName(key, status);
-                        DefaultTableModel model = (DefaultTableModel) listPublisher.getModel();
-
-                        model.setRowCount(0);
-
-                        for (Publisher publisher : publishers) {
-                                Object[] rowData = {
-                                                publisher.getPublisherId(),
-                                                publisher.getPublisherName(),
-                                                publisher.getPublisherAddress(),
-                                                publisher.isHide()
-                                };
-                                model.addRow(rowData);
-                        }
-                } else if (field.equals("Address")) {
-                        ArrayList<Publisher> publishers = pubService.getPublisherByAddress(key, status);
-                        DefaultTableModel model = (DefaultTableModel) listPublisher.getModel();
-
-                        model.setRowCount(0);
-
-                        for (Publisher publisher : publishers) {
-                                Object[] rowData = {
-                                                publisher.getPublisherId(),
-                                                publisher.getPublisherName(),
-                                                publisher.getPublisherAddress(),
-                                                publisher.isHide()
-                                };
-                                model.addRow(rowData);
-                        }
-                } else {
-                        ArrayList<Publisher> publishers = pubService.getListPublishers(status);
-                        DefaultTableModel model = (DefaultTableModel) listPublisher.getModel();
-                        model.setRowCount(0);
-                        for (Publisher publisher : publishers) {
-                                Object[] rowData = {
-                                                publisher.getPublisherId(),
-                                                publisher.getPublisherName(),
-                                                publisher.getPublisherAddress(),
-                                                publisher.isHide()
-                                };
-                                model.addRow(rowData);
-                        }
-                }
-        }// GEN-LAST:event_searchBtnActionPerformed
-
-        public void resetActionPerformed(ActionEvent e) {
-                searchField.setText("");
-
-                statusBtnGroup.clearSelection();
-                searchOption.setSelectedIndex(0);
-
-                String status = null;
-                status = statusBtn1.isSelected() ? statusBtn1.getText() : status;
-                status = statusBtn2.isSelected() ? statusBtn2.getText() : status;
-
-                ArrayList<Publisher> publishers = pubService.getListPublishers();
-                DefaultTableModel model = (DefaultTableModel) listPublisher.getModel();
-                model.setRowCount(0);
-                for (Publisher publisher : publishers) {
-                        Object[] rowData = {
-                                        publisher.getPublisherId(),
-                                        publisher.getPublisherName(),
-                                        publisher.getPublisherAddress(),
-                                        publisher.isHide()
-                        };
-                        model.addRow(rowData);
-                }
-
-        }
-
-        private void rowSelectedAction(MouseEvent e) {// GEN-FIRST:event_searchOptionActionPerformed
-                if (e.getClickCount() == 2) { // Kiểm tra xem người dùng đã nhấp đúp chuột chưa
-                        int row = listPublisher.getSelectedRow();
-
-                        Publisher publisher = new Publisher();
-                        publisher.setPublisherId((String) listPublisher.getValueAt(row, 0));
-                        publisher.setPublisherName((String) listPublisher.getValueAt(row, 1));
-                        publisher.setPublisherAddress((String) listPublisher.getValueAt(row, 2));
-                        publisher.setVisible((Boolean) listPublisher.getValueAt(row, 3));
-
-                        EditInfoPublisherPanel editInfoPublisherPanel = new EditInfoPublisherPanel(cardLayout,
-                                        panelParent, publisher);
-                        if (editInfoPublisherPanel != null) {
-                                panelParent.add(editInfoPublisherPanel, "editPublisher");
-                                cardLayout.show(panelParent, "editPublisher");
-                        }
-                }
-
-        }// GEN-LAST:event_searchOptionActionPerformed
-
-        // Variables declaration - do not modify//GEN-BEGIN:variables
-        CardLayout cardLayout;
-        JPanel panelParent;
-        PublisherService pubService;
-        PublisherDao pubDao;
-
-        private javax.swing.ButtonGroup statusBtnGroup;
-        private javax.swing.JButton searchBtn;
-        private javax.swing.JButton resetBtn;
-        private javax.swing.JButton addPublisherBtn;
-        private javax.swing.JComboBox<String> searchOption;
-        private javax.swing.JLabel pageTitle;
-        private javax.swing.JPanel searchPanel;
-        private javax.swing.JPanel searchBtnPanel;
-        private javax.swing.JRadioButton statusBtn1;
-        private javax.swing.JRadioButton statusBtn2;
-        private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JTextField searchField;
-        private javax.swing.JTable listPublisher;
-
-        // End of variables declaration//GEN-END:variables
-        @Override
-        public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
-        }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addPublisherButton;
+    private javax.swing.JButton filterButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel19;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable publisherList;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchField;
+    private javax.swing.JComboBox<String> searchOption;
+    // End of variables declaration//GEN-END:variables
 }

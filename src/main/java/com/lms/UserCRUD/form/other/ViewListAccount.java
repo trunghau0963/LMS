@@ -179,20 +179,7 @@ public class ViewListAccount extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel12 = new javax.swing.JPanel();
-        jPanel17 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel14 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jPanel15 = new javax.swing.JPanel();
-        jTextPane1 = new javax.swing.JTextField();
-        jPanel16 = new javax.swing.JPanel();
-        searchEmployeeButton = new javax.swing.JButton();
-        jPanel13 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listEmployee = new javax.swing.JTable();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
@@ -207,8 +194,22 @@ public class ViewListAccount extends javax.swing.JPanel {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         listAdmin = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel12 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanel15 = new javax.swing.JPanel();
+        jTextPane1 = new javax.swing.JTextField();
+        jPanel16 = new javax.swing.JPanel();
+        searchEmployeeButton = new javax.swing.JButton();
+        jPanel13 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listEmployee = new javax.swing.JTable();
 
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
+        setLayout(new java.awt.BorderLayout());
 
         jPanel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 60, 1, 60));
         jPanel11.setPreferredSize(new java.awt.Dimension(800, 100));
@@ -221,20 +222,20 @@ public class ViewListAccount extends javax.swing.JPanel {
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 728, Short.MAX_VALUE)
+            .addGap(0, 580, Short.MAX_VALUE)
             .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 68, Short.MAX_VALUE)
+            .addGap(0, 69, Short.MAX_VALUE)
             .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel19Layout.createSequentialGroup()
                     .addGap(14, 14, 14)
                     .addComponent(jLabel1)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(7, Short.MAX_VALUE)))
         );
 
         jPanel11.add(jPanel19, java.awt.BorderLayout.CENTER);
@@ -254,7 +255,98 @@ public class ViewListAccount extends javax.swing.JPanel {
 
         jPanel11.add(jPanel18, java.awt.BorderLayout.EAST);
 
-        add(jPanel11);
+        add(jPanel11, java.awt.BorderLayout.NORTH);
+
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(920, 500));
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 10, 60));
+        jPanel4.setLayout(new java.awt.BorderLayout());
+
+        jPanel5.setPreferredSize(new java.awt.Dimension(800, 100));
+        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.Y_AXIS));
+
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setText("Admin");
+        jPanel10.add(jLabel2, java.awt.BorderLayout.CENTER);
+
+        jPanel5.add(jPanel10);
+
+        jPanel3.setPreferredSize(new java.awt.Dimension(800, 60));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel7.setPreferredSize(new java.awt.Dimension(100, 60));
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox3.setPreferredSize(new java.awt.Dimension(100, 40));
+        jPanel7.add(jComboBox3);
+
+        jPanel3.add(jPanel7, java.awt.BorderLayout.WEST);
+
+        jPanel8.setPreferredSize(new java.awt.Dimension(700, 60));
+
+        jTextPane3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextPane3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanel8, java.awt.BorderLayout.CENTER);
+
+        jPanel9.setPreferredSize(new java.awt.Dimension(100, 60));
+
+        searchAdminButton.setPreferredSize(new java.awt.Dimension(100, 40));
+        searchAdminButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchAdminButtonActionPerformed(evt);
+            }
+        });
+        jPanel9.add(searchAdminButton);
+
+        jPanel3.add(jPanel9, java.awt.BorderLayout.EAST);
+
+        jPanel5.add(jPanel3);
+
+        jPanel4.add(jPanel5, java.awt.BorderLayout.NORTH);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 40, 1));
+        jPanel6.setPreferredSize(new java.awt.Dimension(800, 400));
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
+        jScrollPane2.setViewportView(listAdmin);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+        );
+
+        jPanel4.add(jPanel6, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane1.addTab("Admin", jPanel4);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 10, 60));
         jPanel2.setPreferredSize(new java.awt.Dimension(800, 701));
@@ -273,11 +365,11 @@ public class ViewListAccount extends javax.swing.JPanel {
         jPanel17.setLayout(jPanel17Layout);
         jPanel17Layout.setHorizontalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 828, Short.MAX_VALUE)
+            .addGap(0, 680, Short.MAX_VALUE)
             .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel17Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 816, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel17Layout.setVerticalGroup(
@@ -323,7 +415,7 @@ public class ViewListAccount extends javax.swing.JPanel {
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+                .addComponent(jTextPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                 .addGap(8, 8, 8))
         );
         jPanel15Layout.setVerticalGroup(
@@ -331,7 +423,7 @@ public class ViewListAccount extends javax.swing.JPanel {
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTextPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel15, java.awt.BorderLayout.CENTER);
@@ -353,6 +445,7 @@ public class ViewListAccount extends javax.swing.JPanel {
 
         jPanel2.add(jPanel12, java.awt.BorderLayout.NORTH);
 
+        jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 40, 1));
         jPanel13.setPreferredSize(new java.awt.Dimension(800, 100));
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
@@ -373,104 +466,18 @@ public class ViewListAccount extends javax.swing.JPanel {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 828, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
         );
 
         jPanel2.add(jPanel13, java.awt.BorderLayout.CENTER);
 
-        add(jPanel2);
+        jTabbedPane1.addTab("Employee", jPanel2);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 10, 60));
-        jPanel4.setLayout(new java.awt.BorderLayout());
-
-        jPanel5.setPreferredSize(new java.awt.Dimension(800, 100));
-        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.Y_AXIS));
-
-        jPanel10.setLayout(new java.awt.BorderLayout());
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setText("Admin");
-        jPanel10.add(jLabel2, java.awt.BorderLayout.CENTER);
-
-        jPanel5.add(jPanel10);
-
-        jPanel3.setPreferredSize(new java.awt.Dimension(800, 60));
-        jPanel3.setLayout(new java.awt.BorderLayout());
-
-        jPanel7.setPreferredSize(new java.awt.Dimension(100, 60));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox3.setPreferredSize(new java.awt.Dimension(100, 40));
-        jPanel7.add(jComboBox3);
-
-        jPanel3.add(jPanel7, java.awt.BorderLayout.WEST);
-
-        jPanel8.setPreferredSize(new java.awt.Dimension(700, 60));
-
-        jTextPane3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextPane3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-
-        jPanel3.add(jPanel8, java.awt.BorderLayout.CENTER);
-
-        jPanel9.setPreferredSize(new java.awt.Dimension(100, 60));
-
-        searchAdminButton.setPreferredSize(new java.awt.Dimension(100, 40));
-        searchAdminButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchAdminButtonActionPerformed(evt);
-            }
-        });
-        jPanel9.add(searchAdminButton);
-
-        jPanel3.add(jPanel9, java.awt.BorderLayout.EAST);
-
-        jPanel5.add(jPanel3);
-
-        jPanel4.add(jPanel5, java.awt.BorderLayout.NORTH);
-
-        jPanel6.setPreferredSize(new java.awt.Dimension(800, 600));
-
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
-        jScrollPane2.setViewportView(listAdmin);
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 828, Short.MAX_VALUE)
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-        );
-
-        jPanel4.add(jPanel6, java.awt.BorderLayout.CENTER);
-
-        add(jPanel4);
+        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
@@ -644,6 +651,7 @@ public class ViewListAccount extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextPane1;
     private javax.swing.JTextField jTextPane3;
     private javax.swing.JTable listAdmin;

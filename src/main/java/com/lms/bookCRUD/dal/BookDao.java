@@ -17,4 +17,10 @@ public interface BookDao {
     public Book findByTitle(String title);
 
     public List<Book> findAll();
+
+    public List<Book> findAvailableBooks();
+
+    public List<Book> findUnavailableBooks();
+
+
 }

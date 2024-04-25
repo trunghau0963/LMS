@@ -63,6 +63,84 @@ public class BookService {
         return bookModels;
     }
 
+
+    public List<BookModel> getAvailableBooks() {
+        List<Book> books = bookDao.findAvailableBooks();
+        List<BookModel> bookModels = new ArrayList<>();
+
+        for (Book book : books) {
+            BookModel bookModel = new BookModel();
+            bookModel.loadFromEntity(book);
+
+            List<String> authorIds = getAuthorIds(book.getId());
+            for (String authorId : authorIds) {
+                Author author = getAuthor(authorId);
+                AuthorModel authorModel = new AuthorModel();
+                authorModel.loadFromEntity(author);
+
+                bookModel.addAuthor(authorModel);
+            }
+
+            List<String> categoryIds = getCategoryIds(book.getId());
+            for (String categoryId : categoryIds) {
+                Category category = getCategory(categoryId);
+                CategoryModel categoryModel = new CategoryModel();
+                categoryModel.loadFromEntity(category);
+
+                bookModel.addCategory(categoryModel);
+            }
+
+            Publisher publisher = getPublisher(book.getPublisherId());
+            PublisherModel publisherModel = new PublisherModel();
+            publisherModel.loadFromEntity(publisher);
+
+            bookModel.setPublisher(publisherModel);
+
+            bookModels.add(bookModel);
+        }
+
+        return bookModels;
+    }
+
+    public List<BookModel> getUnavailableBooks() {
+        List<Book> books = bookDao.findUnavailableBooks();
+        List<BookModel> bookModels = new ArrayList<>();
+
+        for (Book book : books) {
+            BookModel bookModel = new BookModel();
+            bookModel.loadFromEntity(book);
+
+            List<String> authorIds = getAuthorIds(book.getId());
+            for (String authorId : authorIds) {
+                Author author = getAuthor(authorId);
+                AuthorModel authorModel = new AuthorModel();
+                authorModel.loadFromEntity(author);
+
+                bookModel.addAuthor(authorModel);
+            }
+
+            List<String> categoryIds = getCategoryIds(book.getId());
+            for (String categoryId : categoryIds) {
+                Category category = getCategory(categoryId);
+                CategoryModel categoryModel = new CategoryModel();
+                categoryModel.loadFromEntity(category);
+
+                bookModel.addCategory(categoryModel);
+            }
+
+            Publisher publisher = getPublisher(book.getPublisherId());
+            PublisherModel publisherModel = new PublisherModel();
+            publisherModel.loadFromEntity(publisher);
+
+            bookModel.setPublisher(publisherModel);
+
+            bookModels.add(bookModel);
+        }
+
+        return bookModels;
+    }
+
+
     public BookModel getBookDetails(String bookId) {
         Book book = bookDao.findById(bookId);
         BookModel bookModel = new BookModel();

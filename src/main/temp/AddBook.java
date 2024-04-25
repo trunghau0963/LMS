@@ -1,19 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.lms.bookCRUD.form.other;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.CardLayout;
+import java.awt.Label;
+import java.util.List;
 
 import com.lms.bookCRUD.dal.*;
 import com.lms.bookCRUD.entities.Author;
@@ -25,16 +24,11 @@ import com.lms.bookCRUD.repo.*;
 import com.lms.bookCRUD.service.*;
 import com.lms.bookCRUD.ui.ImageAvatar;
 
-import java.awt.CardLayout;
-import java.awt.Label;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author PCM
  */
-public class EditBook extends javax.swing.JPanel {
+public class AddBook extends javax.swing.JPanel {
         private BookDao bookDao;
         private AuthorDao authorDao;
         private CategoryDao categoryDao;
@@ -42,14 +36,11 @@ public class EditBook extends javax.swing.JPanel {
         private BookAuthorDao bookAuthorDao;
         private BookCategoryDao bookCategoryDao;
         private BookService bookService;
-        private BookModel book;
-        private String bookId;
 
-        public EditBook(CardLayout cardLayout, JPanel parentPanel) {
+        public AddBook(CardLayout cardLayout, JPanel parentPanel) {
                 this.cardLayout = cardLayout;
                 this.parentPanel = parentPanel;
                 initComponents();
-                bookId = null;
                 bookDao = new BookRepo();
                 authorDao = new AuthorRepo();
                 categoryDao = new CategoryRepo();
@@ -58,13 +49,11 @@ public class EditBook extends javax.swing.JPanel {
                 bookCategoryDao = new BookCategoryRepo();
                 bookService = new BookService(bookDao, authorDao, categoryDao, publisherDao, bookAuthorDao,
                                 bookCategoryDao);
+
                 loadAuthorList();
                 loadCategoryList();
                 loadPublisherComboBox();
-        }
 
-        public void setBookId(String bookId) {
-                this.bookId = bookId;
         }
 
         public void loadAuthorList() {
@@ -100,80 +89,37 @@ public class EditBook extends javax.swing.JPanel {
                 jComboBox2.setModel(publisherComboBoxModel);
         }
 
-        public void loadBook() {
-                book = bookService.getBookDetails(bookId);
-                jTextField3.setText(book.getTitle());
-                jTextField4.setText(book.getEdition().toString());
-
-                DefaultListModel jList2Model = (DefaultListModel) jList2.getModel();
-                List<Integer> selectedIndex2 = new ArrayList<>();
-                for (AuthorModel author : book.getAuthors()) {
-                        for (int i = 0; i < jList2Model.getSize(); i++) {
-                                AuthorModel authorModel = (AuthorModel) jList2Model.getElementAt(i);
-                                if (authorModel.getId().equals(author.getId())) {
-                                        selectedIndex2.add(i);
-                                }
-                        }
-                }
-
-                int[] selectedIndices = selectedIndex2.stream().mapToInt(i -> i).toArray();
-                jList2.setSelectedIndices(selectedIndices);
-
-                DefaultListModel jList1Model = (DefaultListModel) jList1.getModel();
-                List<Integer> selectedIndex1 = new ArrayList<>();
-                for (CategoryModel category : book.getCategories()) {
-                        for (int i = 0; i < jList1Model.getSize(); i++) {
-                                CategoryModel categoryModel = (CategoryModel) jList1Model.getElementAt(i);
-                                if (categoryModel.getId().equals(category.getId())) {
-                                        selectedIndex1.add(i);
-                                }
-                        }
-                }
-
-                int[] selectedIndices1 = selectedIndex1.stream().mapToInt(i -> i).toArray();
-                jList1.setSelectedIndices(selectedIndices1);
-
-                DefaultComboBoxModel jComboBox2Model = (DefaultComboBoxModel) jComboBox2.getModel();
-                for (int i = 0; i < jComboBox2Model.getSize(); i++) {
-                        PublisherModel publisherModel = (PublisherModel) jComboBox2Model.getElementAt(i);
-                        if (publisherModel.getId().equals(book.getPublisher().getId())) {
-                                jComboBox2.setSelectedIndex(i);
-                        }
-                }
-                jComboBox4.setSelectedIndex(book.getIsHide() ? 1 : 0);
-
-        }
-
         @SuppressWarnings("unchecked")
 
         private void initComponents() {
 
-                jPanel1 = new javax.swing.JPanel();
-                label1 = new java.awt.Label();
-                imageAvatar1 = new com.lms.bookCRUD.ui.ImageAvatar();
-                jComboBox2 = new javax.swing.JComboBox<>();
-                jTextField3 = new javax.swing.JTextField();
-                jButton2 = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
-                jLabel1 = new javax.swing.JLabel();
-                jComboBox4 = new javax.swing.JComboBox<>();
-                jLabel3 = new javax.swing.JLabel();
-                jLabel4 = new javax.swing.JLabel();
-                jLabel5 = new javax.swing.JLabel();
-                jLabel6 = new javax.swing.JLabel();
-                jScrollPane1 = new javax.swing.JScrollPane();
-                jList1 = new javax.swing.JList<>();
-                jScrollPane2 = new javax.swing.JScrollPane();
-                jList2 = new javax.swing.JList<>();
-                jLabel2 = new javax.swing.JLabel();
-                jTextField4 = new javax.swing.JTextField();
+                // spinnerUI1 = new com.lms.custom.SpinnerUI();
+                jPanel1 = new JPanel();
+                label1 = new Label();
+                imageAvatar1 = new ImageAvatar();
+                jComboBox2 = new JComboBox<>();
+                jTextField3 = new JTextField();
+                jButton2 = new JButton();
+                jButton3 = new JButton();
+                jLabel1 = new JLabel();
+                jComboBox4 = new JComboBox<>();
+                jLabel3 = new JLabel();
+                jLabel4 = new JLabel();
+                jLabel5 = new JLabel();
+                jLabel6 = new JLabel();
+                jScrollPane1 = new JScrollPane();
+                jList1 = new JList<>();
+                jScrollPane2 = new JScrollPane();
+                jList2 = new JList<>();
+                jLabel2 = new JLabel();
+                jTextField4 = new JTextField();
                 setSize(new java.awt.Dimension(800, 540));
 
                 label1.setAlignment(java.awt.Label.CENTER);
                 label1.setFont(new java.awt.Font("Dialog", 1, 24));
-                label1.setText("Edit a Book");
+                label1.setText("Add a new Book");
 
-                jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(
+                jComboBox2.setModel(new DefaultComboBoxModel<>(
                                 new PublisherModel[] {}));
                 jComboBox2.setPreferredSize(new java.awt.Dimension(323, 36));
                 jComboBox2.addActionListener(new java.awt.event.ActionListener() {
@@ -210,12 +156,18 @@ public class EditBook extends javax.swing.JPanel {
                                 jButton3ActionPerformed(evt);
                         }
                 });
+
                 jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 13));
                 jLabel1.setText("Title");
 
-                jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(
+                jComboBox4.setModel(new DefaultComboBoxModel<>(
                                 new String[] { "Show", "Hide" }));
                 jComboBox4.setPreferredSize(new java.awt.Dimension(116, 36));
+                jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jComboBox4ActionPerformed(evt);
+                        }
+                });
 
                 jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 13));
                 jLabel3.setText("Publishing Company");
@@ -241,6 +193,7 @@ public class EditBook extends javax.swing.JPanel {
                                 jTextField4KeyPressed(evt);
                         }
                 });
+
                 javax.swing.GroupLayout borderPanel1Layout = new javax.swing.GroupLayout(jPanel1);
                 jPanel1.setLayout(borderPanel1Layout);
                 borderPanel1Layout.setHorizontalGroup(
@@ -449,6 +402,7 @@ public class EditBook extends javax.swing.JPanel {
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                 .addGap(68, 68, 68)));
+
                 jButton3.getAccessibleContext().setAccessibleDescription("");
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
@@ -467,15 +421,17 @@ public class EditBook extends javax.swing.JPanel {
 
         }
 
-        private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {
-                // check if the input is a number
-                char c = evt.getKeyChar();
-                if (Character.isLetter(c)) {
-                        jTextField4.setEditable(false);
-                } else {
-                        jTextField4.setEditable(true);
-                }
+        private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {
 
+        }
+
+        private void refresh() {
+                jTextField3.setText("");
+                jTextField4.setText("");
+                jList1.clearSelection();
+                jList2.clearSelection();
+                jComboBox2.setSelectedIndex(0);
+                jComboBox4.setSelectedIndex(0);
         }
 
         private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -491,7 +447,7 @@ public class EditBook extends javax.swing.JPanel {
                         return;
                 }
 
-                book.setId(bookId);
+                BookModel book = new BookModel();
                 book.setTitle(title);
                 book.setEdition(edition);
                 book.setAuthors(authors);
@@ -499,21 +455,30 @@ public class EditBook extends javax.swing.JPanel {
                 book.setIsHide(isHide);
                 book.setPublisher(publisher);
 
-                boolean isUpdated = bookService.editBook(book);
-                if (!isUpdated) {
-                        JOptionPane.showMessageDialog(this, "Failed to edit book");
+                boolean isAdded = bookService.addNewBook(book);
+                if (!isAdded) {
+                        JOptionPane.showMessageDialog(this, "Failed to add book");
                         return;
                 }
-                BookView.reloadListBookTable();
-
-                JOptionPane.showMessageDialog(this, "Book edited successfully");
-
+                // BookView.reloadListBookTable();
+                JOptionPane.showMessageDialog(this, "Book added successfully");
                 cardLayout.show(parentPanel, "listBook");
+                refresh();
+
+        }
+
+        private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {
+                // check if the input is a number
+                char c = evt.getKeyChar();
+                if (Character.isLetter(c)) {
+                        jTextField4.setEditable(false);
+                } else {
+                        jTextField4.setEditable(true);
+                }
 
         }
 
         private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {
-
         }
 
         private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -534,6 +499,7 @@ public class EditBook extends javax.swing.JPanel {
 
         private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
                 cardLayout.show(parentPanel, "listBook");
+                refresh();
         }
 
         private JPanel jPanel1;
@@ -555,6 +521,7 @@ public class EditBook extends javax.swing.JPanel {
         private JTextField jTextField3;
         private JTextField jTextField4;
         private Label label1;
+
         CardLayout cardLayout;
         JPanel parentPanel;
 }

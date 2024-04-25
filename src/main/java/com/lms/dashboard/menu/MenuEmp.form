@@ -16,18 +16,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="logo" pref="180" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="bookButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="bookCategoryButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="publisherButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="authorButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="profileButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="importButton" alignment="0" max="32767" attributes="0"/>
-                  <Component id="logoutButton" alignment="0" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          <Component id="logo" pref="0" max="32767" attributes="0"/>
+          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Component id="bookButton" alignment="0" max="32767" attributes="0"/>
+              <Component id="bookCategoryButton" alignment="0" max="32767" attributes="0"/>
+              <Component id="publisherButton" alignment="0" max="32767" attributes="0"/>
+              <Component id="authorButton" alignment="0" max="32767" attributes="0"/>
+              <Component id="profileButton" alignment="0" max="32767" attributes="0"/>
+              <Component id="importButton" alignment="0" max="32767" attributes="0"/>
+              <Component id="logoutButton" alignment="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -56,6 +53,9 @@
   </Layout>
   <SubComponents>
     <Component class="com.lms.dashboard.menu.Logo" name="logo">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.lms.dashboard.menu.Logo(emp)"/>
+      </AuxValues>
     </Component>
     <Component class="com.lms.dashboard.menu.MenuButton" name="logoutButton">
     </Component>
