@@ -16,6 +16,7 @@ import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuEmp;
+import com.lms.exportCRUD.form.ExportView;
 import com.lms.importCRUD.form.other.ImportPanel;
 import com.lms.publisherCRUD.form.PublishersView;
 import com.lms.publisherCRUD.form.other.ListPublisherPanel;
@@ -92,8 +93,9 @@ public class Emp extends javax.swing.JPanel {
         listFrame.add(new CategoryView());
         listFrame.add(new PublishersView());
         listFrame.add(new AuthorsView());
-        listFrame.add(new InfoPage());
         listFrame.add(new ImportView());
+        listFrame.add(new ExportView());
+        listFrame.add(new InfoPage());
     }
 
     public void logOut() {
