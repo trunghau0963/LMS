@@ -7,11 +7,13 @@ import com.lms.categoryCRUD.entities.Category;
 public interface CategoryDao {
     public List<Category> findAll();
 
+    public Category getbyId(String id);
+
     public Category findByName(String name);
 
     public Category findById(String id);
 
-    public boolean add(Category category);
+    public boolean add(String gerne);
 
     public boolean update(Category category);
 

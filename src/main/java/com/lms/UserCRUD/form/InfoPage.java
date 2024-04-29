@@ -4,8 +4,8 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
-import com.lms.userCRUD.form.other.EditAccount;
 import com.lms.userCRUD.form.other.ViewInformation;
+import com.lms.userCRUD.form.other.temp.EditAccount;
 
 public class InfoPage extends JPanel {
   private CardLayout cardLayout;

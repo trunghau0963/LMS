@@ -78,13 +78,11 @@ public class ListBooks extends javax.swing.JPanel {
         jPanel11 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel20 = new javax.swing.JPanel();
-        addBookButton = new javax.swing.JButton();
         tabBook = new javax.swing.JTabbedPane();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
+        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jPanel9.setLayout(new javax.swing.BoxLayout(jPanel9, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 1, 40));
@@ -98,11 +96,11 @@ public class ListBooks extends javax.swing.JPanel {
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 618, Short.MAX_VALUE)
+            .addGap(0, 718, Short.MAX_VALUE)
             .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,24 +114,11 @@ public class ListBooks extends javax.swing.JPanel {
 
         jPanel11.add(jPanel19, java.awt.BorderLayout.CENTER);
 
-        jPanel20.setPreferredSize(new java.awt.Dimension(100, 50));
-
-        addBookButton.setBackground(new java.awt.Color(153, 153, 153));
-        addBookButton.setForeground(new java.awt.Color(255, 255, 255));
-        addBookButton.setText("Add New");
-        addBookButton.setPreferredSize(new java.awt.Dimension(100, 40));
-        addBookButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBookButtonActionPerformed(evt);
-            }
-        });
-        jPanel20.add(addBookButton);
-
-        jPanel11.add(jPanel20, java.awt.BorderLayout.EAST);
-
         jPanel9.add(jPanel11);
 
         add(jPanel9, java.awt.BorderLayout.NORTH);
+
+        tabBook.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 40, 1, 40));
         add(tabBook, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -142,11 +127,9 @@ public class ListBooks extends javax.swing.JPanel {
     }// GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addBookButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JTabbedPane tabBook;
     // End of variables declaration//GEN-END:variables

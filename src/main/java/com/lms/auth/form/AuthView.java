@@ -34,15 +34,11 @@ public class AuthView extends javax.swing.JPanel {
 
         txtPassLogin.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
         txtPassLogin.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true; showClearButton: true;");
-        txtPassLogin.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
-        txtPassLogin.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true; showClearButton: true;");
 
         textPhoneNumber.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your phone number");
         txtUserName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username");
         txtPassSignup.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
 
-        txtPassSignup.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
-        txtPassSignup.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true; showClearButton: true;");
         txtPassSignup.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
         txtPassSignup.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true; showClearButton: true;");
 

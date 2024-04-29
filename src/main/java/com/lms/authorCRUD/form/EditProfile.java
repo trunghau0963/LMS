@@ -4,7 +4,7 @@ import java.awt.CardLayout;
 import java.text.ParseException;
 import javax.swing.JPanel;
 
-import com.lms.authorCRUD.form.other.EditProfilePanel;
+import com.lms.authorCRUD.form.other.temp.EditProfilePanel;
 
 public class EditProfile extends JPanel {
     private CardLayout cardLayout;

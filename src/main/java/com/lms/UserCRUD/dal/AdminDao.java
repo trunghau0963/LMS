@@ -14,9 +14,19 @@ public interface AdminDao {
 
   public boolean editAccount(ModelEditAccount editUser);
 
+  public boolean editEmployee(ModelEditAccount editUser);
+
+  public boolean deleteAccount(String phoneNumber);
+
+  public boolean deleteEmployee(String phoneNumber);
+
   public List<Employee> getEmployees();
 
   public List<Admin> getAdmins();
+
+  public Admin getAdminById(String id);
+
+  public Employee getEmployeeById(String id);
 
   public Employee getEmployeeByPhoneNumber(String phoneNumber);
 

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.lms.authorCRUD.form.other;
+package com.lms.authorCRUD.form.other.temp;
 
 import java.awt.CardLayout;
 

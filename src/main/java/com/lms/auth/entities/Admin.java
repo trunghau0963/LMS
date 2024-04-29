@@ -1,6 +1,6 @@
 package com.lms.auth.entities;
 
-public class Admin extends User{
+public class Admin extends User {
     private String pwd;
 
     public Admin() {
@@ -27,7 +27,7 @@ public class Admin extends User{
         this.pwd = pwd;
     }
 
-    public void setGender(String gender){
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -53,5 +53,11 @@ public class Admin extends User{
 
     public String getGender() {
         return gender;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin [Id=" + Id + ", Name=" + Name + ", dob=" + dob + ", phoneNumber=" + phoneNumber + ", Gender="
+                + gender + ", pwd=" + pwd + "]";
     }
 }

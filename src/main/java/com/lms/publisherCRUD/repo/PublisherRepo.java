@@ -16,6 +16,10 @@ import com.lms.connection.JDBCConnection;
 public class PublisherRepo implements PublisherDao {
     Connection connection = null;
 
+    public static PublisherRepo getInstance() {
+        return new PublisherRepo();
+    }
+
     public PublisherRepo() {
         connection = JDBCConnection.getJDBCConnection();
     }
@@ -44,22 +48,22 @@ public class PublisherRepo implements PublisherDao {
     }
 
     @Override
-    public ArrayList<Publisher> getListPublishers(String isHide){
+    public ArrayList<Publisher> getListPublishers(String isHide) {
         ArrayList<Publisher> publishers = new ArrayList<Publisher>();
         try {
             connection = JDBCConnection.getJDBCConnection();
 
             String stmt = "SELECT * FROM publisher";
 
-            if(isHide != null){
+            if (isHide != null) {
                 boolean convertIsHide = isHide.equals("Hide") ? true : false;
                 stmt += isHide != null ? " Where isHide = " + convertIsHide + "" : "";
             }
-            
+
             stmt += " ORDER BY publisherName ASC";
 
             PreparedStatement statement = connection.prepareStatement(stmt);
-            
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -157,7 +161,6 @@ public class PublisherRepo implements PublisherDao {
 
             String stmt = "SELECT * FROM Publisher WHERE publisherName ILIKE ?";
 
-
             if (isHide != null) {
                 convertIsHide = isHide.equals("Hide") ? true : false;
                 stmt += isHide != null ? " AND isHide = " + convertIsHide + "" : "";
@@ -194,7 +197,6 @@ public class PublisherRepo implements PublisherDao {
             boolean convertIsHide;
 
             String stmt = "SELECT * FROM Publisher WHERE publisherAddress ILIKE ?";
-
 
             if (isHide != null) {
                 convertIsHide = isHide.equals("Hide") ? true : false;
@@ -295,5 +297,24 @@ public class PublisherRepo implements PublisherDao {
             e.printStackTrace();
         }
         return publisher;
+    }
+
+    public boolean deletePublisher(String id) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+
+            String stmt = "DELETE FROM Publisher WHERE publisherId = ?";
+            PreparedStatement statement = connection.prepareStatement(stmt);
+            statement.setString(1, id);
+
+            statement.execute();
+
+            JOptionPane.showMessageDialog(null, "Delete successfull");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Connection to PostgreSQL failed.");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

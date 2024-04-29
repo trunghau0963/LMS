@@ -64,4 +64,10 @@ public class Employee extends User {
     public boolean getIsBlock() {
         return isBlock;
     }
+
+    @Override
+    public String toString() {
+        return "Employee [Id=" + Id + ", Name=" + Name + ", dob=" + dob + ", phoneNumber=" + phoneNumber + ", Gender="
+                + gender + ", pwd=" + pwd + ", lock=" + isBlock + "]";
+    }
 }

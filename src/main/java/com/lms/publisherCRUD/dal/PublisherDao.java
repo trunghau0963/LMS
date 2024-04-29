@@ -14,4 +14,6 @@ public interface PublisherDao {
     public Publisher editInfo(String id, String name, String address, String isHide);
 
     public Publisher addPublisher(String name, String address, String isHide);
+
+    public boolean deletePublisher(String id);
 }

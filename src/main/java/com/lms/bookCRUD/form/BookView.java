@@ -2,9 +2,9 @@ package com.lms.bookCRUD.form;
 
 import javax.swing.*;
 
-import com.lms.bookCRUD.form.other.AddBook;
-import com.lms.bookCRUD.form.other.EditBook;
 import com.lms.bookCRUD.form.other.ListBooks;
+import com.lms.bookCRUD.form.other.temp.AddBook;
+import com.lms.bookCRUD.form.other.temp.EditBook;
 import com.lms.bookCRUD.service.BookService;
 import com.lms.bookCRUD.dal.AuthorDao;
 import com.lms.bookCRUD.dal.BookAuthorDao;
@@ -23,7 +23,6 @@ import java.awt.*;
 
 public class BookView extends JPanel {
   private static CardLayout cardLayout;
-  AddBook addBook;
   static EditBook editBook;
   static ListBooks listBook;
   private BookDao bookDao;
@@ -47,13 +46,11 @@ public class BookView extends JPanel {
     bookAuthorDao = new BookAuthorRepo();
     bookCategoryDao = new BookCategoryRepo();
     bookService = new BookService(bookDao, authorDao, categoryDao, publisherDao, bookAuthorDao,
-            bookCategoryDao);
+        bookCategoryDao);
 
-    addBook = new AddBook(cardLayout, this);
     editBook = new EditBook(cardLayout, this);
     listBook = new ListBooks(cardLayout, this, bookService);
 
-    add(addBook, "addBook");
     add(editBook, "editBook");
     add(listBook, "listBook");
 
@@ -68,7 +65,7 @@ public class BookView extends JPanel {
   }
 
   // public static void reloadListBookTable() {
-  //   listBook.reloadTable();
+  // listBook.reloadTable();
   // }
 
 }

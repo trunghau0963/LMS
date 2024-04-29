@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Tpublates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Tpublates/GUIForms/JFrame.java to edit this tpublate
  */
-package com.lms.publisherCRUD.form.other;
+package com.lms.publisherCRUD.form.other.temp;
 
 import java.awt.CardLayout;
 

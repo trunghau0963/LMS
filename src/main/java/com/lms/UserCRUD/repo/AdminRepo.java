@@ -17,6 +17,10 @@ import com.lms.userCRUD.model.ModelEditAccount;
 
 public class AdminRepo implements AdminDao {
 
+  public static AdminRepo getInstance() {
+    return new AdminRepo();
+  }
+
   public User addUser(ModelAddUser addUser) {
     Connection connection = null;
     ResultSet resultSet;
@@ -107,6 +111,80 @@ public class AdminRepo implements AdminDao {
     return true;
   }
 
+  public boolean editEmployee(ModelEditAccount editUser) {
+    Connection connection = null;
+    try {
+      connection = JDBCConnection.getJDBCConnection();
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("UPDATE employee SET empName = '" + editUser.getFullName() + "', dob = '"
+          + editUser.getDob() + "', pwd = '" + editUser.getPwd() + "', gender = '" + editUser.getGender()
+          + "' WHERE phoneNumber = '"
+          + editUser.getPhoneNumber() + "'");
+
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return true;
+  }
+
+  public boolean deleteAccount(String phoneNumber) {
+    Connection connection = null;
+    try {
+      connection = JDBCConnection.getJDBCConnection();
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("DELETE FROM administrator WHERE phoneNumber = '" + phoneNumber + "'");
+
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+      return false;
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return true;
+  }
+
+  public boolean deleteEmployee(String phoneNumber) {
+    Connection connection = null;
+    try {
+      connection = JDBCConnection.getJDBCConnection();
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("DELETE FROM employee WHERE phoneNumber = '" + phoneNumber + "'");
+
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+      return false;
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return true;
+  }
+
   public List<Employee> getEmployees() {
 
     Connection connection = null;
@@ -118,6 +196,7 @@ public class AdminRepo implements AdminDao {
       resultSet = statement.executeQuery("SELECT * FROM employee");
       while (resultSet.next()) {
         Employee user = new Employee();
+        user.setEmpId(resultSet.getString("empId"));
         user.setName(resultSet.getString("empName"));
         user.setPhoneNumber(resultSet.getString("phoneNumber"));
         user.setPwd(resultSet.getString("pwd"));
@@ -152,6 +231,7 @@ public class AdminRepo implements AdminDao {
       resultSet = statement.executeQuery("SELECT * FROM administrator");
       while (resultSet.next()) {
         Admin user = new Admin();
+        user.setAdminId(resultSet.getString("adminId"));
         user.setName(resultSet.getString("adminName"));
         user.setPhoneNumber(resultSet.getString("phoneNumber"));
         user.setPwd(resultSet.getString("pwd"));
@@ -173,6 +253,71 @@ public class AdminRepo implements AdminDao {
       }
     }
     return users;
+  }
+
+  public Admin getAdminById(String id) {
+    Connection connection = null;
+    ResultSet resultSet;
+    Admin user = new Admin();
+    try {
+      connection = JDBCConnection.getJDBCConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM administrator WHERE adminid = '" + id + "'");
+      while (resultSet.next()) {
+        user.setAdminId(resultSet.getString("adminid"));
+        user.setName(resultSet.getString("adminname"));
+        user.setPhoneNumber(resultSet.getString("phonenumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return user;
+  }
+
+  public Employee getEmployeeById(String id) {
+    Connection connection = null;
+    ResultSet resultSet;
+    Employee user = new Employee();
+    try {
+      connection = JDBCConnection.getJDBCConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM employee WHERE empid = '" + id + "'");
+      while (resultSet.next()) {
+        user.setEmpId(resultSet.getString("empid"));
+        user.setName(resultSet.getString("empname"));
+        user.setPhoneNumber(resultSet.getString("phonenumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
+        user.setIsBlock(resultSet.getBoolean("isblock"));
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return user;
   }
 
   public Employee getEmployeeByPhoneNumber(String phoneNumber) {
@@ -248,6 +393,7 @@ public class AdminRepo implements AdminDao {
       Statement statement = connection.createStatement();
       resultSet = statement.executeQuery("SELECT * FROM administrator WHERE phonenumber = '" + phoneNumber + "'");
       while (resultSet.next()) {
+        user.setAdminId(resultSet.getString("adminid"));
         user.setName(resultSet.getString("adminname"));
         user.setPhoneNumber(resultSet.getString("phonenumber"));
         user.setPwd(resultSet.getString("pwd"));

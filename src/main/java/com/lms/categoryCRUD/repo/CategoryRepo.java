@@ -13,6 +13,11 @@ import com.lms.categoryCRUD.entities.Category;
 import com.lms.connection.JDBCConnection;
 
 public class CategoryRepo implements CategoryDao {
+
+    public static CategoryRepo getInstance() {
+        return new CategoryRepo();
+    }
+
     @Override
     public List<Category> findAll() {
         List<Category> categories = new ArrayList<>();
@@ -57,11 +62,11 @@ public class CategoryRepo implements CategoryDao {
     }
 
     @Override
-    public boolean add(Category category) {
+    public boolean add(String gerne) {
         try (Connection connection = JDBCConnection.getJDBCConnection()) {
             String sql = "INSERT INTO category (genre) VALUES (?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, category.getGenre());
+            preparedStatement.setString(1, gerne);
             int rowsAffected = preparedStatement.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException se) {
@@ -119,4 +124,25 @@ public class CategoryRepo implements CategoryDao {
         }
         return category;
     }
+
+    @Override
+    public Category getbyId(String id) {
+        Category category = new Category();
+        try (Connection connection = JDBCConnection.getJDBCConnection()) {
+            String sql = "SELECT * FROM category WHERE genreId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                category.setId(id);
+                category.setGenre(resultSet.getString("genre"));
+            }
+            // resultSet.close();
+            // preparedStatement.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return category;
+    }
+
 }

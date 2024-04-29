@@ -3,8 +3,8 @@ package com.lms.authorCRUD.form;
 import javax.swing.*;
 
 import com.lms.authorCRUD.form.other.AddAuthorPanel;
-import com.lms.authorCRUD.form.other.EditInfoAuthorPanel;
 import com.lms.authorCRUD.form.other.ListAuthorPanel;
+import com.lms.authorCRUD.form.other.temp.EditInfoAuthorPanel;
 
 import java.awt.*;
 

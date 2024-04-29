@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -18,19 +19,26 @@ import com.lms.bookCRUD.model.BookModel;
 import com.lms.bookCRUD.service.BookService;
 import com.lms.bookCRUD.ui.CenterTableCellRenderer;
 
-public class UnavailableBook extends javax.swing.JPanel {
+public class UnavailableBook extends javax.swing.JInternalFrame {
     private BookService bookService;
 
     public UnavailableBook(BookService bookService) {
         this.bookService = bookService;
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         initComponents();
         init();
     }
 
     private void init() {
         searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search...");
-        searchBookButton.setIcon(new FlatSVGIcon("svg/search.svg"));
-        filterBookButton.setIcon(new FlatSVGIcon("svg/filter.svg"));
+        refreshButton.setIcon(new FlatSVGIcon("svg/search.svg"));
+        filterButton.setIcon(new FlatSVGIcon("svg/filter.svg"));
+        btnAdd.setIcon(new FlatSVGIcon("svg/add.svg"));
+        btnDelete.setIcon(new FlatSVGIcon("svg/delete.svg"));
+        btnEdit.setIcon(new FlatSVGIcon("svg/edit.svg"));
+        btnExport.setIcon(new FlatSVGIcon("svg/export.svg"));
+        btnImport.setIcon(new FlatSVGIcon("svg/import.svg"));
+        refreshButton.setIcon(new FlatSVGIcon("svg/refresh.svg"));
 
         List<BookModel> bookModels = bookService.getUnavailableBooks();
         DefaultTableModel tblModel = (DefaultTableModel) bookList.getModel();
@@ -84,106 +92,202 @@ public class UnavailableBook extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel13 = new javax.swing.JPanel();
-        jPanel17 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jPanel18 = new javax.swing.JPanel();
-        jSplitPane1 = new javax.swing.JSplitPane();
-        filterBookButton = new javax.swing.JButton();
-        filterSearch = new javax.swing.JComboBox<>();
-        jPanel21 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        filterButton = new javax.swing.JButton();
+        searchOption = new javax.swing.JComboBox<>();
+        jPanel15 = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
-        jPanel22 = new javax.swing.JPanel();
-        searchBookButton = new javax.swing.JButton();
+        jPanel16 = new javax.swing.JPanel();
+        refreshButton = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jToolBar2 = new javax.swing.JToolBar();
+        btnAdd = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnImport = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         jPanel23 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         bookList = new javax.swing.JTable();
 
-        setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 60, 10, 60));
-        setLayout(new java.awt.BorderLayout());
+        setBorder(null);
 
-        jPanel13.setPreferredSize(new java.awt.Dimension(800, 100));
-        jPanel13.setLayout(new javax.swing.BoxLayout(jPanel13, javax.swing.BoxLayout.Y_AXIS));
+        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
+        jPanel9.setLayout(new javax.swing.BoxLayout(jPanel9, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanel17.setLayout(new java.awt.BorderLayout());
+        jPanel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 1, 40));
+        jPanel11.setMinimumSize(new java.awt.Dimension(392, 80));
+        jPanel11.setPreferredSize(new java.awt.Dimension(800, 120));
+        jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Unavailable Books");
-        jPanel17.add(jLabel3, java.awt.BorderLayout.CENTER);
-
-        jPanel13.add(jPanel17);
-
-        jPanel3.setPreferredSize(new java.awt.Dimension(800, 40));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Unavailable Book", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
+        jPanel3.setPreferredSize(new java.awt.Dimension(400, 200));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jPanel18.setPreferredSize(new java.awt.Dimension(150, 40));
+        jPanel1.setPreferredSize(new java.awt.Dimension(800, 40));
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        filterBookButton.setPreferredSize(new java.awt.Dimension(40, 40));
-        filterBookButton.addActionListener(new java.awt.event.ActionListener() {
+        jPanel14.setPreferredSize(new java.awt.Dimension(150, 40));
+
+        filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
+        filterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filterBookButtonActionPerformed(evt);
+                filterButtonActionPerformed(evt);
             }
         });
-        jSplitPane1.setLeftComponent(filterBookButton);
+        jPanel14.add(filterButton);
 
-        filterSearch.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        filterSearch.setPreferredSize(new java.awt.Dimension(100, 40));
-        filterSearch.addActionListener(new java.awt.event.ActionListener() {
+        searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
+        searchOption.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filterSearchActionPerformed(evt);
+                searchOptionActionPerformed(evt);
             }
         });
-        jSplitPane1.setRightComponent(filterSearch);
+        jPanel14.add(searchOption);
 
-        jPanel18.add(jSplitPane1);
+        jPanel1.add(jPanel14, java.awt.BorderLayout.WEST);
 
-        jPanel3.add(jPanel18, java.awt.BorderLayout.WEST);
-
-        jPanel21.setPreferredSize(new java.awt.Dimension(700, 40));
+        jPanel15.setPreferredSize(new java.awt.Dimension(700, 40));
 
         searchField.setPreferredSize(new java.awt.Dimension(71, 40));
 
-        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
-        jPanel21.setLayout(jPanel21Layout);
-        jPanel21Layout.setHorizontalGroup(
-                jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel21Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
-                                .addGap(8, 8, 8)));
-        jPanel21Layout.setVerticalGroup(
-                jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel21Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(11, Short.MAX_VALUE)));
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                .addGap(8, 8, 8))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        jPanel3.add(jPanel21, java.awt.BorderLayout.CENTER);
+        jPanel1.add(jPanel15, java.awt.BorderLayout.CENTER);
 
-        jPanel22.setPreferredSize(new java.awt.Dimension(60, 40));
-        jPanel22.setRequestFocusEnabled(false);
+        jPanel16.setPreferredSize(new java.awt.Dimension(60, 40));
+        jPanel16.setRequestFocusEnabled(false);
 
-        searchBookButton.setPreferredSize(new java.awt.Dimension(60, 40));
-        searchBookButton.addActionListener(new java.awt.event.ActionListener() {
+        refreshButton.setToolTipText("Refresh");
+        refreshButton.setPreferredSize(new java.awt.Dimension(60, 40));
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBookButtonActionPerformed(evt);
+                refreshButtonActionPerformed(evt);
             }
         });
-        jPanel22.add(searchBookButton);
+        jPanel16.add(refreshButton);
 
-        jPanel3.add(jPanel22, java.awt.BorderLayout.EAST);
+        jPanel1.add(jPanel16, java.awt.BorderLayout.EAST);
 
-        jPanel13.add(jPanel3);
+        jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        add(jPanel13, java.awt.BorderLayout.NORTH);
+        jPanel11.add(jPanel3);
 
-        jPanel23.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 40, 1));
+        jToolBar2.setBorder(javax.swing.BorderFactory.createTitledBorder("Method"));
+        jToolBar2.setRollover(true);
+
+        btnAdd.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnAdd.setText("Add");
+        btnAdd.setFocusable(false);
+        btnAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAdd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnAdd);
+
+        btnDelete.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.setFocusable(false);
+        btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnDelete);
+
+        btnEdit.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnEdit.setText("Edit");
+        btnEdit.setFocusable(false);
+        btnEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnEdit);
+        jToolBar2.add(jSeparator1);
+
+        btnImport.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnImport.setText("Import Excel");
+        btnImport.setFocusable(false);
+        btnImport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnImport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnImport);
+
+        btnExport.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnExport.setText("Export Excel");
+        btnExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnExport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnExport);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 350, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 119, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 9, Short.MAX_VALUE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jPanel11.add(jPanel5);
+
+        jPanel9.add(jPanel11);
+
+        getContentPane().add(jPanel9, java.awt.BorderLayout.NORTH);
+
+        jPanel23.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 40, 40, 40));
         jPanel23.setPreferredSize(new java.awt.Dimension(800, 400));
 
         jScrollPane5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
@@ -195,20 +299,55 @@ public class UnavailableBook extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
         jPanel23Layout.setHorizontalGroup(
-                jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 561, Short.MAX_VALUE)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 561,
-                                        Short.MAX_VALUE)));
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 720, Short.MAX_VALUE)
+            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE))
+        );
         jPanel23Layout.setVerticalGroup(
-                jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 253, Short.MAX_VALUE)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)));
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 325, Short.MAX_VALUE)
+            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+        );
 
-        add(jPanel23, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel23, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_filterButtonActionPerformed
+
+    private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_searchOptionActionPerformed
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_refreshButtonActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
+        AddBook a;
+        a = new AddBook(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this), rootPaneCheckingEnabled,
+                "Add Unavailable Book");
+        a.setVisible(true);
+    }// GEN-LAST:event_btnAddActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleteActionPerformed
+
+    }// GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
+
+    }// GEN-LAST:event_btnEditActionPerformed
+
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnImportActionPerformed
+
+    }// GEN-LAST:event_btnImportActionPerformed
+
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnExportActionPerformed
+
+    }// GEN-LAST:event_btnExportActionPerformed
 
     private void filterBookButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterBookButtonActionPerformed
         // TODO add your handling code here:
@@ -224,19 +363,26 @@ public class UnavailableBook extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable bookList;
-    private javax.swing.JButton filterBookButton;
-    private javax.swing.JComboBox<String> filterSearch;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnImport;
+    private javax.swing.JButton filterButton;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JButton searchBookButton;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchField;
+    private javax.swing.JComboBox<String> searchOption;
     // End of variables declaration//GEN-END:variables
 }

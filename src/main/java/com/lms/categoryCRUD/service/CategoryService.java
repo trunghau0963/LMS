@@ -42,10 +42,18 @@ public class CategoryService {
         return categoryDao.update(category);
     }
 
-    public boolean addNewCategory(CategoryModel categoryModel) {
-        Category category = new Category();
-        category.loadFromModel(categoryModel);
-        return categoryDao.add(category);
+    public boolean addNewCategory(String gerne) {
+        // Category category = new Category();
+        // category.loadFromModel(categoryModel);
+        return categoryDao.add(gerne);
+    }
+
+    public Category getbyId(String id) {
+        return categoryDao.getbyId(id);
+    }
+
+    public boolean deleteCategory(String id) {
+        return categoryDao.delete(id);
     }
 
 }

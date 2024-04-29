@@ -5,53 +5,80 @@
 package com.lms.categoryCRUD.form.other;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.lms.auth.entities.Employee;
 import com.lms.categoryCRUD.dal.CategoryDao;
+import com.lms.categoryCRUD.entities.Category;
 import com.lms.categoryCRUD.model.CategoryModel;
-import com.lms.categoryCRUD.repo.CategoryRepo;
 import com.lms.categoryCRUD.service.CategoryService;
+import com.lms.userCRUD.form.other.AdminList;
 
-public class ListBookCategory extends javax.swing.JPanel {
+public class ListBookCategory extends javax.swing.JInternalFrame {
     private CategoryDao categoryDao;
     private CategoryService categoryService;
+    List<CategoryModel> categoryModels;
+    DefaultTableModel tblModel;
 
-    public ListBookCategory() {
+    public ListBookCategory(CategoryService service) {
+        categoryService = service;
         initComponents();
-        categoryDao = new CategoryRepo();
-        categoryService = new CategoryService(categoryDao);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        UIManager.put("Table.showVerticalLines", true);
+        categoryList.setDefaultEditor(Object.class, null);
         init();
 
     }
 
     private void init() {
         searchField.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search...");
-        searchButton.setIcon(new FlatSVGIcon("svg/search.svg"));
-        filterButton.setIcon(new FlatSVGIcon("svg/filter.svg"));
-        List<CategoryModel> categoryModels = categoryService.getAllCategories();
-        DefaultTableModel tblModel = (DefaultTableModel) categoryList.getModel();
-        reloadTable(tblModel, categoryModels);
+        refreshButton.setIcon(new FlatSVGIcon("svg/search.svg"));
+        btnAdd.setIcon(new FlatSVGIcon("svg/add.svg"));
+        btnDelete.setIcon(new FlatSVGIcon("svg/delete.svg"));
+        btnEdit.setIcon(new FlatSVGIcon("svg/edit.svg"));
+        btnExport.setIcon(new FlatSVGIcon("svg/export.svg"));
+        btnImport.setIcon(new FlatSVGIcon("svg/import.svg"));
+        refreshButton.setIcon(new FlatSVGIcon("svg/refresh.svg"));
+        categoryModels = categoryService.getAllCategories();
+        tblModel = (DefaultTableModel) categoryList.getModel();
+        reloadTable();
 
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(categoryList.getModel());
         categoryList.setRowSorter(sorter);
     }
 
-    public void reloadTable(DefaultTableModel tblModel, List<CategoryModel> bookModels) {
+    public void reloadTable() {
         customTable(categoryList);
         tblModel.addColumn("ID");
         tblModel.addColumn("Genre");
         tblModel.addColumn("Is hidden");
-        for (CategoryModel categoryModel : bookModels) {
-            tblModel.addRow(new Object[] { categoryModel.getId(), categoryModel.getGenre(), false });
-        }
+
+        loadDataToTable(categoryModels);
 
         categoryList.setModel(tblModel);
 
@@ -59,12 +86,33 @@ public class ListBookCategory extends javax.swing.JPanel {
 
     }
 
-    private void customTable(javax.swing.JTable table){
+    private void customTable(javax.swing.JTable table) {
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         table.getTableHeader().setBackground(new Color(125, 200, 204));
         table.getTableHeader().setForeground(new Color(0, 0, 0));
         table.setRowHeight(30);
         table.setShowGrid(true);
+    }
+
+    public void loadDataToTable(List<CategoryModel> category) {
+        try {
+            tblModel.setRowCount(0);
+            for (CategoryModel categoryModel : category) {
+                tblModel.addRow(new Object[] { categoryModel.getId(), categoryModel.getGenre(), false });
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    public Category getSelectCategory() {
+        int row = categoryList.getSelectedRow();
+        Category category = categoryService.getbyId(categoryList.getValueAt(row, 0).toString());
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Something went wrong, please try again!");
+            return null;
+        }
+        return category;
     }
 
     /**
@@ -75,139 +123,56 @@ public class ListBookCategory extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel9 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        addNewCategoryField = new javax.swing.JTextField();
-        jPanel20 = new javax.swing.JPanel();
-        addButton = new javax.swing.JButton();
-        jPanel12 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel14 = new javax.swing.JPanel();
-        filterButton = new javax.swing.JButton();
-        filterSearch = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
         jPanel16 = new javax.swing.JPanel();
-        searchButton = new javax.swing.JButton();
+        refreshButton = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jToolBar2 = new javax.swing.JToolBar();
+        btnAdd = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnImport = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         categoryList = new javax.swing.JTable();
 
-        setLayout(new java.awt.BorderLayout());
+        setBorder(null);
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 40, 1, 40));
+        jPanel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
         jPanel9.setLayout(new javax.swing.BoxLayout(jPanel9, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanel11.setPreferredSize(new java.awt.Dimension(800, 60));
-        jPanel11.setLayout(new java.awt.BorderLayout());
+        jPanel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 40, 1, 40));
+        jPanel11.setMinimumSize(new java.awt.Dimension(392, 80));
+        jPanel11.setPreferredSize(new java.awt.Dimension(800, 120));
+        jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel6.setPreferredSize(new java.awt.Dimension(250, 62));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setText("Category List");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 362, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel6Layout.createSequentialGroup()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 62, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel6Layout.createSequentialGroup()
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        jPanel11.add(jPanel6, java.awt.BorderLayout.WEST);
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 1));
-
-        jPanel5.setPreferredSize(new java.awt.Dimension(112, 35));
-        jPanel5.setLayout(new java.awt.BorderLayout());
-
-        addNewCategoryField.setPreferredSize(new java.awt.Dimension(71, 40));
-        addNewCategoryField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addNewCategoryFieldActionPerformed(evt);
-            }
-        });
-        jPanel5.add(addNewCategoryField, java.awt.BorderLayout.CENTER);
-
-        jPanel20.setPreferredSize(new java.awt.Dimension(100, 40));
-        jPanel20.setLayout(new java.awt.BorderLayout());
-
-        addButton.setBackground(new java.awt.Color(153, 153, 153));
-        addButton.setForeground(new java.awt.Color(255, 255, 255));
-        addButton.setText("Add New");
-        addButton.setPreferredSize(new java.awt.Dimension(100, 40));
-        addButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addButtonActionPerformed(evt);
-            }
-        });
-        jPanel20.add(addButton, java.awt.BorderLayout.CENTER);
-
-        jPanel5.add(jPanel20, java.awt.BorderLayout.EAST);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 468, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                    .addGap(0, 118, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-
-        jPanel11.add(jPanel3, java.awt.BorderLayout.CENTER);
-
-        jPanel9.add(jPanel11);
-
-        jPanel12.setPreferredSize(new java.awt.Dimension(800, 70));
-        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.Y_AXIS));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Category", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 36))); // NOI18N
+        jPanel6.setPreferredSize(new java.awt.Dimension(400, 200));
+        jPanel6.setLayout(new java.awt.BorderLayout());
 
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 40));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel14.setPreferredSize(new java.awt.Dimension(150, 40));
-
-        filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
-        jPanel14.add(filterButton);
-
-        filterSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        filterSearch.setPreferredSize(new java.awt.Dimension(100, 40));
-        jPanel14.add(filterSearch);
-
-        jPanel1.add(jPanel14, java.awt.BorderLayout.WEST);
-
         jPanel15.setPreferredSize(new java.awt.Dimension(700, 40));
 
         searchField.setPreferredSize(new java.awt.Dimension(71, 40));
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchFieldKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -215,7 +180,7 @@ public class ListBookCategory extends javax.swing.JPanel {
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addGap(8, 8, 8))
         );
         jPanel15Layout.setVerticalGroup(
@@ -231,18 +196,111 @@ public class ListBookCategory extends javax.swing.JPanel {
         jPanel16.setPreferredSize(new java.awt.Dimension(60, 40));
         jPanel16.setRequestFocusEnabled(false);
 
-        searchButton.setPreferredSize(new java.awt.Dimension(60, 40));
-        jPanel16.add(searchButton);
+        refreshButton.setToolTipText("Refresh");
+        refreshButton.setPreferredSize(new java.awt.Dimension(60, 40));
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+        jPanel16.add(refreshButton);
 
         jPanel1.add(jPanel16, java.awt.BorderLayout.EAST);
 
-        jPanel12.add(jPanel1);
+        jPanel6.add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jPanel9.add(jPanel12);
+        jPanel11.add(jPanel6);
 
-        add(jPanel9, java.awt.BorderLayout.NORTH);
+        jToolBar2.setBorder(javax.swing.BorderFactory.createTitledBorder("Method"));
+        jToolBar2.setRollover(true);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 40, 40, 40));
+        btnAdd.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnAdd.setText("Add");
+        btnAdd.setFocusable(false);
+        btnAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAdd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnAdd);
+
+        btnDelete.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.setFocusable(false);
+        btnDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnDelete);
+
+        btnEdit.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnEdit.setText("Edit");
+        btnEdit.setFocusable(false);
+        btnEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnEdit);
+        jToolBar2.add(jSeparator1);
+
+        btnImport.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnImport.setText("Import Excel");
+        btnImport.setFocusable(false);
+        btnImport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnImport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnImport);
+
+        btnExport.setFont(new java.awt.Font("SF Pro Display", 0, 15)); // NOI18N
+        btnExport.setText("Export Excel");
+        btnExport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnExport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(btnExport);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 350, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 119, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                    .addGap(0, 16, Short.MAX_VALUE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jPanel11.add(jPanel7);
+
+        jPanel9.add(jPanel11);
+
+        getContentPane().add(jPanel9, java.awt.BorderLayout.NORTH);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 40, 40, 40));
         jPanel4.setPreferredSize(new java.awt.Dimension(800, 600));
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
 
@@ -264,63 +322,228 @@ public class ListBookCategory extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 348, Short.MAX_VALUE)
+            .addGap(0, 325, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel2);
 
-        add(jPanel4, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel4, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        if (addNewCategoryField.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Please enter a category");
-            return;
-    }
-    CategoryModel categoryModel = new CategoryModel();
-    categoryModel.setGenre(addNewCategoryField.getText());
-    Boolean isAdded = categoryService.addNewCategory(categoryModel);
-    categoryModel = categoryService.getCategoryByName(categoryModel.getGenre());
-    if (isAdded) {
-            DefaultTableModel tblModel = (DefaultTableModel) categoryList.getModel();
-            tblModel.addRow(new Object[] { categoryModel.getId(), categoryModel.getGenre(), false });
+    private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
+        String search = searchField.getText();
+        List<CategoryModel> categoryModels = categoryService.getAllCategories();
+        List<CategoryModel> searchList = new ArrayList<>();
+        for (CategoryModel categoryModel : categoryModels) {
+            if (categoryModel.getGenre().toLowerCase().contains(search.toLowerCase())) {
+                searchList.add(categoryModel);
+            }
+        }
+        loadDataToTable(searchList);
+    }//GEN-LAST:event_searchFieldKeyReleased
 
-            addNewCategoryField.setText("");
-            JOptionPane.showMessageDialog(this, "Category added successfully");
-    } else {
-            addNewCategoryField.setText("");
-            JOptionPane.showMessageDialog(this, "Failed to add category");
-    }
-    }//GEN-LAST:event_addButtonActionPerformed
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_addButtonActionPerformed
+        // if (addNewCategoryField.getText().equals("")) {
+        // JOptionPane.showMessageDialog(this, "Please enter a category");
+        // return;
+        // }
+        // CategoryModel categoryModel = new CategoryModel();
+        // categoryModel.setGenre(addNewCategoryField.getText());
+        // Boolean isAdded = categoryService.addNewCategory(categoryModel);
+        // categoryModel = categoryService.getCategoryByName(categoryModel.getGenre());
+        // if (isAdded) {
+        // DefaultTableModel tblModel = (DefaultTableModel) categoryList.getModel();
+        // tblModel.addRow(new Object[] { categoryModel.getId(),
+        // categoryModel.getGenre(), false });
 
-    private void addNewCategoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewCategoryFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addNewCategoryFieldActionPerformed
+        // addNewCategoryField.setText("");
+        // JOptionPane.showMessageDialog(this, "Category added successfully");
+        // } else {
+        // addNewCategoryField.setText("");
+        // JOptionPane.showMessageDialog(this, "Failed to add category");
+        // }
+    }// GEN-LAST:event_addButtonActionPerformed
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
+        loadDataToTable(categoryService.getAllCategories());
+    }// GEN-LAST:event_refreshButtonActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
+        AddCategory a;
+        a = new AddCategory(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this), rootPaneCheckingEnabled,
+                categoryService);
+        a.setVisible(true);
+    }// GEN-LAST:event_btnAddActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleteActionPerformed
+        if (categoryList.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "please select the category to delete !");
+        } else {
+            Category category = getSelectCategory();
+
+            int checkSure = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this category ?",
+                    "Verify delete this category", JOptionPane.YES_NO_OPTION);
+            if (checkSure == JOptionPane.YES_OPTION) {
+                try {
+                    categoryService.deleteCategory(category.getId());
+                    JOptionPane.showMessageDialog(this, "Delete Succesfull !");
+                    loadDataToTable(categoryService.getAllCategories());
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Delete failed !");
+                }
+            }
+        }
+    }// GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
+        if (categoryList.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "please select the category to edit !");
+        } else {
+            // Category category = getSelectCategory();
+            EditCategory editCategory = new EditCategory(this,
+                    (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                    rootPaneCheckingEnabled, categoryService);
+            editCategory.setVisible(true);
+        }
+    }// GEN-LAST:event_btnEditActionPerformed
+
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnImportActionPerformed
+        importExcel();  
+    }// GEN-LAST:event_btnImportActionPerformed
+
+    private void importExcel() {
+        File file;
+        JFileChooser chooser = new JFileChooser();
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        XSSFWorkbook workbook = null;
+        ArrayList<Category> categories = new ArrayList<Category>();
+        chooser.setDialogTitle("Import Excel File");
+        int result = chooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            file = chooser.getSelectedFile();
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                workbook = new XSSFWorkbook(bis);
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                System.out.println("Row count: " + sheet.getLastRowNum());
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    XSSFRow row = sheet.getRow(i);
+                    Category a = new Category();
+                    a.setId(row.getCell(0).getStringCellValue());
+                    a.setGenre(row.getCell(1).getStringCellValue());
+                    // if (a.getAdminName().isEmpty() || a.getPhoneNumber().isEmpty() ||
+                    // a.getPwd().isEmpty()
+                    // || a.getDob().isEmpty()) {
+                    // JOptionPane.showMessageDialog(this, "Import failed !");
+                    // return;
+                    // }
+                    categories.add(a);
+                }
+                for (Category a : categories) {
+                    System.out.println(a.toString());
+                    categoryService.addNewCategory(a.getGenre());
+                    if (categoryService.getbyId(a.getId()).getId() == null) {
+                        JOptionPane.showMessageDialog(this, "Import failed !");
+                        return;
+                    }
+                }
+                loadDataToTable(categoryService.getAllCategories());
+                JOptionPane.showMessageDialog(this, "Import successful !");
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Import failed !");
+                Logger.getLogger(AdminList.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Import failed !");
+                Logger.getLogger(AdminList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            finally {
+                try {
+                    if (workbook != null)
+                        workbook.close();
+                    if (bis != null)
+                        bis.close();
+                    if (fis != null)
+                        fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnExportActionPerformed
+        exportExcel();
+    }// GEN-LAST:event_btnExportActionPerformed
+
+    private void exportExcel() {
+        JFileChooser chooser = new JFileChooser();
+        try {
+            chooser.showSaveDialog(this);
+            File file = chooser.getSelectedFile();
+            if (file != null) {
+                file = new File(file.toString() + ".xlsx");
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("Admins");
+                XSSFRow row;
+                row = sheet.createRow(0);
+
+                for (int i = 0; i < categoryList.getColumnCount(); i++) {
+                    row.createCell(i).setCellValue(categoryList.getColumnName(i));
+                }
+                for (int i = 0; i < categoryList.getRowCount(); i++) {
+                    row = sheet.createRow(i + 1);
+                    for (int j = 0; j < categoryList.getColumnCount(); j++) {
+                        if (categoryList.getValueAt(i, j) != null) {
+                            row.createCell(j).setCellValue(categoryList.getValueAt(i, j).toString());
+                        }
+                    }
+                }
+                FileOutputStream fos = new FileOutputStream(file);
+                workbook.write(fos);
+                fos.close();
+                workbook.close();
+                openFile(file.toString());
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    public void openFile(String file) {
+        try {
+            File myFile = new File(file);
+            Desktop.getDesktop().open(myFile);
+        } catch (IOException ex) {
+            // no application registered for PDFs
+            JOptionPane.showMessageDialog(this, "No application registered for PDFs");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addButton;
-    private javax.swing.JTextField addNewCategoryField;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnImport;
     private javax.swing.JTable categoryList;
-    private javax.swing.JButton filterButton;
-    private javax.swing.JComboBox<String> filterSearch;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel20;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JButton searchButton;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchField;
     // End of variables declaration//GEN-END:variables
 }
