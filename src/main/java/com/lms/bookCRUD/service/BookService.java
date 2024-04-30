@@ -281,6 +281,10 @@ public class BookService {
         return bookModel;
     }
 
+    public boolean updateQuantity(String bookId, int quantity) {
+        return bookDao.updateQuantity(bookId, quantity);
+    }
+
     private List<String> getAuthorIds(String bookId) {
         List<String> authorIds = new ArrayList<>();
         bookAuthorDao.findByBookId(bookId).forEach(bookAuthor -> authorIds.add(bookAuthor.getAuthorId()));
@@ -330,5 +334,7 @@ public class BookService {
     private Publisher getPublisher(String id) {
         return publisherDao.findById(id);
     }
+
+
 
 }

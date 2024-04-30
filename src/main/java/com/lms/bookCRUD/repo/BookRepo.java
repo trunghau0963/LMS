@@ -211,6 +211,31 @@ public class BookRepo implements BookDao {
         return false;
     }
 
+    public boolean updateQuantity(String bookId, int quantity) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql1 = "SELECT quantity FROM book WHERE bookId = ?";
+            PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
+            preparedStatement1.setString(1, bookId);
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            if (resultSet.next()) {
+                int currentQuantity = resultSet.getInt("quantity");
+                quantity = currentQuantity - quantity;
+            }
+            preparedStatement1.close();
+            String sql = "UPDATE book SET quantity = ? WHERE bookId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, quantity);
+            preparedStatement.setString(2, bookId);
+            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            return rowsAffected > 0;
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public boolean delete(String bookId) {
         try {
