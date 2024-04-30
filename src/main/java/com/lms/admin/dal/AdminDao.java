@@ -22,4 +22,10 @@ public interface AdminDao {
 
   public Employee getEmployeeByName(String name);
 
+  public Admin getAdminByPhoneNumber(String phoneNumber);
+
+  public Admin getAdminByName(String name);
+
+  public boolean toggleBlock(String phoneNumber, boolean isBlocked);
+
 }

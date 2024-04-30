@@ -107,207 +107,134 @@ public class ListBook extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
-        // Code">//GEN-BEGIN:initComponents
-        private void initComponents() {
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-                borderPanel1 = new com.lms.custom.BorderPanel();
-                jTextField1 = new javax.swing.JTextField();
-                jComboBox1 = new javax.swing.JComboBox<>();
-                jButton1 = new javax.swing.JButton();
-                jScrollPane2 = new javax.swing.JScrollPane();
-                jTable2 = new javax.swing.JTable() {
+        borderPanel1 = new com.lms.custom.BorderPanel();
+        jTextField1 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        label1 = new java.awt.Label();
 
-                        public boolean isCellEditable(int row, int column) {
-                                if (column < 6)
-                                        return false;
-                                return true;
-                        }
+        jTextField1.setText("Search...");
+        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jTextField1.setPreferredSize(new java.awt.Dimension(387, 27));
 
-                };
-                jButton2 = new javax.swing.JButton();
-                label1 = new java.awt.Label();
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alphabet", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jComboBox1.setPreferredSize(new java.awt.Dimension(94, 27));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
-                setSize(new java.awt.Dimension(900, 600));
+        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jButton1.setPreferredSize(new java.awt.Dimension(36, 27));
+        jButton1.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
+        jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
+        jButton1.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
+        jButton1.setSelected(true);
+        jButton1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
 
-                jTextField1.setText("Search...");
-                jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                jTextField1.setPreferredSize(new java.awt.Dimension(387, 27));
+        jTable2.setBackground(new java.awt.Color(231, 226, 226));
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"", "", "", "", null, null,  new Boolean(false)},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Title", "Category", "Author", "Price", "Quantity", "Lock/Hide"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Boolean.class
+            };
 
-                jComboBox1.setModel(
-                                new javax.swing.DefaultComboBoxModel<>(
-                                                new String[] { "Alphabet", "Item 2", "Item 3", "Item 4" }));
-                jComboBox1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                jComboBox1.setPreferredSize(new java.awt.Dimension(94, 27));
-                jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jComboBox1ActionPerformed(evt);
-                        }
-                });
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable2.getColumnModel().getColumn(6).setCellRenderer(new ToggleRenderer());
+        jTable2.getColumnModel().getColumn(6).setCellEditor(new ToggleEditor());
+        jTable2.setColumnSelectionAllowed(true);
+        jTable2.setGridColor(new java.awt.Color(0, 0, 0));
+        jTable2.setRowHeight(26);
+        jTable2.setShowGrid(true);
+        jScrollPane2.setViewportView(jTable2);
+        jTable2.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-                jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-                jButton1.setPreferredSize(new java.awt.Dimension(36, 27));
-                jButton1.setPressedIcon(
-                                new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
-                jButton1.setRolloverIcon(
-                                new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
-                jButton1.setRolloverSelectedIcon(
-                                new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
-                jButton1.setSelected(true);
-                jButton1.setSelectedIcon(
-                                new javax.swing.ImageIcon(getClass().getResource("/com/lms/book/search-icon.png"))); // NOI18N
+        jButton2.setBackground(new java.awt.Color(60, 58, 72));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("ADD NEW");
+        jButton2.setPreferredSize(new java.awt.Dimension(85, 26));
+        jButton2.setRequestFocusEnabled(false);
 
-                jTable2.setBackground(new java.awt.Color(231, 226, 226));
+        label1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        label1.setText("List Books");
 
-                jTable2.setModel(new javax.swing.table.DefaultTableModel(
-                                new Object[][] {},
-                                new String[] {
-                                                "ID", "Title", "Category", "Author", "Publisher", "Price", "Show/Hide",
-                                                "Action"
-                                }) {
-                        Class[] types = new Class[] {
-                                        java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                                        java.lang.String.class,
-                                        java.lang.String.class, java.lang.Float.class, java.lang.Boolean.class,
-                                        java.lang.Object.class
-                        };
+        javax.swing.GroupLayout borderPanel1Layout = new javax.swing.GroupLayout(borderPanel1);
+        borderPanel1.setLayout(borderPanel1Layout);
+        borderPanel1Layout.setHorizontalGroup(
+            borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(borderPanel1Layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(60, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, borderPanel1Layout.createSequentialGroup()
+                .addGroup(borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(borderPanel1Layout.createSequentialGroup()
+                        .addGap(294, 294, 294)
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(borderPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2)))
+                .addGap(15, 15, 15))
+        );
+        borderPanel1Layout.setVerticalGroup(
+            borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, borderPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(172, Short.MAX_VALUE))
+        );
 
-                        public Class getColumnClass(int columnIndex) {
-                                return types[columnIndex];
-                        }
-                });
-                jTable2.getColumnModel().getColumn(6).setCellRenderer(new ToggleRenderer());
-                jTable2.getColumnModel().getColumn(6).setCellEditor(new ToggleEditor());
-                jTable2.getColumnModel().getColumn(7).setCellRenderer(new TableToggleRenderer());
-                jTable2.getColumnModel().getColumn(7).setCellEditor(new TableToggleEditor());
-
-                jTable2.setColumnSelectionAllowed(true);
-                jTable2.setGridColor(new java.awt.Color(0, 0, 0));
-                jTable2.setRowHeight(26);
-                jTable2.setShowGrid(true);
-                jScrollPane2.setViewportView(jTable2);
-                jTable2.getColumnModel().getSelectionModel()
-                                .setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-                jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jTable2MouseClicked(evt);
-                        }
-                });
-                jButton2.setBackground(new java.awt.Color(60, 58, 72));
-                jButton2.setForeground(new java.awt.Color(255, 255, 255));
-                jButton2.setText("ADD NEW");
-                jButton2.setPreferredSize(new java.awt.Dimension(85, 26));
-                jButton2.setRequestFocusEnabled(false);
-                jButton2.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton2ActionPerformed(evt);
-                        }
-                });
-
-                label1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-                label1.setText("List Books");
-
-                javax.swing.GroupLayout borderPanel1Layout = new javax.swing.GroupLayout(borderPanel1);
-                borderPanel1.setLayout(borderPanel1Layout);
-                borderPanel1Layout.setHorizontalGroup(
-                                borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(borderPanel1Layout.createSequentialGroup()
-                                                                .addGap(61, 61, 61)
-                                                                .addComponent(jComboBox1,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                94,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(0, 0, 0)
-                                                                .addComponent(jTextField1,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                449,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(0, 0, 0)
-                                                                .addComponent(jButton1,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                36,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addContainerGap(60, Short.MAX_VALUE))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, borderPanel1Layout
-                                                                .createSequentialGroup()
-                                                                .addGroup(borderPanel1Layout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                .addGroup(borderPanel1Layout
-                                                                                                .createSequentialGroup()
-                                                                                                .addGap(294, 294, 294)
-                                                                                                .addComponent(label1,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                Short.MAX_VALUE)
-                                                                                                .addComponent(jButton2,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                .addGroup(borderPanel1Layout
-                                                                                                .createSequentialGroup()
-                                                                                                .addContainerGap()
-                                                                                                .addComponent(jScrollPane2)))
-                                                                .addGap(15, 15, 15)));
-                borderPanel1Layout.setVerticalGroup(
-                                borderPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, borderPanel1Layout
-                                                                .createSequentialGroup()
-                                                                .addGap(37, 37, 37)
-                                                                .addGroup(borderPanel1Layout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                .addComponent(jButton1,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(jTextField1,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                .addComponent(jComboBox1,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                .addGap(32, 32, 32)
-                                                                .addGroup(borderPanel1Layout
-                                                                                .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                .addComponent(label1,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(jButton2,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                28,
-                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                .addGap(16, 16, 16)
-                                                                .addComponent(jScrollPane2,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                288,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addContainerGap(172, Short.MAX_VALUE)));
-
-                javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-                this.setLayout(layout);
-                layout.setHorizontalGroup(
-                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout
-                                                                .createSequentialGroup()
-                                                                .addGap(0, 200, Short.MAX_VALUE)
-                                                                .addComponent(borderPanel1,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)));
-                layout.setVerticalGroup(
-                                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(borderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-
-        }// </editor-fold>//GEN-END:initComponents
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 200, Short.MAX_VALUE)
+                .addComponent(borderPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(borderPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
 
         private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
                 // TODO add your handling code here:
@@ -366,14 +293,14 @@ public class ListBook extends javax.swing.JPanel {
                 });
         }
 
-        // Variables declaration - do not modify//GEN-BEGIN:variables
-        private com.lms.custom.BorderPanel borderPanel1;
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
-        private javax.swing.JComboBox<String> jComboBox1;
-        private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JTable jTable2;
-        private javax.swing.JTextField jTextField1;
-        private java.awt.Label label1;
-        // End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.lms.custom.BorderPanel borderPanel1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
+    private java.awt.Label label1;
+    // End of variables declaration//GEN-END:variables
 }

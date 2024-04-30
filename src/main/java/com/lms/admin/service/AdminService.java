@@ -43,4 +43,16 @@ public class AdminService {
     return adminDao.getEmployeeByName(name);
   }
 
+  public Admin getAdminByPhoneNumber(String phoneNumber) {
+    return adminDao.getAdminByPhoneNumber(phoneNumber);
+  }
+
+  public Admin getAdminByName(String name) {
+    return adminDao.getAdminByName(name);
+  }
+
+  public boolean toggleBlockUser(String phoneNumber, boolean isBlocked) {
+    return adminDao.toggleBlock(phoneNumber, isBlocked);
+  }
+
 }

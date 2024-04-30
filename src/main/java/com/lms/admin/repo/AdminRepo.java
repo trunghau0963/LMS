@@ -182,14 +182,14 @@ public class AdminRepo implements AdminDao {
     try {
       connection = JDBCConnection.getJDBConnection();
       Statement statement = connection.createStatement();
-      resultSet = statement.executeQuery("SELECT * FROM employee WHERE empName = '" + phoneNumber + "'");
+      resultSet = statement.executeQuery("SELECT * FROM employee WHERE phonenumber = '" + phoneNumber + "'");
       while (resultSet.next()) {
-        user.setName(resultSet.getString("empName"));
-        user.setPhoneNumber(resultSet.getString("phoneNumber"));
+        user.setName(resultSet.getString("empname"));
+        user.setPhoneNumber(resultSet.getString("phonenumber"));
         user.setPwd(resultSet.getString("pwd"));
         user.setGender(resultSet.getString("gender"));
         user.setDob(resultSet.getString("dob"));
-        user.setIsBlock(resultSet.getBoolean("isBlock"));
+        user.setIsBlock(resultSet.getBoolean("isblock"));
       }
     } catch (SQLException e) {
       System.out.println("Connection to PostgreSQL failed.");
@@ -204,7 +204,7 @@ public class AdminRepo implements AdminDao {
         }
       }
     }
-    return null;
+    return user;
   }
 
   public Employee getEmployeeByName(String name) {
@@ -214,14 +214,14 @@ public class AdminRepo implements AdminDao {
     try {
       connection = JDBCConnection.getJDBConnection();
       Statement statement = connection.createStatement();
-      resultSet = statement.executeQuery("SELECT * FROM employee WHERE empName = '" + name + "'");
+      resultSet = statement.executeQuery("SELECT * FROM employee WHERE empname = '" + name + "'");
       while (resultSet.next()) {
-        user.setName(resultSet.getString("empName"));
-        user.setPhoneNumber(resultSet.getString("phoneNumber"));
+        user.setName(resultSet.getString("empname"));
+        user.setPhoneNumber(resultSet.getString("phonenumber"));
         user.setPwd(resultSet.getString("pwd"));
         user.setGender(resultSet.getString("gender"));
         user.setDob(resultSet.getString("dob"));
-        user.setIsBlock(resultSet.getBoolean("isBlock"));
+        user.setIsBlock(resultSet.getBoolean("isblock"));
       }
     } catch (SQLException e) {
       System.out.println("Connection to PostgreSQL failed.");
@@ -236,6 +236,94 @@ public class AdminRepo implements AdminDao {
         }
       }
     }
-    return null;
+    return user;
+  }
+
+  public Admin getAdminByPhoneNumber(String phoneNumber) {
+    Connection connection = null;
+    ResultSet resultSet;
+    Admin user = new Admin();
+    try {
+      connection = JDBCConnection.getJDBConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM administrator WHERE phonenumber = '" + phoneNumber + "'");
+      while (resultSet.next()) {
+        user.setName(resultSet.getString("adminname"));
+        user.setPhoneNumber(resultSet.getString("phonenumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return user;
+  }
+
+  public Admin getAdminByName(String name) {
+    Connection connection = null;
+    ResultSet resultSet;
+    Admin user = new Admin();
+    try {
+      connection = JDBCConnection.getJDBConnection();
+      Statement statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM administrator WHERE adminname = '" + name + "'");
+      while (resultSet.next()) {
+        user.setName(resultSet.getString("adminname"));
+        user.setPhoneNumber(resultSet.getString("phonenumber"));
+        user.setPwd(resultSet.getString("pwd"));
+        user.setGender(resultSet.getString("gender"));
+        user.setDob(resultSet.getString("dob"));
+      }
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return user;
+  }
+
+  public boolean toggleBlock(String phoneNumber, boolean isBlocked) {
+    Connection connection = null;
+    try {
+      connection = JDBCConnection.getJDBConnection();
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("UPDATE employee SET isblock = " + isBlocked + " WHERE phonenumber = '"
+          + phoneNumber + "'");
+
+    } catch (SQLException e) {
+      System.out.println("Connection to PostgreSQL failed.");
+      e.printStackTrace();
+      return false;
+    } finally {
+      // Close the connection
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+
+    }
+    return true;
   }
 }

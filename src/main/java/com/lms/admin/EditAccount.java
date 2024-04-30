@@ -4,6 +4,8 @@
  */
 package com.lms.admin;
 
+import java.text.SimpleDateFormat;
+
 import javax.swing.JOptionPane;
 
 import com.lms.admin.dal.AdminDao;
@@ -228,7 +230,7 @@ public class EditAccount extends javax.swing.JPanel {
         String userPhoneNumber = contacttxt.getText().trim();
         String pass = String.valueOf(pwd.getPassword());
         String fullName = fullNametxt.getText().trim();
-        String dob = "1/1/2003";
+        String dob = new SimpleDateFormat("yyyy-MM-dd").format(jDateChooser1.getDate());
         String gender = genderChoose.getSelectedItem().toString().toLowerCase();
 
         System.out.println(userPhoneNumber);
