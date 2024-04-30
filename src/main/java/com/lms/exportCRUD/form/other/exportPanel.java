@@ -4,29 +4,28 @@
  */
 package com.lms.exportCRUD.form.other;
 
-import java.awt.Font;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.lms.bookCRUD.service.BookService;
-import com.lms.bookCRUD.entities.Book;
 import com.lms.bookCRUD.model.BookModel;
 import com.lms.bookCRUD.ui.CenterTableCellRenderer;
-import com.lms.bookCRUD.ui.EditToggleEditor;
-import com.lms.bookCRUD.ui.EditToggleRenderer;
-import com.lms.bookCRUD.ui.ToggleEditor;
-import com.lms.bookCRUD.ui.ToggleRenderer;
-import com.lms.categoryCRUD.entities.Category;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import javax.swing.*;
-import javax.swing.table.*;
 
 /**
  *
@@ -472,11 +471,9 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                                                         "Success", JOptionPane.INFORMATION_MESSAGE);
                                                         BookModel bookModel = new BookModel();
                                                         bookModel.setId((String) bookList.getValueAt(selectedRow, 1));
-                                                        bookModel.setTitle(
-                                                                        (String) bookList.getValueAt(selectedRow, 2));
+                                                        bookModel.setTitle((String) bookList.getValueAt(selectedRow, 2));
                                                         bookModel.setEdition((int) bookList.getValueAt(selectedRow, 3));
-                                                        bookModel.setSalePrice(
-                                                                        (float) bookList.getValueAt(selectedRow, 7));
+                                                        bookModel.setSalePrice((float) bookList.getValueAt(selectedRow, 7));
                                                         bookModel.setQuantity((int) numberOfBooks);
 
                                                         bookAlready.add(bookModel);
@@ -504,7 +501,6 @@ public class exportPanel extends javax.swing.JInternalFrame {
 
                                                         bookList1.setModel(tblModel);
                                                         totalNumber.setText(String.valueOf(totalPrice) + "đ");
-
                                                 }
 
                                         }
@@ -544,45 +540,8 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 }
 
                 bookList.setModel(tblModel);
-                // bookList.getColumnModel().getColumn(8).setCellRenderer(new ToggleRenderer());
-                // bookList.getColumnModel().getColumn(8).setCellEditor(new ToggleEditor());
-                // bookList.getColumnModel().getColumn(9).setCellRenderer(new
-                // EditToggleRenderer());
-                // bookList.getColumnModel().getColumn(9).setCellEditor(new EditToggleEditor());
         }
 
-        // public void reloadTable1(DefaultTableModel tblModel, List<BookModel>
-        // bookModels) {
-        // CenterTableCellRenderer centerRenderer = new CenterTableCellRenderer();
-        // int idx = 0;
-        // customTable(bookList1);
-        // tblModel.setRowCount(0);
-        // tblModel.addColumn("No.");
-        // tblModel.addColumn("ID");
-        // tblModel.addColumn("Title");
-        // tblModel.addColumn("Edition");
-        // tblModel.addColumn("Sale Price");
-        // tblModel.addColumn("Quantity");
-        // float totalPrice = 0;
-        // for (BookModel bookModel : bookModels) {
-        // tblModel.addRow(new Object[] { ++idx, bookModel.getId(),
-        // bookModel.getTitle(),
-        // bookModel.getEdition(),
-        // bookModel.getSalePrice(), bookModel.getQuantity()
-        // });
-        // totalPrice += bookModel.getSalePrice() * bookModel.getQuantity();
-        // }
-
-        // for (int columnIndex = 0; columnIndex < bookList1.getColumnCount();
-        // columnIndex++) {
-        // bookList1.getColumnModel().getColumn(columnIndex).setCellRenderer(centerRenderer);
-        // }
-
-        // totalNumber.setText(String.valueOf(totalPrice) + "đ");
-
-        // bookList1.setModel(tblModel);
-
-        // }
 
         private void customTable(javax.swing.JTable table) {
                 table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -645,6 +604,7 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 for (BookModel book : bookAlready) {
                         bookService.updateQuantity(book.getId(), book.getQuantity());
                 }
+                exportExcel();
                 JOptionPane.showMessageDialog(null, "Export successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 bookAlready.clear();
                 DefaultTableModel tblModel = new DefaultTableModel();
@@ -657,6 +617,51 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 bookList.setModel(tblModel1);
 
         }// GEN-LAST:event_jButton9ActionPerformed
+
+        private void exportExcel() {
+                JFileChooser chooser = new JFileChooser();
+                try {
+                        chooser.showSaveDialog(this);
+                        File file = chooser.getSelectedFile();
+                        if (file != null) {
+                                file = new File(file.toString() + ".xlsx");
+                                XSSFWorkbook workbook = new XSSFWorkbook();
+                                XSSFSheet sheet = workbook.createSheet("Admins");
+                                XSSFRow row;
+                                row = sheet.createRow(0);
+
+                                for (int i = 0; i < bookList1.getColumnCount(); i++) {
+                                        row.createCell(i).setCellValue(bookList1.getColumnName(i));
+                                }
+                                for (int i = 0; i < bookList1.getRowCount(); i++) {
+                                        row = sheet.createRow(i + 1);
+                                        for (int j = 0; j < bookList1.getColumnCount(); j++) {
+                                                if (bookList1.getValueAt(i, j) != null) {
+                                                        row.createCell(j).setCellValue(
+                                                                        bookList1.getValueAt(i, j).toString());
+                                                }
+                                        }
+                                }
+                                FileOutputStream fos = new FileOutputStream(file);
+                                workbook.write(fos);
+                                fos.close();
+                                workbook.close();
+                                openFile(file.toString());
+                        }
+                } catch (Exception e) {
+                        e.getStackTrace();
+                }
+        }
+
+        public void openFile(String file) {
+                try {
+                        File myFile = new File(file);
+                        Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                        // no application registered for PDFs
+                        JOptionPane.showMessageDialog(this, "No application registered for PDFs");
+                }
+        }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JTable bookList;
