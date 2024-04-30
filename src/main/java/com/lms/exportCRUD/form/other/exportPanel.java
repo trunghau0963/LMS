@@ -604,7 +604,9 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 for (BookModel book : bookAlready) {
                         bookService.updateQuantity(book.getId(), book.getQuantity());
                 }
+
                 exportExcel();
+                
                 JOptionPane.showMessageDialog(null, "Export successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 bookAlready.clear();
                 DefaultTableModel tblModel = new DefaultTableModel();
