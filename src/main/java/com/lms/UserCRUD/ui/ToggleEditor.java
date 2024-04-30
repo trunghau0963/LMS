@@ -1,4 +1,4 @@
-package com.lms.userCRUD.ui;
+package com.lms.UserCRUD.ui;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;

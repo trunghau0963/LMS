@@ -18,7 +18,7 @@ import com.lms.bookCRUD.ui.EditToggleEditor;
 import com.lms.bookCRUD.ui.EditToggleRenderer;
 import com.lms.bookCRUD.ui.ToggleEditor;
 import com.lms.bookCRUD.ui.ToggleRenderer;
-import com.lms.userCRUD.form.other.AddAccount;
+import com.lms.UserCRUD.form.other.AddAccount;
 
 public class AllBook extends javax.swing.JInternalFrame {
 

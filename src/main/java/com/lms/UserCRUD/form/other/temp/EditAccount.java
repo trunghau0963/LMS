@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.lms.userCRUD.form.other.temp;
+package com.lms.UserCRUD.form.other.temp;
 
 import java.awt.CardLayout;
 import java.text.SimpleDateFormat;
@@ -10,9 +10,9 @@ import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.lms.userCRUD.dal.AdminDao;
-import com.lms.userCRUD.repo.AdminRepo;
-import com.lms.userCRUD.service.AdminService;
+import com.lms.UserCRUD.dal.AdminDao;
+import com.lms.UserCRUD.repo.AdminRepo;
+import com.lms.UserCRUD.service.AdminService;
 
 /**
  *
@@ -57,7 +57,7 @@ public class EditAccount extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         saveButton = new javax.swing.JButton();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
+        imageAvatar1 = new com.lms.UserCRUD.ui.ImageAvatar();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -289,7 +289,7 @@ public class EditAccount extends javax.swing.JPanel {
     private javax.swing.JTextField contacttxt;
     private javax.swing.JTextField fullNametxt;
     private javax.swing.JComboBox<String> genderChoose;
-    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
+    private com.lms.UserCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel10;

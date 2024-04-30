@@ -1,11 +1,11 @@
-package com.lms.userCRUD.form;
+package com.lms.UserCRUD.form;
 
 import javax.swing.*;
 
-import com.lms.userCRUD.dal.AdminDao;
-import com.lms.userCRUD.form.other.ViewListAccount;
-import com.lms.userCRUD.repo.AdminRepo;
-import com.lms.userCRUD.service.AdminService;
+import com.lms.UserCRUD.dal.AdminDao;
+import com.lms.UserCRUD.form.other.ViewListAccount;
+import com.lms.UserCRUD.repo.AdminRepo;
+import com.lms.UserCRUD.service.AdminService;
 
 import java.awt.*;
 

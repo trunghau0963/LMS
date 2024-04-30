@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.lms.userCRUD.form.other;
+package com.lms.UserCRUD.form.other;
 
 import java.util.Date;
 import java.text.ParseException;
@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
-import com.lms.userCRUD.service.AdminService;
+import com.lms.UserCRUD.service.AdminService;
 
 /**
  *

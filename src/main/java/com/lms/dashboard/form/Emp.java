@@ -20,7 +20,7 @@ import com.lms.exportCRUD.form.ExportView;
 import com.lms.importCRUD.form.other.ImportPanel;
 import com.lms.publisherCRUD.form.PublishersView;
 import com.lms.publisherCRUD.form.other.ListPublisherPanel;
-import com.lms.userCRUD.form.InfoPage;
+import com.lms.UserCRUD.form.InfoPage;
 import com.lms.importCRUD.form.ImportView;
 
 public class Emp extends javax.swing.JPanel {

@@ -5,7 +5,7 @@
 package com.lms.bookCRUD.form.other;
 
 import com.lms.bookCRUD.model.PublisherModel;
-import com.lms.userCRUD.form.other.*;
+import com.lms.UserCRUD.form.other.*;
 import javax.swing.JOptionPane;
 
 /**
