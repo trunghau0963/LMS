@@ -1,4 +1,4 @@
-package com.lms.UserCRUD.repo;
+package com.lms.accountCRUD.repo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,13 +7,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lms.accountCRUD.dal.AdminDao;
+import com.lms.accountCRUD.model.ModelAddUser;
+import com.lms.accountCRUD.model.ModelEditAccount;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
 import com.lms.connection.JDBCConnection;
-import com.lms.UserCRUD.dal.AdminDao;
-import com.lms.UserCRUD.model.ModelAddUser;
-import com.lms.UserCRUD.model.ModelEditAccount;
 
 public class AdminRepo implements AdminDao {
 

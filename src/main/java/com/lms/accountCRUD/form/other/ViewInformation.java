@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 
-package com.lms.UserCRUD.form.other;
+package com.lms.accountCRUD.form.other;
 
 import java.awt.CardLayout;
 import javax.swing.JPanel;
@@ -41,7 +41,7 @@ public class ViewInformation extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        imageAvatar1 = new com.lms.UserCRUD.ui.ImageAvatar();
+        imageAvatar1 = new com.lms.accountCRUD.ui.ImageAvatar();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -175,7 +175,7 @@ public class ViewInformation extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit;
     private javax.swing.JButton Home;
-    private com.lms.UserCRUD.ui.ImageAvatar imageAvatar1;
+    private com.lms.accountCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

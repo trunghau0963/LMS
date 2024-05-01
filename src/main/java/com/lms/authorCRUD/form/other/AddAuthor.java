@@ -6,7 +6,7 @@ package com.lms.authorCRUD.form.other;
 
 import javax.swing.JOptionPane;
 
-import com.lms.UserCRUD.form.other.ViewListAccount;
+import com.lms.accountCRUD.form.other.ViewListAccount;
 
 /**
  *

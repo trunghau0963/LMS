@@ -40,13 +40,13 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.lms.accountCRUD.form.other.AdminList;
 import com.lms.publisherCRUD.SwitchButton.ToggleRenderer;
 import com.lms.publisherCRUD.dal.PublisherDao;
 import com.lms.publisherCRUD.entities.Publisher;
 import com.lms.publisherCRUD.form.other.temp.EditInfoPublisherPanel;
 import com.lms.publisherCRUD.repo.PublisherRepo;
 import com.lms.publisherCRUD.service.PublisherService;
-import com.lms.UserCRUD.form.other.AdminList;
 
 class PublishersTableEditor extends AbstractCellEditor implements TableCellEditor {
     private JToggleButton button = new JToggleButton("Unhide");
