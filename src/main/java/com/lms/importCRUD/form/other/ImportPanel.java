@@ -7,15 +7,19 @@ package com.lms.importCRUD.form.other;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
+import java.awt.Desktop;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,6 +32,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.lms.importCRUD.models.AuthorModel;
 import com.lms.importCRUD.models.BookModel;
@@ -46,6 +59,18 @@ import com.lms.importCRUD.repo.SheetRepo;
 import com.lms.importCRUD.service.BookService;
 import com.lms.importCRUD.service.SheetDetailService;
 import com.lms.importCRUD.service.SheetService;
+
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Cell;
 
 /**
  *
@@ -96,7 +121,27 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         }
                 };
 
+                exportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                exportPDF();
+                        }
+                });
+
                 bookListTable.setModel(listBookModel);
+                setExportBtnEven();
+        }
+
+        void setExportBtnEven() {
+                exportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                exportPDF();
+                        }
+                });
+                exportExcelBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                exportExcel();
+                        }
+                });
         }
 
         public void setImportListBookModel() {
@@ -124,7 +169,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 return canEdit[columnIndex];
                         }
                 };
-                importbookListTable.setModel(importListBookModel);
+                importBookListTable.setModel(importListBookModel);
         }
 
         public void setRowSorter(JTable tbName, List<BookModel> books) {
@@ -242,7 +287,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 titleTxT1 = new javax.swing.JTextField();
                 jPanel5 = new javax.swing.JPanel();
                 jScrollPane3 = new javax.swing.JScrollPane();
-                importbookListTable = new javax.swing.JTable();
+                importBookListTable = new javax.swing.JTable();
                 jPanel13 = new javax.swing.JPanel();
                 jPanel28 = new javax.swing.JPanel();
                 removeBtnZone = new javax.swing.JPanel();
@@ -252,8 +297,8 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 jPanel27 = new javax.swing.JPanel();
                 typeFileChooseZone = new javax.swing.JPanel();
                 removeBtn = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
-                jButton4 = new javax.swing.JButton();
+                exportPdfBtn = new javax.swing.JButton();
+                exportExcelBtn = new javax.swing.JButton();
 
                 setBorder(null);
                 getContentPane().setLayout(
@@ -492,7 +537,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 jScrollPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 2));
 
-                importbookListTable.setModel(new javax.swing.table.DefaultTableModel(
+                importBookListTable.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
 
                                 },
@@ -515,14 +560,14 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 return canEdit[columnIndex];
                         }
                 });
-                importbookListTable.setRowHeight(30);
-                importbookListTable.setShowGrid(true);
-                importbookListTable.addMouseListener(new java.awt.event.MouseAdapter() {
+                importBookListTable.setRowHeight(30);
+                importBookListTable.setShowGrid(true);
+                importBookListTable.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                importbookListTableMouseClicked(evt);
+                                importBookListTableMouseClicked(evt);
                         }
                 });
-                jScrollPane3.setViewportView(importbookListTable);
+                jScrollPane3.setViewportView(importBookListTable);
 
                 jPanel5.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
@@ -625,13 +670,14 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 removeBtn.setPreferredSize(new java.awt.Dimension(80, 40));
                 typeFileChooseZone.add(removeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-                jButton3.setText("Pdf");
-                jButton3.setPreferredSize(new java.awt.Dimension(80, 40));
-                typeFileChooseZone.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+                exportPdfBtn.setText("Pdf");
+                exportPdfBtn.setPreferredSize(new java.awt.Dimension(80, 40));
+                typeFileChooseZone.add(exportPdfBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
-                jButton4.setText("Excel");
-                jButton4.setPreferredSize(new java.awt.Dimension(80, 40));
-                typeFileChooseZone.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+                exportExcelBtn.setText("Excel");
+                exportExcelBtn.setPreferredSize(new java.awt.Dimension(80, 40));
+                typeFileChooseZone.add(exportExcelBtn,
+                                new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
                 jPanel27.add(typeFileChooseZone, java.awt.BorderLayout.CENTER);
 
@@ -642,11 +688,11 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void importbookListTableMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_importbookListTableMouseClicked
+        private void importBookListTableMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_importBookListTableMouseClicked
                 // TODO add your handling code here:
                 if (evt.getClickCount() == 2) { // Kiểm tra xem người dùng đã nhấp đúp
-                        int row = importbookListTable.getSelectedRow();
-                        String idObject = (String) importbookListTable.getValueAt(row, 0);
+                        int row = importBookListTable.getSelectedRow();
+                        String idObject = (String) importBookListTable.getValueAt(row, 0);
 
                         totalNumber.setText(String.valueOf(calTotalCost()) + "$");
 
@@ -665,7 +711,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                         bookListTable.repaint();
                 }
-        }// GEN-LAST:event_importbookListTableMouseClicked
+        }// GEN-LAST:event_importBookListTableMouseClicked
 
         public List<String> showMultiInputDialog(String title, int edition) {
                 JPanel panel = new JPanel();
@@ -812,16 +858,160 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 }
         }// GEN-LAST:event_importBtnActionPerformed
 
+        public void openFile(String file) {
+                try {
+                        File myFile = new File(file);
+                        Desktop.getDesktop().open(myFile);
+                } catch (IOException ex) {
+                        // no application registered for PDFs
+                        JOptionPane.showMessageDialog(this, "No application registered for PDFs");
+                }
+        }
+
+        private void exportPDF() {
+                JFileChooser chooser = new JFileChooser();
+                try {
+                        chooser.showSaveDialog(this);
+                        File file = chooser.getSelectedFile();
+                        if (file != null) {
+                                file = new File(file.toString() + ".pdf");
+
+                                // Initialize PDF document
+                                PdfWriter writer = new PdfWriter(new FileOutputStream(file));
+                                PdfDocument pdf = new PdfDocument(writer);
+                                Document document = new Document(pdf, PageSize.A4);
+
+                                // Set title
+                                PdfFont titleFont = PdfFontFactory.createFont();
+                                Paragraph title = new Paragraph("IMPORT BOOK")
+                                                .setFont(titleFont)
+                                                .setFontSize(20)
+                                                .setTextAlignment(TextAlignment.CENTER);
+                                document.add(title);
+
+                                // Set export date and time
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                                String formattedDateTime = LocalDateTime.now().format(formatter);
+                                Paragraph dateTime = new Paragraph("Import Date and Time: " + formattedDateTime)
+                                                .setTextAlignment(TextAlignment.CENTER);
+                                document.add(dateTime);
+
+                                // Add table
+                                Table table = new Table(importBookListTable.getColumnCount());
+                                for (int i = 0; i < importBookListTable.getColumnCount(); i++) {
+                                        Cell cell = new Cell().add(new Paragraph(importBookListTable.getColumnName(i)));
+                                        cell.setBackgroundColor(new DeviceRgb(125, 200, 204));
+
+                                        table.addCell(cell);
+                                }
+                                for (int i = 0; i < importBookListTable.getRowCount(); i++) {
+                                        for (int j = 0; j < importBookListTable.getColumnCount(); j++) {
+                                                if (importBookListTable.getValueAt(i, j) != null) {
+                                                        table.addCell(importBookListTable.getValueAt(i, j).toString());
+                                                } else {
+                                                        table.addCell("");
+                                                }
+                                        }
+                                }
+
+                                document.add(table);
+
+                                // Add total price
+                                Paragraph totalPrice = new Paragraph("Total Price: " + totalNumber.getText())
+                                                .setTextAlignment(TextAlignment.RIGHT);
+                                document.add(totalPrice);
+
+                                document.close();
+
+                                openFile(file.toString());
+                        }
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+
+        private void exportExcel() {
+                JFileChooser chooser = new JFileChooser();
+                try {
+                        chooser.showSaveDialog(this);
+                        File file = chooser.getSelectedFile();
+                        if (file != null) {
+                                file = new File(file.toString() + ".xlsx");
+                                XSSFWorkbook workbook = new XSSFWorkbook();
+                                XSSFSheet sheet = workbook.createSheet("Books");
+
+                                // Create title row
+                                XSSFRow titleRow = sheet.createRow(0);
+                                XSSFCell titleCell = titleRow.createCell(0);
+                                titleCell.setCellValue("IMPORT BOOK");
+                                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, importBookListTable.getColumnCount() - 1));
+                                titleCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
+                                titleCell.getCellStyle().setFont(createHeaderFont(workbook));
+
+                                // Create date and time row
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                                String formattedDateTime = LocalDateTime.now().format(formatter);
+                                XSSFRow dateTimeRow = sheet.createRow(1);
+                                XSSFCell dateTimeCell = dateTimeRow.createCell(0);
+                                dateTimeCell.setCellValue("Import Date and Time: " + formattedDateTime);
+                                sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, importBookListTable.getColumnCount() - 1));
+                                dateTimeCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
+
+                                // Create header row
+                                XSSFRow headerRow = sheet.createRow(2);
+                                for (int i = 0; i < importBookListTable.getColumnCount(); i++) {
+                                        XSSFCell headerCell = headerRow.createCell(i);
+                                        headerCell.setCellValue(importBookListTable.getColumnName(i));
+                                        headerCell.getCellStyle().setFont(createHeaderFont(workbook));
+                                }
+
+                                // Populate data rows
+                                for (int i = 0; i < importBookListTable.getRowCount(); i++) {
+                                        XSSFRow dataRow = sheet.createRow(i + 3);
+                                        for (int j = 0; j < importBookListTable.getColumnCount(); j++) {
+                                                XSSFCell dataCell = dataRow.createCell(j);
+                                                if (importBookListTable.getValueAt(i, j) != null) {
+                                                        dataCell.setCellValue(importBookListTable.getValueAt(i, j).toString());
+                                                }
+                                        }
+                                }
+
+                                // Add total price row
+                                XSSFRow totalPriceRow = sheet.createRow(sheet.getLastRowNum() + 2);
+                                XSSFCell totalPriceCellLabel = totalPriceRow.createCell(0);
+                                totalPriceCellLabel.setCellValue("Total Price");
+                                XSSFCell totalPriceCell = totalPriceRow.createCell(1);
+                                totalPriceCell.setCellValue(totalNumber.getText());
+
+                                FileOutputStream fos = new FileOutputStream(file);
+                                workbook.write(fos);
+                                fos.close();
+                                workbook.close();
+                                openFile(file.toString());
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+        }
+
+         private XSSFFont createHeaderFont(XSSFWorkbook workbook) {
+                XSSFFont font = workbook.createFont();
+                font.setFontHeightInPoints((short) 14);
+                font.setBold(true);
+                font.setColor(IndexedColors.BLACK.getIndex());
+                return font;
+        }
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JTable bookListTable;
         private javax.swing.JPanel bookListTableZone;
         private javax.swing.JButton filterButton;
-        private javax.swing.JTable importbookListTable;
+        private javax.swing.JTable importBookListTable;
         private javax.swing.JPanel importBtnZone;
         private javax.swing.JPanel infoZone;
         private javax.swing.JButton removeBtn;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JButton jButton4;
+        private javax.swing.JButton exportPdfBtn;
+        private javax.swing.JButton exportExcelBtn;
         private javax.swing.JButton removeAllBtn;
         private javax.swing.JButton importBtn;
         private javax.swing.JLabel jLabel1;
