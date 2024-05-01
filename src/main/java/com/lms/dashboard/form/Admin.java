@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.accountCRUD.form.InfoPage;
 import com.lms.accountCRUD.form.UsersView;
+import com.lms.authorCRUD.form.AuthorsView;
 import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
@@ -95,8 +97,8 @@ public class Admin extends javax.swing.JPanel {
         listFrame.add(new BookView());
         listFrame.add(new CategoryView());
         listFrame.add(new PublishersView());
-        // listFrame.add(new AuthorsView());
-        // listFrame.add(new InfoPage());
+        listFrame.add(new AuthorsView());
+        listFrame.add(new InfoPage());
         // try {
         // listFrame.add(new EditProfile("17470f3a4f13c023"));
         // } catch (ParseException e) {
