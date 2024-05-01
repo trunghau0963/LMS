@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.AbstractCellEditor;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -36,22 +35,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.lms.auth.entities.Admin;
-import com.lms.categoryCRUD.entities.Category;
 import com.lms.publisherCRUD.SwitchButton.ToggleRenderer;
 import com.lms.publisherCRUD.dal.PublisherDao;
 import com.lms.publisherCRUD.entities.Publisher;
 import com.lms.publisherCRUD.form.other.temp.EditInfoPublisherPanel;
 import com.lms.publisherCRUD.repo.PublisherRepo;
 import com.lms.publisherCRUD.service.PublisherService;
-import com.lms.userCRUD.form.other.AdminList;
+import com.lms.UserCRUD.form.other.AdminList;
 
 class PublishersTableEditor extends AbstractCellEditor implements TableCellEditor {
     private JToggleButton button = new JToggleButton("Unhide");
@@ -85,7 +80,6 @@ public class ListPublisherPanel extends javax.swing.JInternalFrame {
     private CardLayout cardLayout;
     private JPanel panelParent;
     private PublisherService pubService;
-    private PublisherDao pubDao;
     ArrayList<Publisher> publishers;
     DefaultTableModel model;
 

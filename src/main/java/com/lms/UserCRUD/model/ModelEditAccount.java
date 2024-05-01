@@ -1,4 +1,4 @@
-package com.lms.userCRUD.model;
+package com.lms.UserCRUD.model;
 
 public class ModelEditAccount {
   private String userName;

@@ -64,7 +64,7 @@ public class EditInfoAuthorPanel extends javax.swing.JPanel {
         jPanel12 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
+        imageAvatar1 = new com.lms.UserCRUD.ui.ImageAvatar();
         jPanel14 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -401,7 +401,7 @@ public class EditInfoAuthorPanel extends javax.swing.JPanel {
     private javax.swing.JTextField authorID;
     private javax.swing.JTextField authorName;
     private javax.swing.JComboBox<String> gender;
-    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
+    private com.lms.UserCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;

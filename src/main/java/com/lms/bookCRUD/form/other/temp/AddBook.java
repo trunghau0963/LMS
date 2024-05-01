@@ -114,7 +114,7 @@ public class AddBook extends javax.swing.JPanel {
         jPanel12 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
+        imageAvatar1 = new com.lms.UserCRUD.ui.ImageAvatar();
         jPanel13 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -499,7 +499,7 @@ public class AddBook extends javax.swing.JPanel {
     private javax.swing.JTextField authorTxT;
     private javax.swing.JTextField categoryTxt;
     private javax.swing.JTextField editionTxT;
-    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
+    private com.lms.UserCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;

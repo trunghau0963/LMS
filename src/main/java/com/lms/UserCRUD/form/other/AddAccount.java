@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package com.lms.userCRUD.form.other;
+package com.lms.UserCRUD.form.other;
 
 import javax.swing.JOptionPane;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.lms.userCRUD.service.AdminService;
+import com.lms.UserCRUD.service.AdminService;
 
 /**
  *

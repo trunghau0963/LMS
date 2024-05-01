@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package com.lms.userCRUD.form.other.temp;
+package com.lms.UserCRUD.form.other.temp;
 
 /**
  *
@@ -40,7 +40,7 @@ public class Form extends javax.swing.JPanel {
         saveButton = new javax.swing.JButton();
         roleChoose = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
+        imageAvatar1 = new com.lms.UserCRUD.ui.ImageAvatar();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
 
@@ -257,7 +257,7 @@ public class Form extends javax.swing.JPanel {
     private javax.swing.JTextField contacttxt;
     private javax.swing.JTextField fullNametxt;
     private javax.swing.JComboBox<String> genderChoose;
-    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
+    private com.lms.UserCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel10;
