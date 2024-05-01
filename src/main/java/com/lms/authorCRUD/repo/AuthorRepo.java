@@ -16,6 +16,10 @@ import com.lms.connection.JDBCConnection;
 public class AuthorRepo implements AuthorDao {
     Connection connection = null;
 
+    public static AuthorRepo getInstance() {
+        return new AuthorRepo();
+    }
+
     public AuthorRepo() {
         connection = JDBCConnection.getJDBCConnection();
     }
@@ -263,5 +267,24 @@ public class AuthorRepo implements AuthorDao {
             e.printStackTrace();
         }
         return author;
+    }
+
+    public boolean deleteAuthor(String id) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+
+            String stmt = "DELETE FROM Author WHERE authorId = ?";
+            PreparedStatement statement = connection.prepareStatement(stmt);
+            statement.setString(1, id);
+
+            statement.execute();
+
+            JOptionPane.showMessageDialog(null, "Delete successfull");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Connection to PostgreSQL failed.");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

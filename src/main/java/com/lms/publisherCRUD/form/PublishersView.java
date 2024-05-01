@@ -1,7 +1,6 @@
 package com.lms.publisherCRUD.form;
 
 import java.awt.CardLayout;
-
 import javax.swing.JPanel;
 
 import com.lms.publisherCRUD.repo.PublisherRepo;
@@ -25,7 +24,6 @@ public class PublishersView extends JPanel {
 
         pubDao = PublisherRepo.getInstance();
         pubService = new PublisherService(pubDao);
-
         publishers = new ListPublisherPanel(pubService);
 
         // Panel trống ban đầu

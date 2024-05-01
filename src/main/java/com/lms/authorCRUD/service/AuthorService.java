@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.lms.authorCRUD.dal.AuthorDao;
 import com.lms.authorCRUD.entities.Author;
+import com.lms.publisherCRUD.entities.Publisher;
 
 public class AuthorService {
     private AuthorDao authorDao;
@@ -36,7 +37,22 @@ public class AuthorService {
         return authorDao.addAuthor(name, gender, isHide);
     }
 
+    public boolean deleteAuthor(String id) {
+        return authorDao.deleteAuthor(id);
+    }
+
     public Author editInfo(String id, String name, String gender, String isHide){
         return authorDao.editInfo(id, name, gender, isHide);
+    }
+
+    public ArrayList<Author> SearchByName(String search) {
+        ArrayList<Author> result = new ArrayList<Author>();
+        ArrayList<Author> all = authorDao.getListAuthors();
+        for (Author author : all) {
+            if (author.getAuthorName().toLowerCase().contains(search.toLowerCase())) {
+                result.add(author);
+            }
+        }
+        return result;
     }
 }

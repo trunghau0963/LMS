@@ -10,12 +10,12 @@ import javax.swing.UIManager;
  *
  * @author nttha
  */
-public class ExportPanel extends javax.swing.JInternalFrame {
+public class exportPanel extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form ImportPanel
      */
-    public ExportPanel() {
+    public exportPanel() {
         initComponents();
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         UIManager.put("Table.showVerticalLines", true);
