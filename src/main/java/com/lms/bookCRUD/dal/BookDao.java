@@ -12,6 +12,8 @@ public interface BookDao {
 
     public boolean update(Book book);
 
+    public boolean updateQuantity(String bookId, int quantity);
+
     public Book findById(String bookId);
 
     public Book findByTitle(String title);

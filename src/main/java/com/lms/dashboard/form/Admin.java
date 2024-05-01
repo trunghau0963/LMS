@@ -2,28 +2,22 @@ package com.lms.dashboard.form;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import com.lms.accountCRUD.form.UsersView;
-import com.lms.authorCRUD.form.AuthorsView;
 import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
-import com.lms.dataSaleCRUD.entities.User;
 import com.lms.dataSaleCRUD.form.dataSaleView;
 import com.lms.dataSaleCRUD.repo.UserRepo;
 import com.lms.dataSaleCRUD.service.UserService;
 import com.lms.publisherCRUD.form.PublishersView;
-import com.lms.publisherCRUD.form.other.ListPublisherPanel;
-import com.lms.bookCRUD.dal.BookDao;
-import com.lms.bookCRUD.service.BookService;
 
 public class Admin extends javax.swing.JPanel {
 

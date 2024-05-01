@@ -4,10 +4,9 @@
  */
 package com.lms.bookCRUD.form.other;
 
-import com.lms.accountCRUD.form.other.*;
-import com.lms.bookCRUD.model.PublisherModel;
-
 import javax.swing.JOptionPane;
+
+import com.lms.bookCRUD.model.PublisherModel;
 
 /**
  *
