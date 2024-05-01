@@ -57,6 +57,18 @@ public class BookModel {
         return categoryIds;
     }
 
+    public List<String> getGenres() {
+        List<String> genres = new ArrayList<>();
+        categories.forEach(category -> genres.add(category.getGenre().toLowerCase()));
+        return genres;
+    }
+
+    public List<String> getAuthorNames() {
+        List<String> authorNames = new ArrayList<>();
+        authors.forEach(author -> authorNames.add(author.getName().toLowerCase()));
+        return authorNames;
+    }
+
     public PublisherModel getPublisher() {
         return publisher;
     }

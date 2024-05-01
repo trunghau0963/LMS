@@ -13,6 +13,8 @@ public interface AuthorDao {
 
     public ArrayList<Author> getAuthorByName(String name, String gender, String isHide);
 
+    public Author findByName(String name);
+
     public Author setVisible(String id, boolean isHide);
 
     public Author editInfo(String id, String name, String gender, String isHide);

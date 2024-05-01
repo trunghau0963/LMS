@@ -4,8 +4,24 @@
  */
 package com.lms.bookCRUD.form.other;
 
+import com.lms.bookCRUD.dal.AuthorDao;
+import com.lms.bookCRUD.dal.CategoryDao;
+import com.lms.bookCRUD.dal.PublisherDao;
+import com.lms.bookCRUD.entities.Author;
+import com.lms.bookCRUD.entities.Category;
+import com.lms.bookCRUD.entities.Publisher;
+import com.lms.bookCRUD.model.AuthorModel;
+import com.lms.bookCRUD.model.CategoryModel;
 import com.lms.bookCRUD.model.PublisherModel;
+import com.lms.bookCRUD.repo.AuthorRepo;
+import com.lms.bookCRUD.repo.CategoryRepo;
+import com.lms.bookCRUD.repo.PublisherRepo;
+import com.lms.bookCRUD.service.BookService;
 import com.lms.userCRUD.form.other.*;
+
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,19 +30,63 @@ import javax.swing.JOptionPane;
  */
 public class AddNewBook extends javax.swing.JDialog {
 
-    private AllBook homeAcc;
+    private AllBook allBook;
+        private AuthorDao authorDao;
+        private CategoryDao categoryDao;
+        private PublisherDao publisherDao;
+        private BookService bookService;
 
     public AddNewBook(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        this.bookService = bookService;
+
         initComponents();
     }
 
-    public AddNewBook(javax.swing.JInternalFrame parent, javax.swing.JFrame owner, boolean modal) {
+    public AddNewBook(javax.swing.JInternalFrame parent, javax.swing.JFrame owner, boolean modal, BookService bookService) {
         super(owner, modal);
+        this.bookService = bookService;
+        allBook = (AllBook) parent;
         initComponents();
+        init();
         setLocationRelativeTo(null);
-        homeAcc = (AllBook) parent;
+
     }
+
+     private void init() {
+                authorDao = new AuthorRepo();
+                categoryDao = new CategoryRepo();
+                publisherDao = new PublisherRepo();
+
+                List<Author> authors = authorDao.findAll();
+                DefaultComboBoxModel<AuthorModel> authorListModel = new DefaultComboBoxModel<>();
+                for (Author author : authors) {
+                        AuthorModel authorModel = new AuthorModel();
+                        authorModel.loadFromEntity(author);
+                        authorListModel.addElement(authorModel);
+                }
+                authorChoose.setModel(authorListModel);
+
+                List<Category> categories = categoryDao.findAll();
+                DefaultComboBoxModel<CategoryModel> categoryListModel = new DefaultComboBoxModel<>();
+                for (Category category : categories) {
+                        CategoryModel categoryModel = new CategoryModel();
+                        categoryModel.loadFromEntity(category);
+                        categoryListModel.addElement(categoryModel);
+                }
+
+                categoryChoose.setModel(categoryListModel);
+
+                List<Publisher> publishers = publisherDao.findAll();
+                DefaultComboBoxModel<PublisherModel> publisherComboBoxModel = new DefaultComboBoxModel<>();
+                for (Publisher publisher : publishers) {
+                        PublisherModel publisherModel = new PublisherModel();
+                        publisherModel.loadFromEntity(publisher);
+                        publisherComboBoxModel.addElement(publisherModel);
+                }
+                publisherChoose.setModel(publisherComboBoxModel);
+
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -242,7 +302,7 @@ public class AddNewBook extends javax.swing.JDialog {
 
         jPanel25.add(jPanel7);
 
-        categoryChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Employee" }));
+        categoryChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new CategoryModel[] { }));
         categoryChoose.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         categoryChoose.setPreferredSize(new java.awt.Dimension(88, 40));
         jPanel25.add(categoryChoose);
@@ -280,7 +340,7 @@ public class AddNewBook extends javax.swing.JDialog {
 
         jPanel21.add(jPanel6);
 
-        authorChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
+        authorChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new AuthorModel[] {  }));
         authorChoose.setPreferredSize(new java.awt.Dimension(72, 40));
         jPanel21.add(authorChoose);
 
@@ -473,8 +533,8 @@ public class AddNewBook extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> authorChoose;
-    private javax.swing.JComboBox<String> categoryChoose;
+    private javax.swing.JComboBox<AuthorModel> authorChoose;
+    private javax.swing.JComboBox<CategoryModel> categoryChoose;
     private javax.swing.JPasswordField editionTxT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

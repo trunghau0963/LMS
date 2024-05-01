@@ -1,28 +1,59 @@
 package com.lms.bookCRUD.form.other;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.lms.authorCRUD.dal.AuthorDao;
+import com.lms.authorCRUD.entities.Author;
+import com.lms.authorCRUD.repo.AuthorRepo;
+import com.lms.bookCRUD.model.AuthorModel;
 import com.lms.bookCRUD.model.BookModel;
+import com.lms.bookCRUD.model.CategoryModel;
+import com.lms.bookCRUD.model.PublisherModel;
 import com.lms.bookCRUD.service.BookService;
 import com.lms.bookCRUD.ui.CenterTableCellRenderer;
-import com.lms.bookCRUD.ui.EditToggleEditor;
-import com.lms.bookCRUD.ui.EditToggleRenderer;
 import com.lms.bookCRUD.ui.ToggleEditor;
 import com.lms.bookCRUD.ui.ToggleRenderer;
-import com.lms.userCRUD.form.other.AddAccount;
+import com.lms.categoryCRUD.dal.CategoryDao;
+import com.lms.categoryCRUD.entities.Category;
+import com.lms.categoryCRUD.repo.CategoryRepo;
+import com.lms.publisherCRUD.dal.PublisherDao;
+import com.lms.publisherCRUD.entities.Publisher;
+import com.lms.publisherCRUD.repo.PublisherRepo;
+import com.lms.userCRUD.form.other.AdminList;
 
 public class AllBook extends javax.swing.JInternalFrame {
 
     private BookService bookService;
+    private CategoryDao categoryDao;
+    private AuthorDao authorDao;
+    private PublisherDao publisherDao;
 
     public AllBook(BookService bookService) {
         this.bookService = bookService;
@@ -41,12 +72,20 @@ public class AllBook extends javax.swing.JInternalFrame {
         btnExport.setIcon(new FlatSVGIcon("svg/export.svg"));
         btnImport.setIcon(new FlatSVGIcon("svg/import.svg"));
         refreshButton.setIcon(new FlatSVGIcon("svg/refresh.svg"));
+
+        categoryDao = new CategoryRepo();
+        authorDao = new AuthorRepo();
+        publisherDao = new PublisherRepo();
+
         List<BookModel> bookModels = bookService.getAllBooks();
         DefaultTableModel tblModel = (DefaultTableModel) bookList.getModel();
         reloadTable(tblModel, bookModels);
 
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(bookList.getModel());
         bookList.setRowSorter(sorter);
+        searchOption.setModel(
+                new javax.swing.DefaultComboBoxModel<>(
+                        new String[] { "Any", "Title", "Category", "Author", "Publisher" }));
 
     }
 
@@ -64,14 +103,13 @@ public class AllBook extends javax.swing.JInternalFrame {
         tblModel.addColumn("Publisher");
         tblModel.addColumn("Sale Price");
         tblModel.addColumn("Quantity");
-        tblModel.addColumn("Is Hide");
-        tblModel.addColumn("Edit");
+        tblModel.addColumn("Visibility");
         for (BookModel bookModel : bookModels) {
             tblModel.addRow(new Object[] { ++idx, bookModel.getId(), bookModel.getTitle(), bookModel.getEdition(),
                     bookModel.getCategoriesString(),
                     bookModel.getAuthorsString(), bookModel.getPublisher().toString(),
                     bookModel.getSalePrice(), bookModel.getQuantity(),
-                    bookModel.getIsHide(), "Edit" });
+                    bookModel.getIsHide() });
         }
 
         for (int columnIndex = 0; columnIndex < bookList.getColumnCount(); columnIndex++) {
@@ -79,12 +117,26 @@ public class AllBook extends javax.swing.JInternalFrame {
         }
 
         bookList.setModel(tblModel);
-        bookList.getColumnModel().getColumn(8).setCellRenderer(new ToggleRenderer());
-        bookList.getColumnModel().getColumn(8).setCellEditor(new ToggleEditor());
-        bookList.getColumnModel().getColumn(9).setCellRenderer(new EditToggleRenderer());
-        bookList.getColumnModel().getColumn(9).setCellEditor(new EditToggleEditor());
+        bookList.getColumnModel().getColumn(9).setCellRenderer(new ToggleRenderer());
+        bookList.getColumnModel().getColumn(9).setCellEditor(new ToggleEditor(bookService));
 
         bookList.setColumnSelectionAllowed(true);
+    }
+
+    public void loadDataToTable(List<BookModel> bookModels) {
+        try {
+            DefaultTableModel tblModel = (DefaultTableModel) bookList.getModel();
+            int idx = 0;
+            tblModel.setRowCount(0);
+            for (BookModel bookModel : bookModels) {
+                tblModel.addRow(new Object[] { ++idx, bookModel.getId(), bookModel.getTitle(), bookModel.getEdition(),
+                        bookModel.getCategoriesString(),
+                        bookModel.getAuthorsString(), bookModel.getPublisher().toString(),
+                        bookModel.getSalePrice(), bookModel.getQuantity() });
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 
     private void customTable(javax.swing.JTable table) {
@@ -104,7 +156,8 @@ public class AllBook extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel9 = new javax.swing.JPanel();
@@ -140,7 +193,9 @@ public class AllBook extends javax.swing.JInternalFrame {
         jPanel11.setPreferredSize(new java.awt.Dimension(800, 120));
         jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "All Book", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "All Book",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
         jPanel3.setPreferredSize(new java.awt.Dimension(400, 200));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
@@ -157,7 +212,8 @@ public class AllBook extends javax.swing.JInternalFrame {
         });
         jPanel14.add(filterButton);
 
-        searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        searchOption.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
         searchOption.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,23 +227,27 @@ public class AllBook extends javax.swing.JInternalFrame {
         jPanel15.setPreferredSize(new java.awt.Dimension(700, 40));
 
         searchField.setPreferredSize(new java.awt.Dimension(71, 40));
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchFieldKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
-        );
+                jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel15Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                .addGap(8, 8, 8)));
         jPanel15Layout.setVerticalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel15Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel1.add(jPanel15, java.awt.BorderLayout.CENTER);
 
@@ -275,22 +335,26 @@ public class AllBook extends javax.swing.JInternalFrame {
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 350, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                        jPanel5Layout.createSequentialGroup()
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        Short.MAX_VALUE))));
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 119, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 9, Short.MAX_VALUE)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 119, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                        jPanel5Layout.createSequentialGroup()
+                                                .addGap(0, 9, Short.MAX_VALUE)
+                                                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))));
 
         jPanel11.add(jPanel5);
 
@@ -313,6 +377,31 @@ public class AllBook extends javax.swing.JInternalFrame {
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    protected void searchFieldKeyReleased(KeyEvent evt) {
+        String choose = (String) searchOption.getSelectedItem();
+        String searchContent = searchField.getText();
+        List<BookModel> result = new ArrayList<>();
+        String tab = "All";
+        switch (choose) {
+            case "Any":
+                result = bookService.searchByAny(searchContent, tab);
+                break;
+            case "Title":
+                result = bookService.searchByTitle(searchContent, tab);
+                break;
+            case "Category":
+                result = bookService.searchByCategory(searchContent, tab);
+                break;
+            case "Publisher":
+                result = bookService.searchByPublisher(searchContent, tab);
+                break;
+            case "Author":
+                result = bookService.searchByAuthor(searchContent, tab);
+                break;
+        }
+        loadDataToTable(result);
+    }
+
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_filterButtonActionPerformed
@@ -322,30 +411,213 @@ public class AllBook extends javax.swing.JInternalFrame {
     }// GEN-LAST:event_searchOptionActionPerformed
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
-        // TODO add your handling code here:
+        loadDataToTable(bookService.getAllBooks());
     }// GEN-LAST:event_refreshButtonActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddActionPerformed
         AddNewBook a;
-        a = new AddNewBook(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this), rootPaneCheckingEnabled);
+        a = new AddNewBook(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this), rootPaneCheckingEnabled,
+                bookService);
         a.setVisible(true);
     }// GEN-LAST:event_btnAddActionPerformed
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleteActionPerformed
+    public String getSelectBookId() {
+        int row = bookList.getSelectedRow();
+        if (row == -1) {
+            return null;
+        }
+        return bookList.getValueAt(row, 1).toString();
+    }
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleteActionPerformed
+        if (bookList.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "please select the book to delete !");
+        } else {
+            String bookId = getSelectBookId();
+            System.out.println("deleted book id: " + bookId);
+            int checkSure = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this book ?",
+                    "Verify delete this book", JOptionPane.YES_NO_OPTION);
+            if (checkSure == JOptionPane.YES_OPTION) {
+                if (bookService.deleteBookById(bookId)) {
+                    JOptionPane.showMessageDialog(this, "Delete Succesfull !");
+                    loadDataToTable(bookService.getAllBooks());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Delete failed !");
+                }
+            }
+        }
     }// GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditActionPerformed
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditEActionPerformed
+        if (bookList.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an book to edit");
+            return;
+        } else {
+            EditBook a = new EditBook(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                    rootPaneCheckingEnabled, "All Book", bookService);
+            a.setVisible(true);
+        }
+    }// GEN-LAST:event_btnEditEActionPerformed
 
-    }// GEN-LAST:event_btnEditActionPerformed
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnImportEActionPerformed
+        importExcel();
+    }// GEN-LAST:event_btnImportEActionPerformed
 
-    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnImportActionPerformed
+    private void importExcel() {
+        File file;
+        JFileChooser chooser = new JFileChooser();
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        XSSFWorkbook workbook = null;
+        ArrayList<BookModel> importList = new ArrayList<BookModel>();
+        chooser.setDialogTitle("Import Excel File");
+        int result = chooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            file = chooser.getSelectedFile();
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                workbook = new XSSFWorkbook(bis);
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                System.out.println("Row count: " + sheet.getLastRowNum());
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    XSSFRow row = sheet.getRow(i);
+                    BookModel importBook = new BookModel();
+                    importBook.setTitle(row.getCell(0).getStringCellValue());
+                    importBook.setEdition((int) row.getCell(1).getNumericCellValue());
 
-    }// GEN-LAST:event_btnImportActionPerformed
+                    // Check if book already exists
+                    List<BookModel> sameTitleBooks = bookService.getBookByTitle(title);
+                    if (!sameTitleBooks.isEmpty()) {
+                        for (BookModel book : sameTitleBooks) {
+                            if (book.getEdition() == importBook.getEdition()) {
+                                JOptionPane.showMessageDialog(this, "Import failed ! the book " + importBook.getTitle()
+                                        + " already exists in the system");
+                                return;
+                            }
+                        }
+                    }
 
-    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnExportActionPerformed
+                    String[] categoriesArray = row.getCell(2).getStringCellValue().split(",");
+                    List<String> categoriesList = Arrays.asList(categoriesArray);
+                    for (String category : categoriesList) {
+                        Category categoryE = categoryDao.findByName(category);
+                        if (categoryE == null) {
+                            categoryDao.add(category);
+                            categoryE = categoryDao.findByName(category);
+                        }
+                        CategoryModel categoryModel = new CategoryModel();
+                        categoryModel.setId(categoryE.getId());
+                        categoryModel.setGenre(categoryE.getGenre());
+                        importBook.addCategory(categoryModel);
+                    }
+                    String[] authorsArray = row.getCell(3).getStringCellValue().split(",");
+                    List<String> authorsList = Arrays.asList(authorsArray);
+                    for (String author : authorsList) {
+                        Author authorE = authorDao.findByName(author);
+                        if (authorE == null) {
+                            authorDao.addAuthor(author, null, "false");
+                            authorE = authorDao.findByName(author);
+                        }
+                        AuthorModel authorModel = new AuthorModel();
+                        authorModel.setId(authorE.getAuthorId());
+                        authorModel.setName(authorE.getAuthorName());
+                        importBook.addAuthor(authorModel);
+                    }
 
-    }// GEN-LAST:event_btnExportActionPerformed
+                    Publisher publisher = publisherDao.findByName(row.getCell(4).getStringCellValue());
+                    if (publisher == null) {
+                        publisherDao.addPublisher(row.getCell(4).getStringCellValue(), null, "false");
+                        publisher = publisherDao.findByName(row.getCell(4).getStringCellValue());
+                    }
+                    PublisherModel publisherModel = new PublisherModel();
+                    publisherModel.setId(publisher.getPublisherId());
+                    publisherModel.setName(publisher.getPublisherName());
+                    importBook.setPublisher(publisherModel);
+                    importBook.setSalePrice((float) (row.getCell(5).getNumericCellValue() * 1.1));
+                    importBook.setQuantity((int) row.getCell(6).getNumericCellValue());
+                    importBook.setIsHide(false);
+                    importList.add(importBook);
+                }
+                for (BookModel book : importList) {
+                    Boolean isAdded = bookService.addNewBook(book);
+                    if (!isAdded) {
+                        JOptionPane.showMessageDialog(this, "Import failed !");
+                        return;
+                    }
+                }
+                loadDataToTable(bookService.getAllBooks());
+                JOptionPane.showMessageDialog(this, "Import successful !");
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(this, "Import failed !");
+                Logger.getLogger(AdminList.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Import failed !");
+                Logger.getLogger(AdminList.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            finally {
+                try {
+                    if (workbook != null)
+                        workbook.close();
+                    if (bis != null)
+                        bis.close();
+                    if (fis != null)
+                        fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnExportEActionPerformed
+        exportExcel();
+    }// GEN-LAST:event_btnExportEActionPerformed
+
+    private void exportExcel() {
+        JFileChooser chooser = new JFileChooser();
+        try {
+            chooser.showSaveDialog(this);
+            File file = chooser.getSelectedFile();
+            if (file != null) {
+                file = new File(file.toString() + ".xlsx");
+                XSSFWorkbook workbook = new XSSFWorkbook();
+                XSSFSheet sheet = workbook.createSheet("Admins");
+                XSSFRow row;
+                row = sheet.createRow(0);
+
+                for (int i = 0; i < bookList.getColumnCount(); i++) {
+                    row.createCell(i).setCellValue(bookList.getColumnName(i));
+                }
+                for (int i = 0; i < bookList.getRowCount(); i++) {
+                    row = sheet.createRow(i + 1);
+                    for (int j = 0; j < bookList.getColumnCount(); j++) {
+                        if (bookList.getValueAt(i, j) != null) {
+                            row.createCell(j).setCellValue(bookList.getValueAt(i, j).toString());
+                        }
+                    }
+                }
+                FileOutputStream fos = new FileOutputStream(file);
+                workbook.write(fos);
+                fos.close();
+                workbook.close();
+                openFile(file.toString());
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    public void openFile(String file) {
+        try {
+            File myFile = new File(file);
+            Desktop.getDesktop().open(myFile);
+        } catch (IOException ex) {
+            // no application registered for PDFs
+            JOptionPane.showMessageDialog(this, "No application registered for PDFs");
+        }
+    }
 
     private void filterBookButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterBookButtonActionPerformed
         int w = 250, h = 300;

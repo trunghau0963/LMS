@@ -70,4 +70,5 @@ public class PublisherRepo implements PublisherDao {
     public static PublisherDao getInstance() {
         return new PublisherRepo();
     }
+
 }

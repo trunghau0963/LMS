@@ -13,6 +13,8 @@ public interface PublisherDao {
     public Publisher setVisible(String id, boolean isHide);
     public Publisher editInfo(String id, String name, String address, String isHide);
 
+    public Publisher findByName(String name);
+
     public Publisher addPublisher(String name, String address, String isHide);
 
     public boolean deletePublisher(String id);

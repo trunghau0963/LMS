@@ -10,4 +10,7 @@ public interface BookCategoryDao {
     public boolean add(BookCategory bc);
 
     public boolean delete(String bookId, String genreId);
+
+    public boolean deleteByBookId(String bookId);
+
 }

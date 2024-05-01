@@ -317,4 +317,28 @@ public class PublisherRepo implements PublisherDao {
             return false;
         }
     }
+
+    @Override
+    public Publisher findByName(String name) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql = "SELECT * FROM publisher WHERE publisherName = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Publisher publisher = new Publisher();
+                publisher.setPublisherId(resultSet.getString("publisherId"));
+                publisher.setPublisherName(resultSet.getString("publisherName"));
+                publisher.setPublisherAddress(resultSet.getString("publisherAddress"));
+                publisher.setVisible(resultSet.getBoolean("isHide"));
+                resultSet.close();
+                preparedStatement.close();
+                return publisher;
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return null;
+    }
 }
