@@ -4,24 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.lms.authorCRUD.form.AuthorsView;
-import com.lms.authorCRUD.form.EditProfile;
 import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuEmp;
 import com.lms.exportCRUD.form.ExportView;
-import com.lms.importCRUD.form.other.ImportPanel;
-import com.lms.publisherCRUD.form.PublishersView;
-import com.lms.publisherCRUD.form.other.ListPublisherPanel;
-import com.lms.accountCRUD.form.InfoPage;
 import com.lms.importCRUD.form.ImportView;
+import com.lms.publisherCRUD.form.PublishersView;
 
 public class Emp extends javax.swing.JPanel {
 
@@ -95,7 +90,7 @@ public class Emp extends javax.swing.JPanel {
         listFrame.add(new AuthorsView());
         listFrame.add(new ImportView());
         listFrame.add(new ExportView());
-        listFrame.add(new InfoPage());
+        // listFrame.add(new InfoPage());
     }
 
     public void logOut() {
