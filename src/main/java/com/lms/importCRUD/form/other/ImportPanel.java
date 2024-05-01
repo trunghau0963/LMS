@@ -95,6 +95,9 @@ public class ImportPanel extends javax.swing.JInternalFrame {
         }
 
         public void setListBookModel() {
+                // Add event supplementary
+                setRemoveBtnEven();
+
                 listBookModel = new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
 
@@ -128,10 +131,10 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 });
 
                 bookListTable.setModel(listBookModel);
-                setExportBtnEven();
+                setExportBtnEvent();
         }
 
-        void setExportBtnEven() {
+        void setExportBtnEvent() {
                 exportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 exportPDF();
@@ -140,6 +143,25 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 exportExcelBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 exportExcel();
+                        }
+                });
+        }
+
+        void setRemoveBtnEven() {
+                removeBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                int[] rows = importBookListTable.getSelectedRows();
+
+                                for (int row : rows) {
+                                        String id = (String) importBookListTable.getValueAt(row, 0);
+
+                                        importListBookModel.removeRow(row);
+
+                                        disabledRows.remove(id);
+                                }
+
+                                importBookListTable.repaint();
+                                bookListTable.repaint();
                         }
                 });
         }
@@ -944,7 +966,8 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 XSSFRow titleRow = sheet.createRow(0);
                                 XSSFCell titleCell = titleRow.createCell(0);
                                 titleCell.setCellValue("IMPORT BOOK");
-                                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, importBookListTable.getColumnCount() - 1));
+                                sheet.addMergedRegion(new CellRangeAddress(0, 0, 0,
+                                                importBookListTable.getColumnCount() - 1));
                                 titleCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
                                 titleCell.getCellStyle().setFont(createHeaderFont(workbook));
 
@@ -954,7 +977,8 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 XSSFRow dateTimeRow = sheet.createRow(1);
                                 XSSFCell dateTimeCell = dateTimeRow.createCell(0);
                                 dateTimeCell.setCellValue("Import Date and Time: " + formattedDateTime);
-                                sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, importBookListTable.getColumnCount() - 1));
+                                sheet.addMergedRegion(new CellRangeAddress(1, 1, 0,
+                                                importBookListTable.getColumnCount() - 1));
                                 dateTimeCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
 
                                 // Create header row
@@ -971,7 +995,8 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                         for (int j = 0; j < importBookListTable.getColumnCount(); j++) {
                                                 XSSFCell dataCell = dataRow.createCell(j);
                                                 if (importBookListTable.getValueAt(i, j) != null) {
-                                                        dataCell.setCellValue(importBookListTable.getValueAt(i, j).toString());
+                                                        dataCell.setCellValue(importBookListTable.getValueAt(i, j)
+                                                                        .toString());
                                                 }
                                         }
                                 }
@@ -994,7 +1019,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 }
         }
 
-         private XSSFFont createHeaderFont(XSSFWorkbook workbook) {
+        private XSSFFont createHeaderFont(XSSFWorkbook workbook) {
                 XSSFFont font = workbook.createFont();
                 font.setFontHeightInPoints((short) 14);
                 font.setBold(true);
