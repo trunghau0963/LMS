@@ -2,7 +2,7 @@ package com.lms.authorCRUD.form;
 
 import javax.swing.*;
 
-import com.lms.authorCRUD.form.other.AddAuthorPanel;
+// import com.lms.authorCRUD.form.other.AddAuthorPanel;
 import com.lms.authorCRUD.form.other.ListAuthorPanel;
 import com.lms.authorCRUD.form.other.temp.EditInfoAuthorPanel;
 
@@ -11,8 +11,7 @@ import java.awt.*;
 public class AuthorsView extends JPanel {
     private CardLayout cardLayout;
     ListAuthorPanel authors;
-    AddAuthorPanel addAuthor;
-    EditInfoAuthorPanel editAuthor;
+    // EditInfoAuthorPanel editAuthor;
 
     public AuthorsView() {
         // Tạo CardLayout
@@ -22,10 +21,8 @@ public class AuthorsView extends JPanel {
         this.setLayout(cardLayout);
 
         authors = new ListAuthorPanel(cardLayout, this);
-        addAuthor = new AddAuthorPanel(cardLayout, this);
         
         // Panel trống ban đầu
         this.add(authors, "authorsPage");
-        this.add(addAuthor, "addAuthor");
     }
 }

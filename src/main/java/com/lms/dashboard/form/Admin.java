@@ -15,6 +15,7 @@ import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
 import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuAdmin;
+import com.lms.dataSaleCRUD.entities.User;
 import com.lms.dataSaleCRUD.form.dataSaleView;
 import com.lms.dataSaleCRUD.repo.UserRepo;
 import com.lms.dataSaleCRUD.service.UserService;
@@ -22,7 +23,7 @@ import com.lms.publisherCRUD.form.PublishersView;
 import com.lms.publisherCRUD.form.other.ListPublisherPanel;
 import com.lms.bookCRUD.dal.BookDao;
 import com.lms.bookCRUD.service.BookService;
-import com.lms.UserCRUD.form.InfoPage;
+// import com.lms.UserCRUD.form.InfoPage;
 import com.lms.UserCRUD.form.UsersView;
 
 public class Admin extends javax.swing.JPanel {
@@ -97,12 +98,12 @@ public class Admin extends javax.swing.JPanel {
 
     public void addListFrame() {
         listFrame.add(new dataSaleView());
-        listFrame.add(new UsersView());
+        // listFrame.add(new UsersView());
         listFrame.add(new BookView());
         listFrame.add(new CategoryView());
         listFrame.add(new PublishersView());
-        listFrame.add(new AuthorsView());
-        listFrame.add(new InfoPage());
+        // listFrame.add(new AuthorsView());
+        // listFrame.add(new InfoPage());
         // try {
         // listFrame.add(new EditProfile("17470f3a4f13c023"));
         // } catch (ParseException e) {
