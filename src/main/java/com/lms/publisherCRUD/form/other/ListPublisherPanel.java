@@ -51,7 +51,7 @@ import com.lms.publisherCRUD.entities.Publisher;
 import com.lms.publisherCRUD.form.other.temp.EditInfoPublisherPanel;
 import com.lms.publisherCRUD.repo.PublisherRepo;
 import com.lms.publisherCRUD.service.PublisherService;
-import com.lms.userCRUD.form.other.AdminList;
+import com.lms.accountCRUD.form.other.AdminList;
 
 class PublishersTableEditor extends AbstractCellEditor implements TableCellEditor {
     private JToggleButton button = new JToggleButton("Unhide");

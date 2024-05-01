@@ -1,4 +1,4 @@
-package com.lms.userCRUD.service;
+package com.lms.accountCRUD.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
-import com.lms.userCRUD.dal.AdminDao;
-import com.lms.userCRUD.model.ModelAddUser;
-import com.lms.userCRUD.model.ModelEditAccount;
-import com.lms.userCRUD.repo.AdminRepo;
+import com.lms.accountCRUD.dal.AdminDao;
+import com.lms.accountCRUD.model.ModelAddUser;
+import com.lms.accountCRUD.model.ModelEditAccount;
+import com.lms.accountCRUD.repo.AdminRepo;
 
 public class AdminService {
   private AdminDao adminDao;

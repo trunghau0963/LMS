@@ -46,7 +46,7 @@ public class AddAuthorPanel extends javax.swing.JPanel {
         jPanel12 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        imageAvatar1 = new com.lms.userCRUD.ui.ImageAvatar();
+        imageAvatar1 = new com.lms.accountCRUD.ui.ImageAvatar();
         jPanel13 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -336,7 +336,7 @@ public class AddAuthorPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField empName;
     private javax.swing.JComboBox<String> gender;
-    private com.lms.userCRUD.ui.ImageAvatar imageAvatar1;
+    private com.lms.accountCRUD.ui.ImageAvatar imageAvatar1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;

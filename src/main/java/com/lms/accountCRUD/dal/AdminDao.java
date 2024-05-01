@@ -1,9 +1,9 @@
-package com.lms.userCRUD.dal;
+package com.lms.accountCRUD.dal;
 
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
-import com.lms.userCRUD.model.ModelAddUser;
-import com.lms.userCRUD.model.ModelEditAccount;
+import com.lms.accountCRUD.model.ModelAddUser;
+import com.lms.accountCRUD.model.ModelEditAccount;
 import com.lms.auth.entities.Admin;
 
 import java.util.List;

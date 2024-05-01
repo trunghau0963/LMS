@@ -37,7 +37,7 @@ import com.lms.categoryCRUD.dal.CategoryDao;
 import com.lms.categoryCRUD.entities.Category;
 import com.lms.categoryCRUD.model.CategoryModel;
 import com.lms.categoryCRUD.service.CategoryService;
-import com.lms.userCRUD.form.other.AdminList;
+import com.lms.accountCRUD.form.other.AdminList;
 
 public class ListBookCategory extends javax.swing.JInternalFrame {
     private CategoryDao categoryDao;

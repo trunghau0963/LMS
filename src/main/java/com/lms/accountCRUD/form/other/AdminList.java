@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
-package com.lms.userCRUD.form.other;
+package com.lms.accountCRUD.form.other;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -41,8 +41,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.lms.auth.entities.Admin;
-import com.lms.userCRUD.dal.AdminDao;
-import com.lms.userCRUD.service.AdminService;
+import com.lms.accountCRUD.dal.AdminDao;
+import com.lms.accountCRUD.service.AdminService;
 
 // class UsersTableEditor extends AbstractCellEditor implements TableCellEditor {
 //     private JToggleButton button = new JToggleButton("UnBlock");

@@ -1,4 +1,4 @@
-package com.lms.userCRUD.ui;
+package com.lms.accountCRUD.ui;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
