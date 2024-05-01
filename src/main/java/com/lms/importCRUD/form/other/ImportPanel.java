@@ -4,33 +4,48 @@
  */
 package com.lms.importCRUD.form.other;
 
-import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import java.awt.GridLayout;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.lms.importCRUD.models.AuthorModel;
 import com.lms.importCRUD.models.BookModel;
 import com.lms.importCRUD.dal.BookDao;
+import com.lms.importCRUD.dal.SheetDao;
+import com.lms.importCRUD.dal.SheetDetailDao;
+import com.lms.importCRUD.entities.ImportBook;
 import com.lms.importCRUD.repo.AuthorRepo;
 import com.lms.importCRUD.repo.BookAuthorRepo;
 import com.lms.importCRUD.repo.BookCategoryRepo;
 import com.lms.importCRUD.repo.BookRepo;
 import com.lms.importCRUD.repo.CategoryRepo;
 import com.lms.importCRUD.repo.PublisherRepo;
+import com.lms.importCRUD.repo.SheetDetailRepo;
+import com.lms.importCRUD.repo.SheetRepo;
 import com.lms.importCRUD.service.BookService;
+import com.lms.importCRUD.service.SheetDetailService;
+import com.lms.importCRUD.service.SheetService;
 
 /**
  *
@@ -45,7 +60,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         JComponent component = (JComponent) super.getTableCellRendererComponent(table, value,
                                         isSelected,
                                         hasFocus, row, column);
-                        if (disabledRows.contains(row)) {
+                        if (disabledRows.containsValue(row)) {
                                 component.setEnabled(false);
                         } else {
                                 component.setEnabled(true); // Kích hoạt trở lại các dòng không bị vô hiệu hóa
@@ -81,7 +96,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         }
                 };
 
-                bookList.setModel(listBookModel);
+                bookListTable.setModel(listBookModel);
         }
 
         public void setImportListBookModel() {
@@ -109,7 +124,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 return canEdit[columnIndex];
                         }
                 };
-                importBookList.setModel(importListBookModel);
+                importbookListTable.setModel(importListBookModel);
         }
 
         public void setRowSorter(JTable tbName, List<BookModel> books) {
@@ -163,11 +178,19 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 // Setting book table
                 books = bookService.getAllBooks();
                 setListBookModel();
-                setRowSorter(bookList, books);
+                setRowSorter(bookListTable, books);
 
                 // Setting import book table
                 setImportListBookModel();
                 loadBooksToTable(books);
+
+                // sheet
+                sheetDao = new SheetRepo();
+                sheetService = new SheetService(sheetDao);
+
+                // sheet detail
+                sheetDetailDao = new SheetDetailRepo();
+                sheetDetailService = new SheetDetailService(sheetDetailDao);
 
                 ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
                 UIManager.put("Table.showVerticalLines", true);
@@ -199,9 +222,9 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 searchField = new javax.swing.JTextField();
                 jPanel16 = new javax.swing.JPanel();
                 refreshButton = new javax.swing.JButton();
-                bookListZone = new javax.swing.JPanel();
+                bookListTableZone = new javax.swing.JPanel();
                 jScrollPane2 = new javax.swing.JScrollPane();
-                bookList = new javax.swing.JTable();
+                bookListTable = new javax.swing.JTable();
                 jPanel19 = new javax.swing.JPanel();
                 totalZone = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
@@ -219,16 +242,16 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 titleTxT1 = new javax.swing.JTextField();
                 jPanel5 = new javax.swing.JPanel();
                 jScrollPane3 = new javax.swing.JScrollPane();
-                importBookList = new javax.swing.JTable();
+                importbookListTable = new javax.swing.JTable();
                 jPanel13 = new javax.swing.JPanel();
                 jPanel28 = new javax.swing.JPanel();
                 removeBtnZone = new javax.swing.JPanel();
-                jButton8 = new javax.swing.JButton();
+                removeAllBtn = new javax.swing.JButton();
                 importBtnZone = new javax.swing.JPanel();
-                jButton9 = new javax.swing.JButton();
+                importBtn = new javax.swing.JButton();
                 jPanel27 = new javax.swing.JPanel();
                 typeFileChooseZone = new javax.swing.JPanel();
-                jButton2 = new javax.swing.JButton();
+                removeBtn = new javax.swing.JButton();
                 jButton3 = new javax.swing.JButton();
                 jButton4 = new javax.swing.JButton();
 
@@ -327,13 +350,13 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 jPanel1.add(jPanel9, java.awt.BorderLayout.NORTH);
 
-                bookListZone.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-                bookListZone.setPreferredSize(new java.awt.Dimension(800, 400));
-                bookListZone.setLayout(new java.awt.BorderLayout());
+                bookListTableZone.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
+                bookListTableZone.setPreferredSize(new java.awt.Dimension(800, 400));
+                bookListTableZone.setLayout(new java.awt.BorderLayout());
 
                 jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
 
-                bookList.setModel(new javax.swing.table.DefaultTableModel(
+                bookListTable.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
 
                                 },
@@ -351,18 +374,18 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 return types[columnIndex];
                         }
                 });
-                bookList.setRowHeight(30);
-                bookList.setShowGrid(true);
-                bookList.addMouseListener(new java.awt.event.MouseAdapter() {
+                bookListTable.setRowHeight(30);
+                bookListTable.setShowGrid(true);
+                bookListTable.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                bookListMouseClicked(evt);
+                                bookListTableMouseClicked(evt);
                         }
                 });
-                jScrollPane2.setViewportView(bookList);
+                jScrollPane2.setViewportView(bookListTable);
 
-                bookListZone.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+                bookListTableZone.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-                jPanel1.add(bookListZone, java.awt.BorderLayout.CENTER);
+                jPanel1.add(bookListTableZone, java.awt.BorderLayout.CENTER);
 
                 jPanel19.setPreferredSize(new java.awt.Dimension(657, 80));
                 jPanel19.setLayout(new javax.swing.BoxLayout(jPanel19, javax.swing.BoxLayout.LINE_AXIS));
@@ -469,7 +492,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 jScrollPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 2));
 
-                importBookList.setModel(new javax.swing.table.DefaultTableModel(
+                importbookListTable.setModel(new javax.swing.table.DefaultTableModel(
                                 new Object[][] {
 
                                 },
@@ -492,14 +515,14 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 return canEdit[columnIndex];
                         }
                 });
-                importBookList.setRowHeight(30);
-                importBookList.setShowGrid(true);
-                importBookList.addMouseListener(new java.awt.event.MouseAdapter() {
+                importbookListTable.setRowHeight(30);
+                importbookListTable.setShowGrid(true);
+                importbookListTable.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                importBookListMouseClicked(evt);
+                                importbookListTableMouseClicked(evt);
                         }
                 });
-                jScrollPane3.setViewportView(importBookList);
+                jScrollPane3.setViewportView(importbookListTable);
 
                 jPanel5.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
@@ -510,11 +533,11 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 jPanel28.setPreferredSize(new java.awt.Dimension(365, 120));
                 jPanel28.setLayout(new javax.swing.BoxLayout(jPanel28, javax.swing.BoxLayout.Y_AXIS));
 
-                jButton8.setText("Remove all");
-                jButton8.setPreferredSize(new java.awt.Dimension(80, 40));
-                jButton8.addActionListener(new java.awt.event.ActionListener() {
+                removeAllBtn.setText("Remove all");
+                removeAllBtn.setPreferredSize(new java.awt.Dimension(80, 40));
+                removeAllBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton8ActionPerformed(evt);
+                                removeAllBtnActionPerformed(evt);
                         }
                 });
 
@@ -527,7 +550,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addGroup(removeBtnZoneLayout.createSequentialGroup()
                                                                                 .addContainerGap()
-                                                                                .addComponent(jButton8,
+                                                                                .addComponent(removeAllBtn,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 268, Short.MAX_VALUE)
                                                                                 .addContainerGap())));
@@ -541,7 +564,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                                                                                 .createSequentialGroup()
                                                                                                 .addContainerGap(7,
                                                                                                                 Short.MAX_VALUE)
-                                                                                                .addComponent(jButton8,
+                                                                                                .addComponent(removeAllBtn,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                 37,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -550,11 +573,11 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 jPanel28.add(removeBtnZone);
 
-                jButton9.setText("Import List Book");
-                jButton9.setPreferredSize(new java.awt.Dimension(80, 40));
-                jButton9.addActionListener(new java.awt.event.ActionListener() {
+                importBtn.setText("Import List Book");
+                importBtn.setPreferredSize(new java.awt.Dimension(80, 40));
+                importBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton9ActionPerformed(evt);
+                                importBtnActionPerformed(evt);
                         }
                 });
 
@@ -567,7 +590,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addGroup(importBtnZoneLayout.createSequentialGroup()
                                                                                 .addContainerGap()
-                                                                                .addComponent(jButton9,
+                                                                                .addComponent(importBtn,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 268, Short.MAX_VALUE)
                                                                                 .addContainerGap())));
@@ -581,7 +604,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                                                                                 .createSequentialGroup()
                                                                                                 .addContainerGap(15,
                                                                                                                 Short.MAX_VALUE)
-                                                                                                .addComponent(jButton9,
+                                                                                                .addComponent(importBtn,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                 37,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -598,9 +621,9 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 typeFileChooseZone.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-                jButton2.setText("Remove");
-                jButton2.setPreferredSize(new java.awt.Dimension(80, 40));
-                typeFileChooseZone.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+                removeBtn.setText("Remove");
+                removeBtn.setPreferredSize(new java.awt.Dimension(80, 40));
+                typeFileChooseZone.add(removeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
                 jButton3.setText("Pdf");
                 jButton3.setPreferredSize(new java.awt.Dimension(80, 40));
@@ -619,54 +642,125 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void importBookListMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_importBookListMouseClicked
+        private void importbookListTableMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_importbookListTableMouseClicked
                 // TODO add your handling code here:
                 if (evt.getClickCount() == 2) { // Kiểm tra xem người dùng đã nhấp đúp
-                        int row = importBookList.getSelectedRow();
-        
-                        disabledRows.remove(row);
+                        int row = importbookListTable.getSelectedRow();
+                        String idObject = (String) importbookListTable.getValueAt(row, 0);
 
-                        importListBookModel.removeRow(row);
-                        
-                        bookList.repaint();
+                        totalNumber.setText(String.valueOf(calTotalCost()) + "$");
 
-                }
-        }// GEN-LAST:event_importBookListMouseClicked
-
-        private void bookListMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_bookListMouseClicked
-                // TODO add your handling code here:
-                int row = bookList.getSelectedRow();
-                if (evt.getClickCount() == 2 && !disabledRows.contains(row)) { // Kiểm tra xem người dùng đã nhấp đúp
-                                                                               // chuột chưa
-                        System.out.println(row);
-
-                        disabledRows.add(row);
-
-                        for (int col = 0; col < bookList.getColumnCount(); col++) {
-                                bookList.getColumnModel().getColumn(col)
+                        for (int col = 0; col < bookListTable.getColumnCount(); col++) {
+                                bookListTable.getColumnModel().getColumn(col)
                                                 .setCellRenderer(new DisabledRowRenderer());
                         }
 
-                        BookModel book = new BookModel();
-                        book.setId((String) bookList.getValueAt(row, 0));
-                        book.setTitle((String) bookList.getValueAt(row, 1));
-                        book.setSalePrice((Float) bookList.getValueAt(row, 2));
-                        book.setQuantity((Integer) bookList.getValueAt(row, 3));
-                        book.setEdition((Integer) bookList.getValueAt(row, 4));
+                        importListBookModel.removeRow(row);
 
-                        Object[] rowData = {
-                                        book.getId(),
-                                        book.getTitle(),
-                                        book.getSalePrice(),
-                                        book.getQuantity(),
-                                        book.getEdition()
-                        };
+                        System.out.println(idObject);
 
-                        importListBookModel.addRow(rowData);
-                        bookList.repaint();
+                        disabledRows.remove(idObject);
+
+                        System.out.println(disabledRows);
+
+                        bookListTable.repaint();
+                }
+        }// GEN-LAST:event_importbookListTableMouseClicked
+
+        public List<String> showMultiInputDialog(String title, int edition) {
+                JPanel panel = new JPanel();
+                panel.setLayout(new GridLayout(0, 2)); // Sắp xếp các thành phần theo lưới 2 cột
+
+                JTextField titleField = new JTextField(title, 10);
+                titleField.setEditable(false);
+                JTextField editionField = new JTextField("Edition: " + String.valueOf(edition), 10);
+                editionField.setEditable(false);
+                JTextField quantityField = new JTextField(10);
+                JTextField salePriceField = new JTextField(10);
+
+                panel.add(new JLabel("Title"));
+                panel.add(titleField);
+                panel.add(new JLabel("Edition"));
+                panel.add(editionField);
+                panel.add(new JLabel("Please enter book's quantity"));
+                panel.add(quantityField);
+                panel.add(new JLabel("Please enter book's sale price"));
+                panel.add(salePriceField);
+
+                int result = JOptionPane.showConfirmDialog(null, panel, "Multi-Input Dialog",
+                                JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == JOptionPane.OK_OPTION) {
+                        if (!quantityField.getText().isEmpty() && !salePriceField.getText().isEmpty()) {
+                                List<String> inputs = new ArrayList<>();
+                                inputs.add(quantityField.getText());
+                                inputs.add(salePriceField.getText());
+
+                                JOptionPane.showMessageDialog(this, "Added to import book table");
+
+                                return inputs;
+                        } else {
+                                JOptionPane.showMessageDialog(null, "Add fail. Please fill in all fields.", "Error",
+                                                JOptionPane.ERROR_MESSAGE);
+                                return null;
+                        }
 
                 }
-        }// GEN-LAST:event_bookListMouseClicked
+                return null; // Trả về null nếu người dùng cancel hoặc đóng dialog
+        }
+
+        public float calTotalCost() {
+                float total = 0;
+                for (int i = 0; i < importListBookModel.getRowCount(); i++) {
+                        total += Float.parseFloat(importListBookModel.getValueAt(i, 3).toString())
+                                        * Integer.parseInt(importListBookModel.getValueAt(i, 4).toString());
+                }
+                return total;
+        }
+
+        private void bookListTableMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_bookListTableMouseClicked
+                // TODO add your handling code here:
+                int row = bookListTable.getSelectedRow();
+                String id = (String) bookListTable.getValueAt(row, 0);
+
+                if (evt.getClickCount() == 2 && !disabledRows.containsKey(id)) {
+                        BookModel book = new BookModel();
+                        book.setId((String) bookListTable.getValueAt(row, 0));
+                        book.setTitle((String) bookListTable.getValueAt(row, 1));
+                        book.setEdition((Integer) bookListTable.getValueAt(row, 4));
+
+                        List<String> inputs = showMultiInputDialog(book.getTitle(), book.getEdition());
+
+                        if (inputs != null) {
+                                book.setQuantity(Integer.parseInt(inputs.get(0)));
+                                book.setSalePrice(Float.parseFloat(inputs.get(1)));
+                                System.out.println(inputs.get(1));
+                                importBooks.add(book);
+
+                                Object[] rowData = {
+                                                book.getId(),
+                                                book.getTitle(),
+                                                book.getEdition(),
+                                                book.getSalePrice(),
+                                                book.getQuantity()
+                                };
+
+                                importListBookModel.addRow(rowData);
+
+                                totalNumber.setText(String.valueOf(calTotalCost()) + "$");
+
+                                for (int col = 0; col < bookListTable.getColumnCount(); col++) {
+                                        bookListTable.getColumnModel().getColumn(col)
+                                                        .setCellRenderer(new DisabledRowRenderer());
+                                }
+
+                                disabledRows.put(id, row);
+
+                                bookListTable.repaint();
+                        }
+
+                }
+        }// GEN-LAST:event_bookListTableMouseClicked
 
         private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
                 // TODO add your handling code here:
@@ -680,26 +774,56 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 // TODO add your handling code here:
         }// GEN-LAST:event_filterButtonActionPerformed
 
-        private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton8ActionPerformed
+        private void removeAllBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_removeAllBtnActionPerformed
                 // TODO add your handling code here:
-        }// GEN-LAST:event_jButton8ActionPerformed
+                importBooks.clear();
+                importListBookModel.setRowCount(0);
+                totalNumber.setText(String.valueOf(calTotalCost()) + "$");
+                disabledRows.clear();
+                bookListTable.repaint();
+        }// GEN-LAST:event_removeAllBtnActionPerformed
 
-        private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
+        private void importBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_importBtnActionPerformed
                 // TODO add your handling code here:
-        }// GEN-LAST:event_jButton9ActionPerformed
+                if (importBooks.size() == 0) {
+                        JOptionPane.showMessageDialog(this, "Please select books to import");
+                        return;
+                } else {
+                        List<ImportBook> imBooks = new ArrayList<>();
+
+                        for (BookModel e : importBooks) {
+                                ImportBook book = new ImportBook(e.getId(), e.getQuantity(), e.getSalePrice());
+                                imBooks.add(book);
+                        }
+
+                        String sheetId = sheetService.createSheet(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+                                        "ef3d16db8e6aad88");
+                        System.out.println(sheetId);
+                        sheetDetailService.insertIntoSheet(sheetId, imBooks);
+
+                        JOptionPane.showMessageDialog(this, "Import successfully");
+
+                        importBooks.clear();
+                        importListBookModel.setRowCount(0);
+                        totalNumber.setText(String.valueOf(calTotalCost()) + "$");
+                        disabledRows.clear();
+
+                        bookListTable.repaint();
+                }
+        }// GEN-LAST:event_importBtnActionPerformed
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JTable bookList;
-        private javax.swing.JPanel bookListZone;
+        private javax.swing.JTable bookListTable;
+        private javax.swing.JPanel bookListTableZone;
         private javax.swing.JButton filterButton;
-        private javax.swing.JTable importBookList;
+        private javax.swing.JTable importbookListTable;
         private javax.swing.JPanel importBtnZone;
         private javax.swing.JPanel infoZone;
-        private javax.swing.JButton jButton2;
+        private javax.swing.JButton removeBtn;
         private javax.swing.JButton jButton3;
         private javax.swing.JButton jButton4;
-        private javax.swing.JButton jButton8;
-        private javax.swing.JButton jButton9;
+        private javax.swing.JButton removeAllBtn;
+        private javax.swing.JButton importBtn;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel10;
         private javax.swing.JLabel jLabel9;
@@ -737,8 +861,13 @@ public class ImportPanel extends javax.swing.JInternalFrame {
         private DefaultTableModel importListBookModel;
         private BookService bookService;
         private BookDao bookDao;
+        private SheetDao sheetDao;
+        private SheetService sheetService;
+        private SheetDetailDao sheetDetailDao;
+        private SheetDetailService sheetDetailService;
         private List<BookModel> books;
-        private List<BookModel> importBooks;
-        private Set<Integer> disabledRows = new HashSet<>();
+        private List<BookModel> importBooks = new ArrayList<BookModel>();
+        private Map<String, Integer> disabledRows = new HashMap<>();
+
         // End of variables declaration//GEN-END:variables
 }

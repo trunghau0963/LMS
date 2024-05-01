@@ -85,4 +85,14 @@ public class Book {
         isHide = book.getIsHide();
     }
 
+    void convertFromBookModelToBook(BookModel bookModel){
+        id = bookModel.getId();
+        title = bookModel.getTitle();
+        edition = bookModel.getEdition();
+        quantity = bookModel.getQuantity();
+        publisherId = bookModel.getPublisher().getId();
+        salePrice = bookModel.getSalePrice();
+        isHide = bookModel.getIsHide();
+    }
+
 }
