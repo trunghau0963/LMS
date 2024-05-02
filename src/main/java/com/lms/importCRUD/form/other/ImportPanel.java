@@ -4,6 +4,7 @@
  */
 package com.lms.importCRUD.form.other;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.awt.Desktop;
 import java.awt.GridLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -92,78 +95,6 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         }
                         return component;
                 }
-        }
-
-        public void setListBookModel() {
-                // Add event supplementary
-                setRemoveBtnEven();
-
-                listBookModel = new javax.swing.table.DefaultTableModel(
-                                new Object[][] {
-
-                                },
-                                new String[] {
-                                                "Id", "Title", "Sale Price", "Quantity", "Edition", "Publisher",
-                                                "Authors"
-                                }) {
-                        Class[] types = new Class[] {
-                                        java.lang.String.class, java.lang.String.class, java.lang.Double.class,
-                                        java.lang.Integer.class,
-                                        java.lang.Integer.class, java.lang.String.class, java.lang.String.class
-                        };
-                        boolean[] canEdit = new boolean[] {
-                                        false, false, false, false, false, false, false
-                        };
-
-                        public Class getColumnClass(int columnIndex) {
-                                return types[columnIndex];
-                        }
-
-                        public boolean isCellEditable(int rowIndex, int columnIndex) {
-                                return canEdit[columnIndex];
-                        }
-                };
-
-                exportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                exportPDF();
-                        }
-                });
-
-                bookListTable.setModel(listBookModel);
-                setExportBtnEvent();
-        }
-
-        void setExportBtnEvent() {
-                exportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                exportPDF();
-                        }
-                });
-                exportExcelBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                exportExcel();
-                        }
-                });
-        }
-
-        void setRemoveBtnEven() {
-                removeBtn.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                int[] rows = importBookListTable.getSelectedRows();
-
-                                for (int row : rows) {
-                                        String id = (String) importBookListTable.getValueAt(row, 0);
-
-                                        importListBookModel.removeRow(row);
-
-                                        disabledRows.remove(id);
-                                }
-
-                                importBookListTable.repaint();
-                                bookListTable.repaint();
-                        }
-                });
         }
 
         public void setImportListBookModel() {
@@ -735,9 +666,53 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 }
         }// GEN-LAST:event_importBookListTableMouseClicked
 
+        // Hàm kiểm tra dữ liệu số và hiển thị thông báo lỗi nếu có
+        private static boolean validatePriceInput(JTextField textField, JLabel errorLabel) {
+                try {
+                        float number = Float.parseFloat(textField.getText());
+                        if (number < 0) {
+                                errorLabel.setText("  Value must be >= 0");
+                                errorLabel.setForeground(Color.RED); // Thiết lập màu đỏ cho label
+                                return false;
+                        } else {
+                                errorLabel.setText("  Valid input"); // Xóa thông báo lỗi nếu dữ liệu hợp lệ
+                                errorLabel.setForeground(Color.GREEN);
+                                return true;
+                        }
+                } catch (NumberFormatException e) {
+                        errorLabel.setText("  Invalid input");
+                        errorLabel.setForeground(Color.RED);
+                        return false;
+                }
+        }
+
+        private static boolean validateQuantityInput(JTextField textField, JLabel errorLabel) {
+                try {
+                        float number = Float.parseFloat(textField.getText());
+                        if (number < 0) {
+                                errorLabel.setText("  Value must be >= 0");
+                                errorLabel.setForeground(Color.RED); // Thiết lập màu đỏ cho label
+                                return false;
+                        } else if (number != (int) number) {
+                                errorLabel.setText("  Value must an integer type");
+                                errorLabel.setForeground(Color.RED); // Thiết lập màu đỏ cho label
+                                return false;
+                        } else {
+                                errorLabel.setText("  Valid input"); // Xóa thông báo lỗi nếu dữ liệu hợp lệ
+                                errorLabel.setForeground(Color.GREEN);
+                                return true;
+                        }
+                } catch (NumberFormatException e) {
+                        errorLabel.setText("  Invalid input");
+                        errorLabel.setForeground(Color.RED);
+                        return false;
+                }
+        }
+
         public List<String> showMultiInputDialog(String title, int edition) {
-                JPanel panel = new JPanel();
-                panel.setLayout(new GridLayout(0, 2)); // Sắp xếp các thành phần theo lưới 2 cột
+                JPanel panel = new JPanel(new GridLayout(2, 3));
+                JPanel inputConstPanel = new JPanel(new GridLayout(0, 3));
+                JPanel inputPanel = new JPanel(new GridLayout(0, 3));
 
                 JTextField titleField = new JTextField(title, 10);
                 titleField.setEditable(false);
@@ -745,21 +720,49 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 editionField.setEditable(false);
                 JTextField quantityField = new JTextField(10);
                 JTextField salePriceField = new JTextField(10);
+                JLabel quantityErrorLabel = new JLabel();
+                JLabel salePriceErrorLabel = new JLabel();
+                JLabel titleLabel = new JLabel("  Valid input");
+                titleLabel.setForeground(Color.GREEN);
+                JLabel editionLabel = new JLabel("  Valid input");
+                editionLabel.setForeground(Color.GREEN);
 
-                panel.add(new JLabel("Title"));
-                panel.add(titleField);
-                panel.add(new JLabel("Edition"));
-                panel.add(editionField);
-                panel.add(new JLabel("Please enter book's quantity"));
-                panel.add(quantityField);
-                panel.add(new JLabel("Please enter book's sale price"));
-                panel.add(salePriceField);
+                inputConstPanel.add(new JLabel("Title"));
+                inputConstPanel.add(titleField);
+                inputConstPanel.add(titleLabel);
+                inputConstPanel.add(new JLabel("Edition"));
+                inputConstPanel.add(editionField);
+                inputConstPanel.add(editionLabel);
+                inputPanel.add(new JLabel("Please enter book's quantity"));
+                inputPanel.add(quantityField);
+                inputPanel.add(quantityErrorLabel);
+                inputPanel.add(new JLabel("Please enter book's sale price"));
+                inputPanel.add(salePriceField);
+                inputPanel.add(salePriceErrorLabel);
+                panel.add(inputConstPanel);
+                panel.add(inputPanel);
+
+                // Sử dụng FocusListener để kiểm tra dữ liệu khi component mất focus
+                quantityField.addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                                validateQuantityInput(quantityField, quantityErrorLabel);
+                        }
+                });
+
+                salePriceField.addFocusListener(new FocusAdapter() {
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                                validatePriceInput(salePriceField, salePriceErrorLabel);
+                        }
+                });
 
                 int result = JOptionPane.showConfirmDialog(null, panel, "Multi-Input Dialog",
                                 JOptionPane.OK_CANCEL_OPTION);
 
                 if (result == JOptionPane.OK_OPTION) {
-                        if (!quantityField.getText().isEmpty() && !salePriceField.getText().isEmpty()) {
+                        if (validateQuantityInput(quantityField, quantityErrorLabel)
+                                        && validatePriceInput(salePriceField, salePriceErrorLabel)) {
                                 List<String> inputs = new ArrayList<>();
                                 inputs.add(quantityField.getText());
                                 inputs.add(salePriceField.getText());
@@ -768,7 +771,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                                 return inputs;
                         } else {
-                                JOptionPane.showMessageDialog(null, "Add fail. Please fill in all fields.", "Error",
+                                JOptionPane.showMessageDialog(null, "Add fail. Please refill in all fields.", "Error",
                                                 JOptionPane.ERROR_MESSAGE);
                                 return null;
                         }
@@ -1025,6 +1028,88 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 font.setBold(true);
                 font.setColor(IndexedColors.BLACK.getIndex());
                 return font;
+        }
+
+        public void setListBookModel() {
+                // Add event supplementary
+                setRemoveBtnEven();
+
+                listBookModel = new javax.swing.table.DefaultTableModel(
+                                new Object[][] {
+
+                                },
+                                new String[] {
+                                                "Id", "Title", "Sale Price", "Quantity", "Edition", "Publisher",
+                                                "Authors"
+                                }) {
+                        Class[] types = new Class[] {
+                                        java.lang.String.class, java.lang.String.class, java.lang.Double.class,
+                                        java.lang.Integer.class,
+                                        java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                        };
+                        boolean[] canEdit = new boolean[] {
+                                        false, false, false, false, false, false, false
+                        };
+
+                        public Class getColumnClass(int columnIndex) {
+                                return types[columnIndex];
+                        }
+
+                        public boolean isCellEditable(int rowIndex, int columnIndex) {
+                                return canEdit[columnIndex];
+                        }
+                };
+
+                bookListTable.setModel(listBookModel);
+                setExportBtnEvent();
+        }
+
+        void setExportBtnEvent() {
+                exportPdfBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                if (importBooks.size() == 0) {
+                                        JOptionPane.showMessageDialog(exportPdfBtn, "Import list is empty");
+                                } else {
+                                        exportPDF();
+                                }
+                        }
+                });
+                exportExcelBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                if (importBooks.size() == 0) {
+                                        JOptionPane.showMessageDialog(exportExcelBtn, "Import list is empty");
+                                        return;
+                                } else {
+                                        exportExcel();
+                                }
+                        }
+                });
+        }
+
+        void setRemoveBtnEven() {
+                removeBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                int[] rows = importBookListTable.getSelectedRows();
+
+                                for (int row : rows) {
+                                        String id = (String) importBookListTable.getValueAt(row, 0);
+
+                                        importListBookModel.removeRow(row);
+
+                                        for (BookModel book : importBooks) {
+                                                if (book.getId().equals(id)) {
+                                                        importBooks.remove(book);
+                                                        break;
+                                                }
+                                        }
+
+                                        disabledRows.remove(id);
+                                }
+
+                                importBookListTable.repaint();
+                                bookListTable.repaint();
+                        }
+                });
         }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
