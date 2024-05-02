@@ -18,7 +18,6 @@ import com.lms.bookCRUD.repo.AuthorRepo;
 import com.lms.bookCRUD.repo.CategoryRepo;
 import com.lms.bookCRUD.repo.PublisherRepo;
 import com.lms.bookCRUD.service.BookService;
-import com.lms.userCRUD.form.other.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,8 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+
+import com.lms.bookCRUD.model.PublisherModel;
 
 /**
  *

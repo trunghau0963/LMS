@@ -46,7 +46,6 @@ import com.lms.categoryCRUD.repo.CategoryRepo;
 import com.lms.publisherCRUD.dal.PublisherDao;
 import com.lms.publisherCRUD.entities.Publisher;
 import com.lms.publisherCRUD.repo.PublisherRepo;
-import com.lms.userCRUD.form.other.AdminList;
 
 public class AllBook extends javax.swing.JInternalFrame {
 
@@ -550,10 +549,10 @@ public class AllBook extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Import successful !");
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Import failed !");
-                Logger.getLogger(AdminList.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AllBook.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Import failed !");
-                Logger.getLogger(AdminList.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AllBook.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             finally {
