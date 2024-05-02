@@ -51,11 +51,15 @@ public class MenuButton extends javax.swing.JPanel {
     }
 
     public void setName(String name) {
-        buttonName.setText(name);
+        if (buttonName != null) { // Check to prevent NullPointerException
+            buttonName.setText(name);
+        }
     }
-
     public String getName() {
-        return buttonName.getText();
+        if (buttonName != null) { // Check to prevent NullPointerException
+            return buttonName.getText();
+        }
+        return ""; // Return an empty string or handle accordingly if buttonName is null
     }
 
     public void setAction(java.awt.event.ActionListener action) {
