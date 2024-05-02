@@ -16,13 +16,14 @@ public interface BookDao {
 
     public Book findById(String bookId);
 
-    public Book findByTitle(String title);
-
+    public List<Book> findByTitle(String title);
+    
     public List<Book> findAll();
 
     public List<Book> findAvailableBooks();
 
     public List<Book> findUnavailableBooks();
 
+    public List<Book> find(String column, String keyword);
 
 }

@@ -68,4 +68,33 @@ public class AuthorRepo implements AuthorDao {
         }
         return authors;
     }
+
+    @Override
+    public Author findByName(String name) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+
+            String sql = "SELECT * FROM author WHERE authorName = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Author author = new Author();
+                author.setId(resultSet.getString("authorId"));
+                author.setName(resultSet.getString("authorName"));
+                author.setGender(resultSet.getString("gender"));
+                author.setHide(resultSet.getBoolean("isHide"));
+                resultSet.close();
+                preparedStatement.close();
+                return author;
+            }
+            resultSet.close();
+            preparedStatement.close();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+
+        }
+        return null;
+    }
 }

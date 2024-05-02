@@ -79,4 +79,22 @@ public class BookCategoryRepo implements BookCategoryDao {
         return false;
     }
 
+    @Override
+    public boolean deleteByBookId(String bookId) {
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+
+            String sql = "DELETE FROM book_category WHERE bookId = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, bookId);
+            int rowEffected = preparedStatement.executeUpdate();
+            preparedStatement.close();
+            if (rowEffected > 0)
+                return true;
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return false;
+    }
+
 }
