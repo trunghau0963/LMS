@@ -118,7 +118,7 @@ public class AllBook extends javax.swing.JInternalFrame {
 
         bookList.setModel(tblModel);
         bookList.getColumnModel().getColumn(9).setCellRenderer(new ToggleRenderer());
-        bookList.getColumnModel().getColumn(9).setCellEditor(new ToggleEditor(bookService));
+        bookList.getColumnModel().getColumn(9).setCellEditor(new ToggleEditor(bookService, bookList));
 
         bookList.setColumnSelectionAllowed(true);
     }
