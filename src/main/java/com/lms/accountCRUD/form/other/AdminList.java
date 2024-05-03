@@ -43,34 +43,6 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.lms.auth.entities.Admin;
 import com.lms.accountCRUD.dal.AdminDao;
 import com.lms.accountCRUD.service.AdminService;
-
-// class UsersTableEditor extends AbstractCellEditor implements TableCellEditor {
-//     private JToggleButton button = new JToggleButton("UnBlock");
-//     AdminDao adminDao = new AdminRepo();
-//     AdminService adminService = new AdminService(adminDao);
-
-//     @Override
-//     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-//             int column) {
-//         String phone = table.getValueAt(row, 1).toString();
-//         boolean isBlocked = (boolean) table.getValueAt(row, 4);
-
-//         adminService.toggleBlockUser(phone, !isBlocked);
-
-//         button.addActionListener(e -> {
-//             stopCellEditing();
-//             fireEditingStopped();
-//         });
-
-//         return button;
-//     }
-
-//     @Override
-//     public Object getCellEditorValue() {
-//         return button.isSelected();
-//     }
-// }
-
 /**
  *
  * @author nttha

@@ -17,6 +17,7 @@ import com.lms.dashboard.menu.MenuEmp;
 import com.lms.exportCRUD.form.ExportView;
 import com.lms.importCRUD.form.ImportView;
 import com.lms.publisherCRUD.form.PublishersView;
+import com.lms.sheetCRUD.form.sheetView;
 
 public class Emp extends javax.swing.JPanel {
 
@@ -64,6 +65,7 @@ public class Emp extends javax.swing.JPanel {
         // bg.setLayout(layout);
         // bg.setSize(new Dimension(960, 560));
         mainForm = new MainForm();
+        mainForm.showForm(listFrame.get(0));
         menuEmp = new MenuEmp(this);
         toolbar = new javax.swing.JToolBar();
         scrollMenu = new javax.swing.JScrollPane();
@@ -90,6 +92,7 @@ public class Emp extends javax.swing.JPanel {
         listFrame.add(new AuthorsView());
         listFrame.add(new ImportView());
         listFrame.add(new ExportView());
+        listFrame.add(new sheetView());
         // listFrame.add(new InfoPage());
     }
 

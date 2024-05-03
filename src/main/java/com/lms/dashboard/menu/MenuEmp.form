@@ -22,11 +22,12 @@
               <Component id="bookButton" alignment="0" max="32767" attributes="0"/>
               <Component id="bookCategoryButton" alignment="0" max="32767" attributes="0"/>
               <Component id="publisherButton" alignment="0" max="32767" attributes="0"/>
-              <Component id="authorButton" alignment="0" max="32767" attributes="0"/>
-              <Component id="importButton" alignment="0" max="32767" attributes="0"/>
               <Component id="logoutButton" alignment="0" max="32767" attributes="0"/>
           </Group>
-          <Component id="profileButton" alignment="0" min="-2" max="-2" attributes="0"/>
+          <Component id="sheetButton" alignment="1" min="-2" max="-2" attributes="0"/>
+          <Component id="profileButton" alignment="1" min="-2" max="-2" attributes="0"/>
+          <Component id="importButton" alignment="0" min="-2" max="-2" attributes="0"/>
+          <Component id="authorButton" alignment="0" min="-2" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -43,12 +44,14 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="authorButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="exportButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Component id="importButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="exportButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="sheetButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="profileButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="63" max="32767" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
               <Component id="logoutButton" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -70,9 +73,11 @@
     </Component>
     <Component class="com.lms.dashboard.menu.MenuButton" name="authorButton">
     </Component>
+    <Component class="com.lms.dashboard.menu.MenuButton" name="importButton">
+    </Component>
     <Component class="com.lms.dashboard.menu.MenuButton" name="exportButton">
     </Component>
-    <Component class="com.lms.dashboard.menu.MenuButton" name="importButton">
+    <Component class="com.lms.dashboard.menu.MenuButton" name="sheetButton">
     </Component>
     <Component class="com.lms.dashboard.menu.MenuButton" name="profileButton">
     </Component>
