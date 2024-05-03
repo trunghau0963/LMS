@@ -174,7 +174,6 @@ public class BookService {
         Book newBook = new Book();
         newBook.loadFromModel(bookModel);
         boolean isBookAdded = bookDao.add(newBook);
-
         if (!isBookAdded) {
             return false;
         }
@@ -182,7 +181,7 @@ public class BookService {
         String newBookId = "";
         List<Book> books = bookDao.findByTitle(newBook.getTitle());
         for (Book book : books) {
-            if (book.getEdition().equals(newBook.getEdition())) {
+            if (book.getEdition() == newBook.getEdition()) {
                 newBookId = book.getId();
                 break;
             }

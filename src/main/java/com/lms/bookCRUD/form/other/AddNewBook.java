@@ -11,13 +11,16 @@ import com.lms.bookCRUD.entities.Author;
 import com.lms.bookCRUD.entities.Category;
 import com.lms.bookCRUD.entities.Publisher;
 import com.lms.bookCRUD.model.AuthorModel;
+import com.lms.bookCRUD.model.BookModel;
 import com.lms.bookCRUD.model.CategoryModel;
 import com.lms.bookCRUD.model.PublisherModel;
 import com.lms.bookCRUD.repo.AuthorRepo;
 import com.lms.bookCRUD.repo.CategoryRepo;
 import com.lms.bookCRUD.repo.PublisherRepo;
 import com.lms.bookCRUD.service.BookService;
+import com.lms.bookCRUD.ui.ComboBoxMultiSelection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -32,10 +35,10 @@ import com.lms.bookCRUD.model.PublisherModel;
 public class AddNewBook extends javax.swing.JDialog {
 
     private AllBook allBook;
-        private AuthorDao authorDao;
-        private CategoryDao categoryDao;
-        private PublisherDao publisherDao;
-        private BookService bookService;
+    private AuthorDao authorDao;
+    private CategoryDao categoryDao;
+    private PublisherDao publisherDao;
+    private BookService bookService;
 
     public AddNewBook(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -44,7 +47,8 @@ public class AddNewBook extends javax.swing.JDialog {
         initComponents();
     }
 
-    public AddNewBook(javax.swing.JInternalFrame parent, javax.swing.JFrame owner, boolean modal, BookService bookService) {
+    public AddNewBook(javax.swing.JInternalFrame parent, javax.swing.JFrame owner, boolean modal,
+            BookService bookService) {
         super(owner, modal);
         this.bookService = bookService;
         allBook = (AllBook) parent;
@@ -54,40 +58,40 @@ public class AddNewBook extends javax.swing.JDialog {
 
     }
 
-     private void init() {
-                authorDao = new AuthorRepo();
-                categoryDao = new CategoryRepo();
-                publisherDao = new PublisherRepo();
+    private void init() {
+        authorDao = new AuthorRepo();
+        categoryDao = new CategoryRepo();
+        publisherDao = new PublisherRepo();
 
-                List<Author> authors = authorDao.findAll();
-                DefaultComboBoxModel<AuthorModel> authorListModel = new DefaultComboBoxModel<>();
-                for (Author author : authors) {
-                        AuthorModel authorModel = new AuthorModel();
-                        authorModel.loadFromEntity(author);
-                        authorListModel.addElement(authorModel);
-                }
-                authorChoose.setModel(authorListModel);
-
-                List<Category> categories = categoryDao.findAll();
-                DefaultComboBoxModel<CategoryModel> categoryListModel = new DefaultComboBoxModel<>();
-                for (Category category : categories) {
-                        CategoryModel categoryModel = new CategoryModel();
-                        categoryModel.loadFromEntity(category);
-                        categoryListModel.addElement(categoryModel);
-                }
-
-                categoryChoose.setModel(categoryListModel);
-
-                List<Publisher> publishers = publisherDao.findAll();
-                DefaultComboBoxModel<PublisherModel> publisherComboBoxModel = new DefaultComboBoxModel<>();
-                for (Publisher publisher : publishers) {
-                        PublisherModel publisherModel = new PublisherModel();
-                        publisherModel.loadFromEntity(publisher);
-                        publisherComboBoxModel.addElement(publisherModel);
-                }
-                publisherChoose.setModel(publisherComboBoxModel);
-
+        List<Author> authors = authorDao.findAll();
+        DefaultComboBoxModel<AuthorModel> authorListModel = new DefaultComboBoxModel<>();
+        for (Author author : authors) {
+            AuthorModel authorModel = new AuthorModel();
+            authorModel.loadFromEntity(author);
+            authorListModel.addElement(authorModel);
         }
+        authorChoose.setModel(authorListModel);
+
+        List<Category> categories = categoryDao.findAll();
+        DefaultComboBoxModel<CategoryModel> categoryListModel = new DefaultComboBoxModel<>();
+        for (Category category : categories) {
+            CategoryModel categoryModel = new CategoryModel();
+            categoryModel.loadFromEntity(category);
+            categoryListModel.addElement(categoryModel);
+        }
+
+        categoryChoose.setModel(categoryListModel);
+
+        List<Publisher> publishers = publisherDao.findAll();
+        DefaultComboBoxModel<PublisherModel> publisherComboBoxModel = new DefaultComboBoxModel<>();
+        for (Publisher publisher : publishers) {
+            PublisherModel publisherModel = new PublisherModel();
+            publisherModel.loadFromEntity(publisher);
+            publisherComboBoxModel.addElement(publisherModel);
+        }
+        publisherChoose.setModel(publisherComboBoxModel);
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -97,7 +101,8 @@ public class AddNewBook extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -112,7 +117,7 @@ public class AddNewBook extends javax.swing.JDialog {
         jPanel26 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        editionTxT = new javax.swing.JPasswordField();
+        editionTxT = new javax.swing.JTextField();
         jPanel24 = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -122,12 +127,12 @@ public class AddNewBook extends javax.swing.JDialog {
         jPanel25 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        categoryChoose = new javax.swing.JComboBox<>();
+        categoryChoose = new ComboBoxMultiSelection<>();
         jPanel31 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        authorChoose = new javax.swing.JComboBox<>();
+        authorChoose = new ComboBoxMultiSelection<>();
         jPanel22 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -154,16 +159,16 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE));
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap()));
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.NORTH);
 
@@ -183,19 +188,17 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
-        );
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 398, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)));
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 16, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addComponent(jLabel9)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(0, 0, Short.MAX_VALUE))));
 
         jPanel17.add(jPanel4);
         jPanel17.add(titleTxT);
@@ -215,20 +218,24 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-        );
+                jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE));
         jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+                jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)));
 
         jPanel26.add(jPanel9);
 
         editionTxT.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         editionTxT.setPreferredSize(new java.awt.Dimension(64, 40));
+        editionTxT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                editionTxTKeyPressed(evt);
+            }
+        });
         jPanel26.add(editionTxT);
 
         jPanel3.add(jPanel26);
@@ -248,19 +255,18 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
-        );
+                jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 398, Short.MAX_VALUE)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)));
         jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 22, Short.MAX_VALUE)
-            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel8Layout.createSequentialGroup()
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
+                jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 22, Short.MAX_VALUE)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel8Layout.createSequentialGroup()
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addContainerGap())));
 
         jPanel28.add(jPanel8);
 
@@ -287,23 +293,22 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
-        );
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 398, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)));
         jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 22, Short.MAX_VALUE)
-            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel7Layout.createSequentialGroup()
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
+                jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 22, Short.MAX_VALUE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addContainerGap())));
 
         jPanel25.add(jPanel7);
 
-        categoryChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new CategoryModel[] { }));
+        categoryChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new CategoryModel[] {}));
         categoryChoose.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         categoryChoose.setPreferredSize(new java.awt.Dimension(88, 40));
         jPanel25.add(categoryChoose);
@@ -327,21 +332,20 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 398, Short.MAX_VALUE)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 16, Short.MAX_VALUE)
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel21.add(jPanel6);
 
-        authorChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new AuthorModel[] {  }));
+        authorChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new AuthorModel[] {}));
         authorChoose.setPreferredSize(new java.awt.Dimension(72, 40));
         jPanel21.add(authorChoose);
 
@@ -359,26 +363,25 @@ public class AddNewBook extends javax.swing.JDialog {
         jPanel5.setPreferredSize(new java.awt.Dimension(346, 16));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel6.setText("Is Hide");
+        jLabel6.setText("Visibility");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 398, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)));
         jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 16, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         jPanel20.add(jPanel5);
 
-        stateChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hide", "Is Hide" }));
+        stateChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Show", "Hide" }));
         stateChoose.setPreferredSize(new java.awt.Dimension(72, 40));
         jPanel20.add(stateChoose);
 
@@ -422,13 +425,12 @@ public class AddNewBook extends javax.swing.JDialog {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 600,
+                                javax.swing.GroupLayout.PREFERRED_SIZE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -446,35 +448,56 @@ public class AddNewBook extends javax.swing.JDialog {
     }// GEN-LAST:event_returnButtonActionPerformed
 
     private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButton1ActionPerformed
-        String fullName = titleTxT.getText();
-        // String password = BCrypt.hashpw(txtpassword.getText(), BCrypt.gensalt(12));
-        String edition = editionTxT.getText();
-        String category = categoryChoose.getSelectedItem().toString();
-        String state = stateChoose.getSelectedItem().toString();
-        String author = authorChoose.getSelectedItem().toString();
-        String publisher = publisherChoose.getSelectedItem().toString();
-        String date = "";
-        if (fullName.equals("") || category.equals("") || edition.equals("") || state.equals("")
-                || author.equals("") || publisher.equals("")) {
-            JOptionPane.showMessageDialog(this, "Make sure to fill out the required information accurately !", "Warning",
+        String title = titleTxT.getText();
+        Integer edition = Integer.parseInt(editionTxT.getText().equals("") ? "0" : editionTxT.getText());
+        List<CategoryModel> category = new ArrayList<>();
+        for (Object obj : categoryChoose.getSelectedItems()) {
+            category.add((CategoryModel) obj);
+        }
+        List<AuthorModel> author = new ArrayList<>();
+        for (Object obj : authorChoose.getSelectedItems()) {
+            author.add((AuthorModel) obj);
+        }
+        int selectedIndex2 = publisherChoose.getSelectedIndex();
+        PublisherModel publisher = publisherChoose.getItemAt(selectedIndex2);
+        Boolean isHide = stateChoose.getSelectedIndex() == 1;
+        if (title.equals("") || edition == 0 || category.isEmpty() || author.isEmpty()
+                || publisher == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Make sure to fill out the required information accurately !",
+                    "Warning",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-            // if (AccountDAO.getInstance().selectById(user) != null) {
-            // if (isValid(email)) {
-            // Account acc = new Account(fullName, user, password, role, 1, email);
-            // AccountDAO.getInstance().insert(acc);
-            // this.dispose();
-            // homeAcc.loadDataToTable(AccountDAO.getInstance().selectAll());
-            // JOptionPane.showMessageDialog(this, "Thêm thành công !");
-            // } else {
-            // JOptionPane.showMessageDialog(this, "Vui lòng nhập email đúng định dạng !",
-            // "Cảnh báo =",
-            // JOptionPane.WARNING_MESSAGE);
-            // }
-            // } else {
-            // JOptionPane.showMessageDialog(this, "Tên đăng nhập đã tồn tại !", "Cảnh báo",
-            // JOptionPane.WARNING_MESSAGE);
-            // }
+            List<BookModel> findBooks = bookService.getBookByTitle(title);
+            // check if the book already exists
+            if (!findBooks.isEmpty()) {
+                for (BookModel findBook : findBooks) {
+                    if (findBook.getEdition() == edition) {
+                        JOptionPane.showMessageDialog(this,
+                                "Book already exist!",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+            BookModel newBookModel = new BookModel();
+            newBookModel.setTitle(title);
+            newBookModel.setEdition(edition);
+            newBookModel.setCategories(category);
+            newBookModel.setAuthors(author);
+            newBookModel.setPublisher(publisher);
+            newBookModel.setIsHide(isHide);
+            newBookModel.setQuantity(1);
+            boolean isAdded = bookService.addNewBook(newBookModel);
+            if (!isAdded) {
+                JOptionPane.showMessageDialog(this, "Failed to add book !");
+                return;
+            }
+            this.dispose();
+            JOptionPane.showMessageDialog(this, "The book have been added successfully!");
+            allBook.loadDataToTable(bookService.getAllBooks());
+
         }
     }// GEN-LAST:event_saveButton1ActionPerformed
 
@@ -533,10 +556,21 @@ public class AddNewBook extends javax.swing.JDialog {
         });
     }
 
+    private void editionTxTKeyPressed(java.awt.event.KeyEvent evt) {
+        // check if the input is a number
+        char c = evt.getKeyChar();
+        if (Character.isLetter(c)) {
+            editionTxT.setEditable(false);
+        } else {
+            editionTxT.setEditable(true);
+        }
+
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<AuthorModel> authorChoose;
-    private javax.swing.JComboBox<CategoryModel> categoryChoose;
-    private javax.swing.JPasswordField editionTxT;
+    private ComboBoxMultiSelection<AuthorModel> authorChoose;
+    private ComboBoxMultiSelection<CategoryModel> categoryChoose;
+    private javax.swing.JTextField editionTxT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

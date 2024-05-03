@@ -18,6 +18,7 @@ import com.lms.bookCRUD.repo.AuthorRepo;
 import com.lms.bookCRUD.repo.CategoryRepo;
 import com.lms.bookCRUD.repo.PublisherRepo;
 import com.lms.bookCRUD.service.BookService;
+import com.lms.bookCRUD.ui.ComboBoxMultiSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,21 +119,23 @@ public class EditBook extends javax.swing.JDialog {
 
         stateChoose.setSelectedIndex(book.getIsHide() ? 1 : 0);
 
-        if (!book.getAuthorIds().isEmpty()) {
+        List<String> authorIds = book.getAuthorIds();
+        if (!authorIds.isEmpty()) {
             DefaultComboBoxModel authorChooseModel = (DefaultComboBoxModel) authorChoose.getModel();
             for (int i = 0; i < authorChooseModel.getSize(); i++) {
                 AuthorModel authorModel = (AuthorModel) authorChooseModel.getElementAt(i);
-                if (authorModel.getId().equals(book.getAuthorIds().get(0))) {
+                if (authorIds.contains(authorModel.getId())) {
                     authorChoose.setSelectedIndex(i);
                 }
             }
         }
 
-        if (!book.getCategoryIds().isEmpty()) {
+        List<String> categoryIds = book.getCategoryIds();
+        if (!categoryIds.isEmpty()) {
             DefaultComboBoxModel categoryChooseModel = (DefaultComboBoxModel) categoryChoose.getModel();
             for (int i = 0; i < categoryChooseModel.getSize(); i++) {
                 CategoryModel categoryModel = (CategoryModel) categoryChooseModel.getElementAt(i);
-                if (categoryModel.getId().equals(book.getCategoryIds().get(0))) {
+                if (categoryIds.contains(categoryModel.getId())) {
                     categoryChoose.setSelectedIndex(i);
                 }
             }
@@ -183,12 +186,12 @@ public class EditBook extends javax.swing.JDialog {
         jPanel25 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        categoryChoose = new javax.swing.JComboBox<>();
+        categoryChoose = new ComboBoxMultiSelection<>();
         jPanel31 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        authorChoose = new javax.swing.JComboBox<>();
+        authorChoose = new ComboBoxMultiSelection<>();
         jPanel22 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -532,20 +535,20 @@ public class EditBook extends javax.swing.JDialog {
     private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButton1ActionPerformed
         String id = IDField.getText();
         String title = titleTxT.getText();
-        Integer edition = Integer.parseInt(editionTxT.getText());
-        int selectedIndex = categoryChoose.getSelectedIndex();
+        Integer edition = Integer.parseInt(editionTxT.getText().equals("") ? "0" : editionTxT.getText());
         List<CategoryModel> category = new ArrayList<>();
-        category.add(categoryChoose.getItemAt(selectedIndex));
-
-        int selectedIndex1 = authorChoose.getSelectedIndex();
+        for (Object obj : categoryChoose.getSelectedItems()) {
+            category.add((CategoryModel) obj);
+        }
         List<AuthorModel> author = new ArrayList<>();
-        author.add(authorChoose.getItemAt(selectedIndex1));
-
+        for (Object obj : authorChoose.getSelectedItems()) {
+            author.add((AuthorModel) obj);
+        }
         int selectedIndex2 = publisherChoose.getSelectedIndex();
         PublisherModel publisher = publisherChoose.getItemAt(selectedIndex2);
-        Boolean isHide = stateChoose.getSelectedItem().toString().equals("Show") ? false : true;
-        if (title.equals("") || category.equals("") || edition.equals("") ||
-                author.equals("") || publisher.equals("")) {
+        Boolean isHide = stateChoose.getSelectedIndex() == 1;
+        if (title.equals("") || edition == 0 || category.isEmpty() || author.isEmpty()
+                || publisher == null) {
             JOptionPane.showMessageDialog(this,
                     "Make sure to fill out the required information accurately !",
                     "Warning",
@@ -647,8 +650,8 @@ public class EditBook extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField IDField;
-    private javax.swing.JComboBox<AuthorModel> authorChoose;
-    private javax.swing.JComboBox<CategoryModel> categoryChoose;
+    private ComboBoxMultiSelection<AuthorModel> authorChoose;
+    private ComboBoxMultiSelection<CategoryModel> categoryChoose;
     private javax.swing.JTextField editionTxT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

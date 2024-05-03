@@ -55,7 +55,7 @@ public class BookRepo implements BookDao {
             preparedStatement.setString(1, title);
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Book> books = new ArrayList<>();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Book book = new Book();
                 book.setId(resultSet.getString("bookId"));
                 book.setTitle(resultSet.getString("title"));

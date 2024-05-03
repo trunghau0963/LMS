@@ -131,7 +131,8 @@ public class ComboBoxMultiSelection<E> extends JComboBox<E> {
     private class ComboBoxMultiCellRenderer extends BasicComboBoxRenderer {
 
         @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                boolean cellHasFocus) {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (comboList != list) {
                 comboList = list;
@@ -223,7 +224,7 @@ public class ComboBoxMultiSelection<E> extends JComboBox<E> {
             putClientProperty(FlatClientProperties.STYLE, ""
                     + "border:0,5,0,20;"
                     + "background:darken($ComboBox.background,10%)");
-            JButton cmd = new JButton(new FlatSVGIcon("raven/combobox/close.svg", 0.6f));
+            JButton cmd = new JButton(new FlatSVGIcon("svg/close.svg", 0.6f));
             cmd.putClientProperty(FlatClientProperties.STYLE, ""
                     + "arc:999;"
                     + "margin:1,1,1,1;"

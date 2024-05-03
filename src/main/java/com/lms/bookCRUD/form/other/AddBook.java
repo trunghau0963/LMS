@@ -18,7 +18,9 @@ import com.lms.bookCRUD.repo.AuthorRepo;
 import com.lms.bookCRUD.repo.CategoryRepo;
 import com.lms.bookCRUD.repo.PublisherRepo;
 import com.lms.bookCRUD.service.BookService;
+import com.lms.bookCRUD.ui.ComboBoxMultiSelection;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,18 +137,17 @@ public class AddBook extends javax.swing.JDialog {
                 jPanel25 = new javax.swing.JPanel();
                 jPanel7 = new javax.swing.JPanel();
                 jLabel11 = new javax.swing.JLabel();
-                categoryChoose = new javax.swing.JComboBox<>();
                 jPanel31 = new javax.swing.JPanel();
                 jPanel21 = new javax.swing.JPanel();
                 jPanel6 = new javax.swing.JPanel();
                 jLabel7 = new javax.swing.JLabel();
-                authorChoose = new javax.swing.JComboBox<>();
                 jPanel10 = new javax.swing.JPanel();
                 jPanel11 = new javax.swing.JPanel();
                 returnButton = new javax.swing.JButton();
                 jPanel13 = new javax.swing.JPanel();
                 saveButton1 = new javax.swing.JButton();
-
+                authorChoose = new ComboBoxMultiSelection<>();
+                categoryChoose = new ComboBoxMultiSelection<>();
                 setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
                 jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -447,20 +448,22 @@ public class AddBook extends javax.swing.JDialog {
 
         private void saveButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_saveButton1ActionPerformed
                 String title = titleTxT.getText();
-                Integer edition = Integer.parseInt(editionTxT.getText());
-                int selectedIndex = categoryChoose.getSelectedIndex();
+                Integer edition = Integer.parseInt(editionTxT.getText().equals("") ? "0" : editionTxT.getText());
                 List<CategoryModel> category = new ArrayList<>();
-                category.add(categoryChoose.getItemAt(selectedIndex));
-
-                int selectedIndex1 = authorChoose.getSelectedIndex();
+                for (Object obj : categoryChoose.getSelectedItems()) {
+                        category.add((CategoryModel) obj);
+                }
                 List<AuthorModel> author = new ArrayList<>();
-                author.add(authorChoose.getItemAt(selectedIndex1));
-
+                for (Object obj : authorChoose.getSelectedItems()) {
+                        author.add((AuthorModel) obj);
+                }
                 int selectedIndex2 = publisherChoose.getSelectedIndex();
                 PublisherModel publisher = publisherChoose.getItemAt(selectedIndex2);
                 Boolean isHide = this.title.getText().contains("Unavailable") ? true : false;
-                if (title.equals("") || category.equals("") || edition.equals("") ||
-                                author.equals("") || publisher.equals("")) {
+                System.out.println(
+                                title + " " + edition + " " + category + " " + author + " " + publisher + " " + isHide);
+                if (title.equals("") || edition == 0 || category.isEmpty() || author.isEmpty()
+                                || publisher == null) {
                         JOptionPane.showMessageDialog(this,
                                         "Make sure to fill out the required information accurately !",
                                         "Warning",
@@ -475,32 +478,29 @@ public class AddBook extends javax.swing.JDialog {
                                                                 "Book already exist!",
                                                                 "Error",
                                                                 JOptionPane.ERROR_MESSAGE);
+                                                return;
                                         }
                                 }
-                        } else {
-                                BookModel newBookModel = new BookModel();
-                                newBookModel.setTitle(title);
-                                newBookModel.setEdition(edition);
-                                newBookModel.setCategories(category);
-                                newBookModel.setAuthors(author);
-                                newBookModel.setPublisher(publisher);
-                                newBookModel.setIsHide(isHide);
-                                newBookModel.setQuantity(1);
-                                boolean isAdded = bookService.addNewBook(newBookModel);
-                                if (!isAdded) {
-                                        JOptionPane.showMessageDialog(this, "Failed to add book !");
-                                        return;
-                                }
-                                this.dispose();
-                                JOptionPane.showMessageDialog(this, "The book have been added successfully !");
-                                if (this.title.getText().contains("Unavailable"))
-                                        unavailableBook.loadDataToTable(bookService.getUnavailableBooks());
-                                else if (this.title.getText().contains("Available"))
-                                        availableBook.loadDataToTable(bookService.getAvailableBooks());
-                                else {
-
-                                }
                         }
+                        BookModel newBookModel = new BookModel();
+                        newBookModel.setTitle(title);
+                        newBookModel.setEdition(edition);
+                        newBookModel.setCategories(category);
+                        newBookModel.setAuthors(author);
+                        newBookModel.setPublisher(publisher);
+                        newBookModel.setIsHide(isHide);
+                        newBookModel.setQuantity(1);
+                        boolean isAdded = bookService.addNewBook(newBookModel);
+                        if (!isAdded) {
+                                JOptionPane.showMessageDialog(this, "Failed to add book !");
+                                return;
+                        }
+                        this.dispose();
+                        JOptionPane.showMessageDialog(this, "The book have been added successfully!");
+                        if (this.title.getText().contains("Unavailable"))
+                                unavailableBook.loadDataToTable(bookService.getUnavailableBooks());
+                        else if (this.title.getText().contains("Available"))
+                                availableBook.loadDataToTable(bookService.getAvailableBooks());
 
                 }
 
@@ -580,8 +580,8 @@ public class AddBook extends javax.swing.JDialog {
         }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JComboBox<AuthorModel> authorChoose;
-        private javax.swing.JComboBox<CategoryModel> categoryChoose;
+        private ComboBoxMultiSelection<AuthorModel> authorChoose;
+        private ComboBoxMultiSelection<CategoryModel> categoryChoose;
         private javax.swing.JTextField editionTxT;
         private javax.swing.JLabel jLabel11;
         private javax.swing.JLabel jLabel12;
