@@ -5,6 +5,7 @@
 package com.lms.exportCRUD.form.other;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -36,14 +37,22 @@ import com.itextpdf.layout.properties.TextAlignment;
 
 import com.lms.exportCRUD.service.BookService;
 import com.lms.exportCRUD.model.BookModel;
+import com.lms.exportCRUD.repo.InvoiceRepo;
 import com.lms.exportCRUD.ui.CenterTableCellRenderer;
+
+import com.lms.exportCRUD.entities.ExportBook;
+import com.lms.exportCRUD.service.InvoiceDetailService;
+import com.lms.exportCRUD.service.InvoiceService;
+import com.lms.exportCRUD.dal.InvoiceDetailDao;
+import com.lms.exportCRUD.dal.InvoiceDao;
+import com.lms.exportCRUD.repo.InvoiceDetailRepo;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 
@@ -57,8 +66,18 @@ public class exportPanel extends javax.swing.JInternalFrame {
          * Creates new form ImportPanel
          */
         private BookService bookService;
+        private InvoiceService invoiceService;
+        private InvoiceDetailService invoiceDetailService;
+        private InvoiceDao invoiceDao;
+        private InvoiceDetailDao invoiceDetailDao;
 
         public exportPanel(BookService bookService) {
+
+                invoiceDao = new InvoiceRepo();
+                invoiceDetailDao = new InvoiceDetailRepo();
+
+                invoiceService = new InvoiceService(invoiceDao);
+                invoiceDetailService = new InvoiceDetailService(invoiceDetailDao);
 
                 this.bookService = bookService;
                 initComponents();
@@ -654,9 +673,23 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                         JOptionPane.ERROR_MESSAGE);
                         return;
                 }
-                if (!result){
+                if (!result) {
                         return;
                 }
+
+                List<ExportBook> exportBooks = new ArrayList<>();
+                for (BookModel book : bookAlready) {
+                        ExportBook exportBook = new ExportBook();
+                        exportBook.setId(book.getId());
+                        exportBook.setQuantity(book.getQuantity());
+                        exportBook.setExportPrice(book.getSalePrice() * book.getQuantity());
+                        exportBooks.add(exportBook);
+                }
+
+                String invoiceId = invoiceService.createInvoice("0997fa53eef44c07", "0f253955123c5568",
+                                new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+ 
+                invoiceDetailService.insertIntoInvoice(invoiceId, exportBooks);
 
                 JOptionPane.showMessageDialog(null, "Export successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 bookAlready.clear();
