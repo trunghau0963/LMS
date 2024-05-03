@@ -869,7 +869,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                         String sheetId = sheetService.createSheet(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
                                         "ef3d16db8e6aad88");
-                        System.out.println(sheetId);
+                       
                         sheetDetailService.insertIntoSheet(sheetId, imBooks);
 
                         JOptionPane.showMessageDialog(this, "Import successfully");
@@ -878,6 +878,11 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         importListBookModel.setRowCount(0);
                         totalNumber.setText(String.valueOf(calTotalCost()) + "$");
                         disabledRows.clear();
+
+                     
+                        books.clear();
+                        books = bookService.getAllBooks();
+                        loadBooksToTable(books);
 
                         bookListTable.repaint();
                 }
