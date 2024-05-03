@@ -4,17 +4,24 @@
  */
 package com.lms.sheetCRUD.form.other;
 
+import com.lms.sheetCRUD.service.BookService;
+import com.lms.sheetCRUD.service.SheetDetailService;
+import com.lms.sheetCRUD.service.SheetService;
+
 /**
  *
  * @author nttha
  */
 public class sheetList extends javax.swing.JPanel {
+    private BookService bookService;
+    private SheetService sheetService;
+    private SheetDetailService sheetDetailService;
     private ImportSheet importSheet;
     private ExportSheet exportSheet;
 
-    public sheetList() {
+    public sheetList(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService) {
         initComponents();
-        importSheet = new ImportSheet();
+        importSheet = new ImportSheet(bookService, sheetService, sheetDetailService);
         exportSheet = new ExportSheet();
         init();
     }

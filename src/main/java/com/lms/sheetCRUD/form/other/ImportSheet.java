@@ -6,14 +6,21 @@ package com.lms.sheetCRUD.form.other;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.lms.sheetCRUD.entities.Sheet;
+import com.lms.sheetCRUD.service.BookService;
+import com.lms.sheetCRUD.service.SheetDetailService;
+import com.lms.sheetCRUD.service.SheetService;
 
 /**
  *
@@ -21,21 +28,51 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
  */
 public class ImportSheet extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ImportSheet
-     */
-    public ImportSheet() {
+    private BookService bookService;
+    private SheetService sheetService;
+    private SheetDetailService sheetDetailService;
+    ArrayList<Sheet> sheets = new ArrayList<>();
+    DefaultTableModel model;
+
+    public ImportSheet(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService) {
+        this.bookService = bookService;
+        this.sheetService = sheetService;
+        this.sheetDetailService = sheetDetailService;
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         UIManager.put("Table.showVerticalLines", true);
         BasicInternalFrameUI ui = (BasicInternalFrameUI) this.getUI();
         ui.setNorthPane(null);
-        // listImport.setDefaultEditor(Object.class, null);
+        listImport.setDefaultEditor(Object.class, null);
         initComponents();
         init();
     }
 
     private void init() {
+        customTable(listImport);
         customeIcon(searchField, refreshButton, filterButton, btnView, btnDelete, btnEdit, btnExport, btnImport);
+        sheets = sheetService.getAll();
+        model = (DefaultTableModel) listImport.getModel();
+        model.setRowCount(0);
+        model.addColumn("ID");
+        model.addColumn("Import Date");
+        model.addColumn("Responsible");
+        model.addColumn("Total");
+    }
+
+        public void loadDataToTable(ArrayList<Sheet> sheets) {
+        try {
+            model.setRowCount(0);
+            for (Sheet sheet : sheets) {
+                model.addRow(new Object[] {
+                    sheet.getSheetId(),
+                    sheet.getDate(),
+                    sheet.getResponsible(),
+                    sheet.getTotalCost()
+                });
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 
     private void customeIcon(JTextField searchField, JButton refreshButton, JButton filterButton, JButton btnView,
@@ -57,6 +94,15 @@ public class ImportSheet extends javax.swing.JInternalFrame {
         table.getTableHeader().setForeground(new Color(0, 0, 0));
         table.setRowHeight(30);
         table.setShowGrid(true);
+    }
+
+    public Sheet getSelectedSheet() {
+        int index = listImport.getSelectedRow();
+        Sheet sheet = sheetService.getById((String) model.getValueAt(index, 0));
+        if (index != -1) {
+            return sheets.get(index);
+        }
+        return null;
     }
 
     /**
