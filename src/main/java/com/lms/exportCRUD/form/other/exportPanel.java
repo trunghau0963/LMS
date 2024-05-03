@@ -22,7 +22,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -35,16 +34,16 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 
-import com.lms.bookCRUD.service.BookService;
-import com.lms.bookCRUD.model.BookModel;
-import com.lms.bookCRUD.ui.CenterTableCellRenderer;
+import com.lms.exportCRUD.service.BookService;
+import com.lms.exportCRUD.model.BookModel;
+import com.lms.exportCRUD.ui.CenterTableCellRenderer;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
+
 
 import javax.swing.*;
 
@@ -645,14 +644,17 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 for (BookModel book : bookAlready) {
                         bookService.updateQuantity(book.getId(), book.getQuantity());
                 }
-
+                boolean result = false;
                 if (exportFormat.equals("Excel")) {
-                        exportExcel();
+                        result = exportExcel();
                 } else if (exportFormat.equals("PDF")) {
-                        exportPDF();
+                        result = exportPDF();
                 } else {
                         JOptionPane.showMessageDialog(null, "Please select the export format", "Error",
                                         JOptionPane.ERROR_MESSAGE);
+                        return;
+                }
+                if (!result){
                         return;
                 }
 
@@ -671,7 +673,7 @@ public class exportPanel extends javax.swing.JInternalFrame {
 
         }// GEN-LAST:event_jButton9ActionPerformed
 
-        private void exportExcel() {
+        private boolean exportExcel() {
                 JFileChooser chooser = new JFileChooser();
                 try {
                         chooser.showSaveDialog(this);
@@ -729,10 +731,12 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                 fos.close();
                                 workbook.close();
                                 openFile(file.toString());
+                                return true;
                         }
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
+                return false;
         }
 
         private XSSFFont createHeaderFont(XSSFWorkbook workbook) {
@@ -753,7 +757,7 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 }
         }
 
-        private void exportPDF() {
+        private boolean exportPDF() {
                 JFileChooser chooser = new JFileChooser();
                 try {
                         chooser.showSaveDialog(this);
@@ -809,10 +813,13 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                 document.close();
 
                                 openFile(file.toString());
+                                return true;
+
                         }
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
+                return false;
         }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
