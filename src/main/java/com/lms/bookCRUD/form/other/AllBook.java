@@ -117,7 +117,7 @@ public class AllBook extends javax.swing.JInternalFrame {
 
         bookList.setModel(tblModel);
         bookList.getColumnModel().getColumn(9).setCellRenderer(new ToggleRenderer());
-        bookList.getColumnModel().getColumn(9).setCellEditor(new ToggleEditor(bookService));
+        bookList.getColumnModel().getColumn(9).setCellEditor(new ToggleEditor(bookService, bookList));
 
         bookList.setColumnSelectionAllowed(true);
     }
@@ -131,7 +131,7 @@ public class AllBook extends javax.swing.JInternalFrame {
                 tblModel.addRow(new Object[] { ++idx, bookModel.getId(), bookModel.getTitle(), bookModel.getEdition(),
                         bookModel.getCategoriesString(),
                         bookModel.getAuthorsString(), bookModel.getPublisher().toString(),
-                        bookModel.getSalePrice(), bookModel.getQuantity() });
+                        bookModel.getSalePrice(), bookModel.getQuantity(), bookModel.getIsHide() });
             }
         } catch (Exception e) {
             // TODO: handle exception

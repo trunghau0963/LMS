@@ -9,10 +9,15 @@ import java.awt.*;
 
 public class ToggleEditor extends AbstractCellEditor implements TableCellEditor {
     private JToggleButton button = new JToggleButton("");
-    private BookService bookService;
 
-    public ToggleEditor(BookService bookService) {
-        this.bookService = bookService;
+    public ToggleEditor(BookService bookService, JTable table) {
+        button.addActionListener(e -> {
+            int rowSelected = table.getSelectedRow();
+            if (rowSelected != -1) {
+                String bookId = (String) table.getValueAt(rowSelected, 1);
+                bookService.setBookVisibility(bookId, button.isSelected());
+            }
+        });
     }
 
     @Override
@@ -21,11 +26,6 @@ public class ToggleEditor extends AbstractCellEditor implements TableCellEditor 
             button.setSelected((Boolean) value);
         } else {
             button.setSelected(false); // or handle this case differently
-        }
-        int rowSelected = table.getSelectedRow();
-        if (rowSelected != -1) {
-            String bookId = (String) table.getValueAt(rowSelected, 1);
-            bookService.setBookVisibility(bookId, !(Boolean) value);
         }
         button.addActionListener(e -> stopCellEditing());
 
