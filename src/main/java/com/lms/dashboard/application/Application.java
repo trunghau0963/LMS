@@ -39,7 +39,7 @@ public class Application extends javax.swing.JFrame {
         app = this;
         admin = new Admin(this);
         emp = new Emp(this);
-        app.setContentPane(app.admin);
+        app.setContentPane(app.emp);
         app.pack();
         app.setLocationRelativeTo(null);
 
