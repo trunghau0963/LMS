@@ -17,7 +17,7 @@ import com.lms.dashboard.menu.MenuEmp;
 import com.lms.exportCRUD.form.ExportView;
 import com.lms.importCRUD.form.ImportView;
 import com.lms.publisherCRUD.form.PublishersView;
-import com.lms.sheetCRUD.form.sheetView;
+import com.lms.sheetCRUD.form.SheetView;
 
 public class Emp extends javax.swing.JPanel {
 
@@ -92,7 +92,7 @@ public class Emp extends javax.swing.JPanel {
         listFrame.add(new AuthorsView());
         listFrame.add(new ImportView());
         listFrame.add(new ExportView());
-        listFrame.add(new sheetView());
+        listFrame.add(new SheetView());
         // listFrame.add(new InfoPage());
     }
 

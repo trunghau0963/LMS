@@ -12,17 +12,17 @@ import com.lms.sheetCRUD.service.SheetService;
  *
  * @author nttha
  */
-public class sheetList extends javax.swing.JPanel {
+public class SheetList extends javax.swing.JPanel {
     private BookService bookService;
     private SheetService sheetService;
     private SheetDetailService sheetDetailService;
     private ImportSheet importSheet;
     private ExportSheet exportSheet;
 
-    public sheetList(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService) {
+    public SheetList(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService) {
         initComponents();
         importSheet = new ImportSheet(bookService, sheetService, sheetDetailService);
-        exportSheet = new ExportSheet();
+        exportSheet = new ExportSheet(bookService, sheetService, sheetDetailService);
         init();
     }
 

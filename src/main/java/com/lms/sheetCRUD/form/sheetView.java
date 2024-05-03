@@ -17,11 +17,11 @@ import com.lms.sheetCRUD.repo.SheetRepo;
 import com.lms.sheetCRUD.service.BookService;
 import com.lms.sheetCRUD.service.SheetDetailService;
 import com.lms.sheetCRUD.service.SheetService;
-import com.lms.sheetCRUD.form.other.sheetList;
+import com.lms.sheetCRUD.form.other.SheetList;
 
-public class sheetView extends javax.swing.JPanel {
+public class SheetView extends javax.swing.JPanel {
     private CardLayout cardLayout;
-    public static sheetList sheetList;
+    public static SheetList sheetList;
 
     private BookService bookService;
     private BookDao bookDao;
@@ -30,7 +30,7 @@ public class sheetView extends javax.swing.JPanel {
     private SheetDetailDao sheetDetailDao;
     private SheetDetailService sheetDetailService;
 
-    public sheetView() {
+    public SheetView() {
 
         super();
 
@@ -49,7 +49,7 @@ public class sheetView extends javax.swing.JPanel {
         cardLayout = new CardLayout();
         setLayout(cardLayout);
 
-        sheetList = new sheetList(bookService, sheetService, sheetDetailService);
+        sheetList = new SheetList(bookService, sheetService, sheetDetailService);
         add(sheetList, "sheetList");
         cardLayout.show(this, "sheetList");
     }

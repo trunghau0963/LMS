@@ -19,27 +19,27 @@ public class Application extends javax.swing.JFrame {
     User user;
     int index;
     private static Application app;
-    private final com.lms.auth.form.AuthView AuthView;
+    private final com.lms.auth.form.AuthView authView;
     private Admin admin;
     private Emp emp;
     private static AuthService authService;
 
     public Application(AuthService authService) {
 
-        this.authService = authService;
+        Application.authService = authService;
         user = new User();
 
         initComponents();
 
-        AuthView = new com.lms.auth.form.AuthView(authService);
+        authView = new com.lms.auth.form.AuthView(authService, this, user);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         // setLocationRelativeTo(null);
 
-        app = this;
+        app.setContentPane(app.authView);
+
         admin = new Admin(this);
         emp = new Emp(this);
-        app.setContentPane(app.emp);
         app.pack();
         app.setLocationRelativeTo(null);
 
@@ -72,21 +72,17 @@ public class Application extends javax.swing.JFrame {
     //     reader.close();
     // }
 
-    public static void dashboardAdmin() {
+    public void dashboardAdmin() {
         app.setContentPane(app.admin);
-        // app.pack();
-        // app.setLocationRelativeTo(null);
         FlatLaf.updateUI();
     }
 
-    public static void dashboardUser() {
-        app.setContentPane(app.admin);
-        // app.pack();
-        // app.setLocationRelativeTo(null);
+    public void dashboardUser() {
+        app.setContentPane(app.emp);
         FlatLaf.updateUI();
     }
 
-    public static void setUserInformation(User user) {
+    public void setUserInformation(User user) {
         app.user = user;
     }
 

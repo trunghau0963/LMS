@@ -11,9 +11,13 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.lms.sheetCRUD.service.BookService;
+import com.lms.sheetCRUD.service.SheetDetailService;
+import com.lms.sheetCRUD.service.SheetService;
 
 /**
  *
@@ -21,10 +25,16 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
  */
 public class ExportSheet extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ExportSheet
-     */
-    public ExportSheet() {
+    private BookService bookService;
+    private SheetService sheetService;
+    private SheetDetailService sheetDetailService;
+    // ArrayList<> sheets = new ArrayList<>();
+    DefaultTableModel model;
+
+    public ExportSheet(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService) {
+        this.bookService = bookService;
+        this.sheetService = sheetService;
+        this.sheetDetailService = sheetDetailService;
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
         UIManager.put("Table.showVerticalLines", true);
         BasicInternalFrameUI ui = (BasicInternalFrameUI) this.getUI();
@@ -66,7 +76,8 @@ public class ExportSheet extends javax.swing.JInternalFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel6 = new javax.swing.JPanel();
@@ -101,13 +112,11 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE)
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 709, Short.MAX_VALUE));
         jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-        );
+                jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE));
 
         getContentPane().add(jPanel6, java.awt.BorderLayout.CENTER);
 
@@ -119,7 +128,9 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         jPanel40.setPreferredSize(new java.awt.Dimension(800, 120));
         jPanel40.setLayout(new javax.swing.BoxLayout(jPanel40, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Export List", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
+        jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Export List",
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
         jPanel41.setPreferredSize(new java.awt.Dimension(400, 200));
         jPanel41.setLayout(new java.awt.BorderLayout());
 
@@ -145,19 +156,18 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         javax.swing.GroupLayout jPanel44Layout = new javax.swing.GroupLayout(jPanel44);
         jPanel44.setLayout(jPanel44Layout);
         jPanel44Layout.setHorizontalGroup(
-            jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel44Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
-        );
+                jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel44Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                                .addGap(8, 8, 8)));
         jPanel44Layout.setVerticalGroup(
-            jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel44Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
+                jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel44Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(34, Short.MAX_VALUE)));
 
         jPanel42.add(jPanel44, java.awt.BorderLayout.CENTER);
 
@@ -246,22 +256,26 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         javax.swing.GroupLayout jPanel46Layout = new javax.swing.GroupLayout(jPanel46);
         jPanel46.setLayout(jPanel46Layout);
         jPanel46Layout.setHorizontalGroup(
-            jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 347, Short.MAX_VALUE)
-            .addGroup(jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel46Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
+                jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 347, Short.MAX_VALUE)
+                        .addGroup(jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                        jPanel46Layout.createSequentialGroup()
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        Short.MAX_VALUE))));
         jPanel46Layout.setVerticalGroup(
-            jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 119, Short.MAX_VALUE)
-            .addGroup(jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel46Layout.createSequentialGroup()
-                    .addGap(0, 9, Short.MAX_VALUE)
-                    .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
+                jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 119, Short.MAX_VALUE)
+                        .addGroup(jPanel46Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                        jPanel46Layout.createSequentialGroup()
+                                                .addGap(0, 9, Short.MAX_VALUE)
+                                                .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))));
 
         jPanel40.add(jPanel46);
 

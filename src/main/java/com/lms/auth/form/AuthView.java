@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 import com.formdev.flatlaf.FlatClientProperties;
@@ -15,11 +16,14 @@ import com.lms.dashboard.application.Application;
 public class AuthView extends javax.swing.JPanel {
 
     private AuthService authService;
+    private Application application;
     private User user;
 
-    public AuthView(AuthService authService) {
+    public AuthView(AuthService authService, Application application, User user) {
         initComponents();
+        this.user = user;
         this.authService = authService;
+        this.application = application;
         init();
     }
 
@@ -648,32 +652,20 @@ public class AuthView extends javax.swing.JPanel {
 
         User userLogin = authService.logIn(user, pass, role);
         if (userLogin.getName() != null) {
-            // System.out.print(userLogin.getName());
-            // if (rememberCheckbok.isSelected()) {
-            // try {
-            // FileWriter writer = new FileWriter("login.txt", false);
-            // writer.write(user + "\n" + pass + "\n" + role);
-            // writer.close();
-            // } catch (IOException e) {
-            // e.printStackTrace();
-            // }
-            // }
-            // Notifications.getInstance().show(Notifications.Type.SUCCESS,
-            // Notifications.Location.TOP_CENTER,
-            // "Login Success\n" + " Welcome " + userLogin.getName());
+            JOptionPane.showMessageDialog(null, "Login Success\n" + " Welcome " + userLogin.getName());
             final String finalRole = role;
-            Timer timer = new Timer(3000, new ActionListener() {
+            Timer timer = new Timer(100, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     ((Timer) e.getSource()).stop(); // Stop the timer
                     if (finalRole.equals("Admin")) {
-                        Application.dashboardAdmin();
-                        Application.setUserInformation(userLogin);
+                        application.dashboardAdmin();
+                        application.setUserInformation(userLogin);
                         txtPhoneNumberLogin.setText("");
                         txtPassLogin.setText("");
                     } else if (finalRole.equals("Employee")) {
-                        Application.dashboardUser();
-                        Application.setUserInformation(userLogin);
+                        application.dashboardUser();
+                        application.setUserInformation(userLogin);
                         txtPhoneNumberLogin.setText("");
                         txtPassLogin.setText("");
                     }
@@ -683,9 +675,7 @@ public class AuthView extends javax.swing.JPanel {
             timer.start();
 
         } else {
-            // Notifications.getInstance().show(Notifications.Type.ERROR,
-            // Notifications.Location.TOP_CENTER,
-            // "Login Failed\n" + "User does not exist or password is incorrect");
+            JOptionPane.showMessageDialog(null, "Login Failed\n" + "User does not exist or password is incorrect");
             errorPhone.setText("User does not exist");
             errorPhone.setForeground(new java.awt.Color(255, 0, 0));
             txtPhoneNumberLogin.grabFocus();
