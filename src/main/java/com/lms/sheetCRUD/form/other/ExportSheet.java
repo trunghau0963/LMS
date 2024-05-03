@@ -78,7 +78,6 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         jPanel42 = new javax.swing.JPanel();
         jPanel43 = new javax.swing.JPanel();
         filterButton = new javax.swing.JButton();
-        searchOption = new javax.swing.JComboBox<>();
         jPanel44 = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
         jPanel45 = new javax.swing.JPanel();
@@ -127,7 +126,7 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         jPanel42.setPreferredSize(new java.awt.Dimension(800, 40));
         jPanel42.setLayout(new java.awt.BorderLayout());
 
-        jPanel43.setPreferredSize(new java.awt.Dimension(150, 40));
+        jPanel43.setPreferredSize(new java.awt.Dimension(40, 40));
 
         filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
         filterButton.addActionListener(new java.awt.event.ActionListener() {
@@ -136,15 +135,6 @@ public class ExportSheet extends javax.swing.JInternalFrame {
             }
         });
         jPanel43.add(filterButton);
-
-        searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
-        searchOption.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchOptionsearchOptionActionPerformed(evt);
-            }
-        });
-        jPanel43.add(searchOption);
 
         jPanel42.add(jPanel43, java.awt.BorderLayout.WEST);
 
@@ -158,7 +148,7 @@ public class ExportSheet extends javax.swing.JInternalFrame {
             jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel44Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addGap(8, 8, 8))
         );
         jPanel44Layout.setVerticalGroup(
@@ -171,11 +161,12 @@ public class ExportSheet extends javax.swing.JInternalFrame {
 
         jPanel42.add(jPanel44, java.awt.BorderLayout.CENTER);
 
-        jPanel45.setPreferredSize(new java.awt.Dimension(120, 40));
+        jPanel45.setEnabled(false);
+        jPanel45.setPreferredSize(new java.awt.Dimension(40, 40));
         jPanel45.setRequestFocusEnabled(false);
 
-        refreshButton.setText("Refresh");
-        refreshButton.setPreferredSize(new java.awt.Dimension(120, 40));
+        refreshButton.setToolTipText("Refresh");
+        refreshButton.setPreferredSize(new java.awt.Dimension(40, 40));
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 refreshButtonActionPerformed(evt);
@@ -335,6 +326,5 @@ public class ExportSheet extends javax.swing.JInternalFrame {
     private javax.swing.JTable listExport;
     private javax.swing.JButton refreshButton;
     private javax.swing.JTextField searchField;
-    private javax.swing.JComboBox<String> searchOption;
     // End of variables declaration//GEN-END:variables
 }
