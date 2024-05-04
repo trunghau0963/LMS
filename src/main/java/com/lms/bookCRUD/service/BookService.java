@@ -422,6 +422,71 @@ public class BookService {
         return bookModels;
     }
 
+    public List<BookModel> filterBooks(String tab, List<CategoryModel> categories, AuthorModel author,
+            PublisherModel publisher, float price) {
+        List<BookModel> allBooks;
+        if (tab.contains("All")) {
+            allBooks = getAllBooks();
+        } else if (tab.contains("Available")) {
+            allBooks = getAvailableBooks();
+        } else {
+            allBooks = getUnavailableBooks();
+        }
+        List<BookModel> results = new ArrayList<>();
+        for (BookModel book : allBooks) {
+            Boolean check = true;
+            if (price != 0) {
+                if (book.getSalePrice() > price) {
+                    check = false;
+                }
+            }
+
+            if (!categories.isEmpty()) {
+                List<CategoryModel> genres = book.getCategories();
+                Boolean checkCategory = false;
+                for (int i = 0; i < categories.size(); i++) {
+                    for (int j = 0; j < genres.size(); j++) {
+                        if (genres.get(j).getGenre().equals(categories.get(i).getGenre())) {
+                            checkCategory = true;
+                            break;
+                        }
+                    }
+                    if (checkCategory) {
+                        break;
+                    }
+                }
+                if (!checkCategory) {
+                    check = false;
+                }
+            }
+
+            if (author != null && !author.getName().equals("All")) {
+                List<AuthorModel> authorNames = book.getAuthors();
+                Boolean checkAuthor = false;
+                for (int i = 0; i < authorNames.size(); i++) {
+                    if (authorNames.get(i).getName().equals(author.getName())) {
+                        checkAuthor = true;
+                        break;
+                    }
+                }
+                if (!checkAuthor) {
+                    check = false;
+                }
+            }
+
+            if (publisher != null && !publisher.getName().equals("All")) {
+                if (!publisher.getName().equals(book.getPublisher().getName())) {
+                    check = false;
+                }
+            }
+
+            if (check) {
+                results.add(book);
+            }
+        }
+        return results;
+    }
+
     public boolean deleteBookById(String id) {
         bookAuthorDao.deleteByBookId(id);
         bookCategoryDao.deleteByBookId(id);

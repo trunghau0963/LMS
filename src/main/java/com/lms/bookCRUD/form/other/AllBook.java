@@ -405,7 +405,7 @@ public class AllBook extends javax.swing.JInternalFrame {
 
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonActionPerformed
         FilterDialog a = new FilterDialog(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
-                rootPaneCheckingEnabled);
+                rootPaneCheckingEnabled, bookService, this.getClass().getSimpleName());
         a.setVisible(true);
     }// GEN-LAST:event_filterButtonActionPerformed
 
