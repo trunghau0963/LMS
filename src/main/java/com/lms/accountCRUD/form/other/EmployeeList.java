@@ -60,8 +60,8 @@ class UsersTableEditor extends AbstractCellEditor implements TableCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
             int column) {
-        String phone = table.getValueAt(row, 1).toString();
-        boolean isBlocked = (boolean) table.getValueAt(row, 4);
+        String phone = table.getValueAt(row, 2).toString();
+        boolean isBlocked = (boolean) table.getValueAt(row, 6);
 
         adminService.toggleBlockUser(phone, !isBlocked);
 

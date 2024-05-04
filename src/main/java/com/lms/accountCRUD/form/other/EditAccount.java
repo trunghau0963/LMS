@@ -51,6 +51,7 @@ public class EditAccount extends javax.swing.JDialog {
                         fullNametxt.setText(admin.getAdminName());
                         contactNumber.setText(admin.getPhoneNumber());
                         genderChoose.setSelectedItem(admin.getGender());
+                        pwd.setText(admin.getPwd());
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date dob = (Date) dateFormat.parse(admin.getDob());
                         jDateChooser3.setDate(dob);
@@ -60,6 +61,7 @@ public class EditAccount extends javax.swing.JDialog {
                         employee = employeeList.getSelectEmployee();
                         System.out.println(employee.toString());
                         IdField.setText(employee.getEmpId());
+                        pwd.setText(employee.getPwd());
                         fullNametxt.setText(employee.getEmpName());
                         contactNumber.setText(employee.getPhoneNumber());
                         genderChoose.setSelectedItem(employee.getGender());

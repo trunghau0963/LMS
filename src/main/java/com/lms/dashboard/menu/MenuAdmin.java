@@ -70,9 +70,9 @@ public class MenuAdmin extends javax.swing.JPanel {
         
         setIndex();
         if (!buttonList.isEmpty()) {
-            buttonList.get(0).setSelected(true);
-            buttonList.get(0).isSelected(true);
-            admin.changeFrame(0); // Assuming you want to change the frame to the first one as well
+            buttonList.get(1).setSelected(true);
+            buttonList.get(1).isSelected(true);
+            admin.changeFrame(1); // Assuming you want to change the frame to the first one as well
         }
 
         this.setAction(new java.awt.event.ActionListener() {
