@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lms.sheetCRUD.entities.ImportBook;
+import com.lms.sheetCRUD.entities.Sheet;
 import com.lms.sheetCRUD.entities.SheetDetail;
 
 public interface SheetDetailDao {
@@ -15,7 +16,6 @@ public interface SheetDetailDao {
     public void insertIntoSheet(String sheetId, List<ImportBook> books);
 
     public void deleteSheet(String sheetId);
-
 }
 
     

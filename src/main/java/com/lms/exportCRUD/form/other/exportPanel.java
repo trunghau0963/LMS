@@ -7,6 +7,7 @@ package com.lms.exportCRUD.form.other;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -112,6 +113,19 @@ public class ExportPanel extends javax.swing.JInternalFrame {
 
                 TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(bookList.getModel());
                 bookList.setRowSorter(sorter);
+
+                DefaultTableModel tblModel1 = new DefaultTableModel();
+
+                customTable(bookList1);
+                // Set column names for the table model
+                tblModel1.setColumnIdentifiers(new Object[] { "Title",
+                                "Edition", "Sale Price", "Quantity" });
+
+                bookList1.setModel(tblModel1);
+
+                searchOption.setModel(
+                                new javax.swing.DefaultComboBoxModel<>(
+                                                new String[] { "Any", "Title", "Category", "Author", "Publisher" }));
 
                 bookList.addMouseListener(new MouseAdapter() {
                         @Override
@@ -282,6 +296,11 @@ public class ExportPanel extends javax.swing.JInternalFrame {
                 jPanel15.setPreferredSize(new java.awt.Dimension(700, 40));
 
                 searchField.setPreferredSize(new java.awt.Dimension(71, 40));
+                searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+                        public void keyReleased(java.awt.event.KeyEvent evt) {
+                                searchFieldKeyReleased(evt);
+                        }
+                });
 
                 javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
                 jPanel15.setLayout(jPanel15Layout);
@@ -665,6 +684,24 @@ public class ExportPanel extends javax.swing.JInternalFrame {
 
         }
 
+        public void loadDataToTable(List<BookModel> bookModels) {
+                try {
+                        DefaultTableModel tblModel = (DefaultTableModel) bookList.getModel();
+                        int idx = 0;
+                        tblModel.setRowCount(0);
+                        for (BookModel bookModel : bookModels) {
+                                tblModel.addRow(new Object[] { ++idx, bookModel.getId(), bookModel.getTitle(),
+                                                bookModel.getEdition(),
+                                                bookModel.getCategoriesString(),
+                                                bookModel.getAuthorsString(), bookModel.getPublisher().toString(),
+                                                bookModel.getSalePrice(), bookModel.getQuantity()
+                                });
+                        }
+                } catch (Exception e) {
+                        // TODO: handle exception
+                }
+        }
+
         public void getSelectBookAlready() {
                 int row = bookList1.getSelectedRow();
                 if (row != -1) {
@@ -672,13 +709,14 @@ public class ExportPanel extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(null, "Remove successfully", "Success",
                                         JOptionPane.INFORMATION_MESSAGE);
                         DefaultTableModel tblModel = new DefaultTableModel();
-                        tblModel.setColumnIdentifiers(new Object[] { "ID", "Title", "Edition", "Sale Price",
+                        tblModel.setColumnIdentifiers(new Object[] { "Title", "Edition", "Sale Price",
                                         "Quantity" });
                         float totalPrice = 0;
                         // for (BookModel book : bookAlready) {
-                        //         tblModel.addRow(new Object[] { book.getId(), book.getTitle(), book.getEdition(),
-                        //                         book.getSalePrice(), book.getQuantity() });
-                        //         totalPrice += book.getSalePrice() * book.getQuantity();
+                        // tblModel.addRow(new Object[] { book.getId(), book.getTitle(),
+                        // book.getEdition(),
+                        // book.getSalePrice(), book.getQuantity() });
+                        // totalPrice += book.getSalePrice() * book.getQuantity();
                         // }
                         String selectedMember = listMember.getSelectedItem().toString();
                         if (selectedMember.equals("Null")) {
@@ -695,6 +733,31 @@ public class ExportPanel extends javax.swing.JInternalFrame {
                         bookList1.setModel(tblModel);
                         // totalNumber.setText(String.valueOf(totalPrice) + "đ");
                 }
+        }
+
+        protected void searchFieldKeyReleased(KeyEvent evt) {
+                String choose = (String) searchOption.getSelectedItem();
+                String searchContent = searchField.getText();
+                List<BookModel> result = new ArrayList<>();
+                String tab = "Available";
+                switch (choose) {
+                        case "Any":
+                                result = bookService.searchByAny(searchContent, tab);
+                                break;
+                        case "Title":
+                                result = bookService.searchByTitle(searchContent, tab);
+                                break;
+                        case "Category":
+                                result = bookService.searchByCategory(searchContent, tab);
+                                break;
+                        case "Publisher":
+                                result = bookService.searchByPublisher(searchContent, tab);
+                                break;
+                        case "Author":
+                                result = bookService.searchByAuthor(searchContent, tab);
+                                break;
+                }
+                loadDataToTable(result);
         }
 
         private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
@@ -744,7 +807,7 @@ public class ExportPanel extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Remove all successfully", "Success",
                                 JOptionPane.INFORMATION_MESSAGE);
                 DefaultTableModel tblModel = new DefaultTableModel();
-                tblModel.setColumnIdentifiers(new Object[] { "ID", "Title", "Edition", "Sale Price", "Quantity" });
+                tblModel.setColumnIdentifiers(new Object[] { "Title", "Edition", "Sale Price", "Quantity" });
                 bookList1.setModel(tblModel);
                 totalNumber.setText("0đ");
 
@@ -753,6 +816,7 @@ public class ExportPanel extends javax.swing.JInternalFrame {
         private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
                 for (BookModel book : bookAlready) {
                         bookService.updateQuantity(book.getId(), book.getQuantity());
+                        
                 }
                 boolean result = false;
                 if (exportFormat.equals("Excel")) {
@@ -785,13 +849,13 @@ public class ExportPanel extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Export successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 bookAlready.clear();
                 DefaultTableModel tblModel = new DefaultTableModel();
-                tblModel.setColumnIdentifiers(new Object[] { "ID", "Title", "Edition", "Sale Price", "Quantity" });
+                tblModel.setColumnIdentifiers(new Object[] { "Title", "Edition", "Sale Price", "Quantity" });
                 bookList1.setModel(tblModel);
                 totalNumber.setText("0đ");
 
-                DefaultTableModel tblModel1 = new DefaultTableModel();
-                reloadTable(tblModel1, bookService.getAvailableBooks());
-                bookList.setModel(tblModel1);
+                
+                loadDataToTable(bookService.getAvailableBooks());
+                
 
                 exportFormat = "";
 
@@ -910,7 +974,7 @@ public class ExportPanel extends javax.swing.JInternalFrame {
                                                 .setTextAlignment(TextAlignment.CENTER);
                                 document.add(title);
 
-                                // Set member name 
+                                // Set member name
                                 Paragraph member = new Paragraph("Member: " + listMember.getSelectedItem().toString())
                                                 .setTextAlignment(TextAlignment.CENTER);
                                 document.add(member);

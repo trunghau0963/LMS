@@ -47,14 +47,15 @@ public class BookRepo implements BookDao {
     }
 
     @Override
-    public Book findByTitle(String title) {
+    public List<Book> findByTitle(String title) {
         try {
             connection = JDBCConnection.getJDBCConnection();
             String sql = "SELECT * FROM book WHERE title = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, title);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            List<Book> books = new ArrayList<>();
+            while (resultSet.next()) {
                 Book book = new Book();
                 book.setId(resultSet.getString("bookId"));
                 book.setTitle(resultSet.getString("title"));
@@ -63,10 +64,11 @@ public class BookRepo implements BookDao {
                 book.setPublisherId(resultSet.getString("publisherId"));
                 book.setSalePrice(resultSet.getFloat("salePrice"));
                 book.setIsHide(resultSet.getBoolean("isHide"));
-                return book;
+                books.add(book);
             }
             resultSet.close();
             preparedStatement.close();
+            return books;
         } catch (SQLException se) {
             se.printStackTrace();
         }
@@ -174,13 +176,14 @@ public class BookRepo implements BookDao {
     public boolean add(Book newBook) {
         try {
             connection = JDBCConnection.getJDBCConnection();
-            String sql = "INSERT INTO book (title, publisherId, salePrice, bookEdition, quantity) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO book (title, publisherId, salePrice, bookEdition, quantity, isHide) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, newBook.getTitle());
             preparedStatement.setString(2, newBook.getPublisherId());
             preparedStatement.setFloat(3, newBook.getSalePrice());
             preparedStatement.setInt(4, newBook.getEdition());
             preparedStatement.setInt(5, newBook.getQuantity());
+            preparedStatement.setBoolean(6, newBook.getIsHide());
             int rowsAffected = preparedStatement.executeUpdate();
             preparedStatement.close();
             return rowsAffected > 0;
@@ -211,29 +214,43 @@ public class BookRepo implements BookDao {
         return false;
     }
 
+    @Override
     public boolean updateQuantity(String bookId, int quantity) {
-        try {
-            connection = JDBCConnection.getJDBCConnection();
-            String sql1 = "SELECT quantity FROM book WHERE bookId = ?";
-            PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
-            preparedStatement1.setString(1, bookId);
-            ResultSet resultSet = preparedStatement1.executeQuery();
-            if (resultSet.next()) {
-                int currentQuantity = resultSet.getInt("quantity");
-                quantity = currentQuantity - quantity;
-            }
-            preparedStatement1.close();
-            String sql = "UPDATE book SET quantity = ? WHERE bookId = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, quantity);
-            preparedStatement.setString(2, bookId);
-            int rowsAffected = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            return rowsAffected > 0;
+        try (Connection connection = JDBCConnection.getJDBCConnection()) {
+            // Retrieve current quantity in a single transaction
+            String sql = "SELECT quantity FROM book WHERE bookId = ?";
+            int currentQuantity = 0;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, bookId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+    
+                if (!resultSet.next()) {
+                    // Handle case where book is not found
+                    return false; // Or throw an exception
+                }
+    
+                currentQuantity = resultSet.getInt("quantity");
+                resultSet.close();
+                preparedStatement.close();
+            } // PreparedStatement and ResultSet are automatically closed here
+    
+            // Calculate new quantity (avoiding modification after retrieval)
+            int newQuantity = currentQuantity - quantity;
+    
+            // Update book quantity
+            sql = "UPDATE book SET quantity = ? WHERE bookId = ?";
+        
+            try (PreparedStatement updateStatement = connection.prepareStatement(sql)) {
+                updateStatement.setInt(1, newQuantity);
+                updateStatement.setString(2, bookId);
+                int rowsAffected = updateStatement.executeUpdate();
+                updateStatement.close();
+                return rowsAffected > 0;
+            } // The updateStatement and its associated resources are automatically closed here
         } catch (SQLException se) {
             se.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -250,6 +267,37 @@ public class BookRepo implements BookDao {
             se.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<Book> find(String column, String keyword) {
+        List<Book> books = new ArrayList<>();
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql = "SELECT * FROM book WHERE ? LIKE ?";
+            System.out.println(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, column);
+            preparedStatement.setString(2, "%" + keyword + "%");
+            System.out.println(preparedStatement);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getString("bookId"));
+                book.setTitle(resultSet.getString("title"));
+                book.setEdition(resultSet.getInt("bookEdition"));
+                book.setQuantity(resultSet.getInt("quantity"));
+                book.setPublisherId(resultSet.getString("publisherId"));
+                book.setSalePrice(resultSet.getFloat("salePrice"));
+                book.setIsHide(resultSet.getBoolean("isHide"));
+                books.add(book);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return books;
     }
 
 }

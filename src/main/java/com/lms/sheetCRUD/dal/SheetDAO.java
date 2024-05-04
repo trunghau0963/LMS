@@ -9,4 +9,5 @@ public interface SheetDao {
     public ArrayList<Sheet> getAll();
     public Sheet getById(String id);
     public String createSheet(String importdate, String responsible);
+    public ArrayList<Sheet> getSheetsByDateRange(String startDate, String endDate);
 }

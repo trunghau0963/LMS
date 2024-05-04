@@ -205,11 +205,11 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         jPanel43.setPreferredSize(new java.awt.Dimension(40, 40));
 
         filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
-        filterButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filterButtonfilterButtonActionPerformed(evt);
-            }
-        });
+        // filterButton.addActionListener(new java.awt.event.ActionListener() {
+        //     public void actionPerformed(java.awt.event.ActionEvent evt) {
+        //         filterButtonfilterButtonActionPerformed(evt);
+        //     }
+        // });
         jPanel43.add(filterButton);
 
         jPanel42.add(jPanel43, java.awt.BorderLayout.WEST);
@@ -326,11 +326,10 @@ public class ExportSheet extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void filterButtonfilterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonfilterButtonActionPerformed
-        Filter a = new Filter(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
-                rootPaneCheckingEnabled);
-        a.setVisible(true);
-    }// GEN-LAST:event_filterButtonfilterButtonActionPerformed
+    // private void filterButtonfilterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonfilterButtonActionPerformed
+    //     Filter a = new Filter(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this), rootPaneCheckingEnabled, this);
+    //     a.setVisible(true);
+    // }// GEN-LAST:event_filterButtonfilterButtonActionPerformed
 
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
         loadDataToTable(invoiceService.getAll());
