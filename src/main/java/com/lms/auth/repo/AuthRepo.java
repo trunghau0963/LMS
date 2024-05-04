@@ -17,11 +17,6 @@ import com.lms.auth.model.RegisterModel;
 import com.lms.connection.JDBCConnection;
 
 public class AuthRepo implements AuthDao {
-    Connection connection = null;
-
-    public AuthRepo() {
-        connection = JDBCConnection.getJDBCConnection();
-    }
 
     public User register(RegisterModel register) {
         try {
@@ -94,7 +89,7 @@ public class AuthRepo implements AuthDao {
     }
 
     public User logIn(LoginModel login) {
-        // Connection connection = null;
+        Connection connection = null;
         try {
             connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
@@ -139,7 +134,7 @@ public class AuthRepo implements AuthDao {
     }
 
     public User forgotPassword(String phoneNumber, String userType) {
-        // Connection connection = null;
+        Connection connection = null;
         try {
             connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
@@ -179,7 +174,7 @@ public class AuthRepo implements AuthDao {
     }
 
     public User updatePassword(User user, String newPassword) {
-        // Connection connection = null;
+        Connection connection = null;
         try {
             connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
@@ -208,7 +203,7 @@ public class AuthRepo implements AuthDao {
 
     public List<Employee> getAllEmployeeList() {
         List<Employee> users = new ArrayList<Employee>();
-        // Connection connection = null;
+        Connection connection = null;
         try {
             connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();
@@ -232,7 +227,7 @@ public class AuthRepo implements AuthDao {
     }
 
     public User getUserByPhoneNumber(String phoneNumber, String userType) {
-        // Connection connection = null;
+        Connection connection = null;
         try {
             connection = JDBCConnection.getJDBCConnection();
             Statement statement = connection.createStatement();

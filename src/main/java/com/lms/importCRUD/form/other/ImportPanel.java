@@ -47,6 +47,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.lms.importCRUD.models.AuthorModel;
 import com.lms.importCRUD.models.BookModel;
+import com.lms.auth.entities.User;
 import com.lms.importCRUD.dal.BookDao;
 import com.lms.importCRUD.dal.SheetDao;
 import com.lms.importCRUD.dal.SheetDetailDao;
@@ -163,12 +164,11 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 }
         }
 
-        /**
-         * Creates new form ImportPanel
-         */
-        public ImportPanel() {
-                initComponents();
+        User user;
 
+        public ImportPanel(User userEmp) {
+                initComponents();
+                this.user = userEmp;
                 bookDao = new BookRepo();
                 bookService = new BookService(bookDao, new AuthorRepo(), new CategoryRepo(), new PublisherRepo(),
                                 new BookAuthorRepo(), new BookCategoryRepo());
@@ -192,6 +192,9 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
                 UIManager.put("Table.showVerticalLines", true);
+
+                titleTxT1.setText(user.getId());
+                titleTxT.setText(user.getName());
         }
 
         /**
@@ -424,7 +427,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 jPanel17.setLayout(new javax.swing.BoxLayout(jPanel17, javax.swing.BoxLayout.Y_AXIS));
 
                 jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-                jLabel9.setText("Title");
+                jLabel9.setText("Name Employee");
 
                 javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
                 jPanel10.setLayout(jPanel10Layout);
@@ -455,7 +458,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 jPanel18.setLayout(new javax.swing.BoxLayout(jPanel18, javax.swing.BoxLayout.Y_AXIS));
 
                 jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-                jLabel10.setText("Title");
+                jLabel10.setText("ID Employee");
 
                 javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
                 jPanel12.setLayout(jPanel12Layout);

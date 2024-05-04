@@ -45,11 +45,11 @@ public class ExportView extends JPanel {
     private InvoiceDetailService invoiceDetailService;
     private InvoiceDao invoiceDao;
     private InvoiceDetailDao invoiceDetailDao;
-    private  MemberDao memberDao;
+    private MemberDao memberDao;
     private MemberService memberService;
+    private User user;
 
-
-    public ExportView(User user) {
+    public ExportView(User userPUser) {
         super();
         bookDao = new BookRepo();
         authorDao = new AuthorRepo();
@@ -69,8 +69,11 @@ public class ExportView extends JPanel {
         memberDao = new MemberRepo();
         memberService = new MemberService(memberDao);
 
+        this.user = userPUser;
 
-        exportPanel = new ExportPanel(bookService,invoiceService, invoiceDetailService, memberService, user);
+        System.out.println("ExportView: " + user.toString());
+
+        exportPanel = new ExportPanel(bookService, invoiceService, invoiceDetailService, memberService, user);
         cardLayout = new CardLayout();
         this.setLayout(cardLayout);
 
@@ -78,5 +81,10 @@ public class ExportView extends JPanel {
 
         cardLayout.show(this, "exportPanel");
 
+    }
+
+    public void setUserInformation(User user) {
+        this.user = user;
+        System.out.println("User: " + user.toString());
     }
 }

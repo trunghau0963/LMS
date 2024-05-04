@@ -73,8 +73,9 @@ public class ExportPanel extends javax.swing.JInternalFrame {
         private User user;
 
         public ExportPanel(BookService bookService, InvoiceService invoiceService,
-                        InvoiceDetailService invoiceDetailService, MemberService memberService, User user) {
-                this.user = user;
+                        InvoiceDetailService invoiceDetailService, MemberService memberService, User userPUser) {
+                this.user = userPUser;
+                System.out.println("ExportPanel: " + user.toString());
                 this.invoiceDetailService = invoiceDetailService;
                 this.invoiceService = invoiceService;
                 this.bookService = bookService;

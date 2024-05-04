@@ -4,12 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.lms.accountCRUD.form.InfoPage;
+import com.lms.informationCRUD.form.InfoPage;
 import com.lms.accountCRUD.form.UsersView;
 import com.lms.auth.entities.User;
 import com.lms.authorCRUD.form.AuthorsView;
@@ -97,7 +98,12 @@ public class Admin extends javax.swing.JPanel {
         listFrame.add(new CategoryView());
         listFrame.add(new PublishersView());
         listFrame.add(new AuthorsView());
-        listFrame.add(new InfoPage());
+        try {
+            listFrame.add(new InfoPage(adminUser, "Admin"));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         // try {
         // listFrame.add(new EditProfile("17470f3a4f13c023"));
         // } catch (ParseException e) {

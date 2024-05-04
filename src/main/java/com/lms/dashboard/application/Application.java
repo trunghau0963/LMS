@@ -16,7 +16,7 @@ import com.lms.dashboard.form.Emp;
 
 public class Application extends javax.swing.JFrame {
 
-    User user;
+    User user ;
     int index;
     private static Application app;
     private final com.lms.auth.form.AuthView authView;
@@ -43,40 +43,13 @@ public class Application extends javax.swing.JFrame {
 
     }
 
-    // public void readFromFile(String filename, AuthService authService) throws IOException {
-    //     BufferedReader reader = new BufferedReader(new FileReader(filename));
-    //     String line;
-    //     while ((line = reader.readLine()) != null) {
-
-    //         String[] parts = line.split("\\t+\s*");
-    //         if (parts.length >= 3) {
-    //             try {
-    //                 String username = parts[0];
-    //                 String password = parts[1];
-    //                 String role = parts[2];
-
-    //                 if (role.equals("Admin")) {
-    //                     System.out.println("Admin");
-    //                     LoginForm = new com.lms.auth.form.Login(authService, username, password, role);
-    //                     app.setContentPane(app.admin);
-    //                     app.pack();
-    //                     app.setLocationRelativeTo(null);
-    //                 }
-    //             } catch (NumberFormatException e) {
-    //                 System.out.println("One of the parts cannot be parsed to a float: " + e.getMessage());
-    //             }
-    //         }
-    //     }
-    //     reader.close();
-    // }
-
-    public void dashboardAdmin() {
+    public void dashboardAdmin(User user) {
         admin = new Admin(this,user);
         setContentPane(this.admin);
         FlatLaf.updateUI();
     }
 
-    public void dashboardUser() {
+    public void dashboardUser(User user) {
         emp = new Emp(this,user);
         setContentPane(this.emp);
         FlatLaf.updateUI();

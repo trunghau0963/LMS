@@ -10,7 +10,9 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.lms.accountCRUD.service.AdminService;
+import com.lms.auth.controller.BCrypt;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 
@@ -39,6 +41,8 @@ public class EditAccount extends javax.swing.JDialog {
                 setLocationRelativeTo(null);
                 this.adminService = adminService;
                 this.role = role;
+                pwd.putClientProperty(FlatClientProperties.TEXT_FIELD_SHOW_CLEAR_BUTTON, true);
+                pwd.putClientProperty(FlatClientProperties.STYLE, "showRevealButton: true; showClearButton: true;");
                 if (parent instanceof AdminList) {
                         adminList = (AdminList) parent;
                         System.out.println("AdminList");
@@ -78,6 +82,7 @@ public class EditAccount extends javax.swing.JDialog {
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
@@ -90,6 +95,10 @@ public class EditAccount extends javax.swing.JDialog {
                 jPanel9 = new javax.swing.JPanel();
                 jLabel8 = new javax.swing.JLabel();
                 IdField = new javax.swing.JTextField();
+                jPanel28 = new javax.swing.JPanel();
+                jPanel14 = new javax.swing.JPanel();
+                jLabel10 = new javax.swing.JLabel();
+                pwd = new javax.swing.JPasswordField();
                 jPanel17 = new javax.swing.JPanel();
                 jPanel4 = new javax.swing.JPanel();
                 jLabel9 = new javax.swing.JLabel();
@@ -151,7 +160,7 @@ public class EditAccount extends javax.swing.JDialog {
                 jPanel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
                 jPanel12.setPreferredSize(new java.awt.Dimension(800, 300));
 
-                jPanel3.setPreferredSize(new java.awt.Dimension(400, 450));
+                jPanel3.setPreferredSize(new java.awt.Dimension(400, 500));
                 jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
                 jPanel26.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 20, 1));
@@ -195,6 +204,44 @@ public class EditAccount extends javax.swing.JDialog {
                 jPanel26.add(jPanel9);
 
                 jPanel3.add(jPanel26);
+
+                jPanel28.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 20, 1));
+                jPanel28.setPreferredSize(new java.awt.Dimension(700, 80));
+                jPanel28.setLayout(new javax.swing.BoxLayout(jPanel28, javax.swing.BoxLayout.Y_AXIS));
+
+                jPanel14.setPreferredSize(new java.awt.Dimension(698, 16));
+
+                jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                jLabel10.setText("Password");
+                jLabel10.setPreferredSize(new java.awt.Dimension(52, 12));
+
+                javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+                jPanel14.setLayout(jPanel14Layout);
+                jPanel14Layout.setHorizontalGroup(
+                                jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 398,
+                                                                Short.MAX_VALUE));
+                jPanel14Layout.setVerticalGroup(
+                                jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(jPanel14Layout.createSequentialGroup()
+                                                                .addComponent(jLabel10,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(0, 0, Short.MAX_VALUE)));
+
+                jPanel28.add(jPanel14);
+
+                pwd.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+                pwd.setPreferredSize(new java.awt.Dimension(64, 40));
+                pwd.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                pwdActionPerformed(evt);
+                        }
+                });
+                jPanel28.add(pwd);
+
+                jPanel3.add(jPanel28);
 
                 jPanel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 20, 1));
                 jPanel17.setPreferredSize(new java.awt.Dimension(700, 80));
@@ -291,7 +338,7 @@ public class EditAccount extends javax.swing.JDialog {
                                                                                 398, Short.MAX_VALUE)));
                 jPanel5Layout.setVerticalGroup(
                                 jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 17, Short.MAX_VALUE)
+                                                .addGap(0, 16, Short.MAX_VALUE)
                                                 .addGroup(jPanel5Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addComponent(jLabel6,
@@ -386,11 +433,15 @@ public class EditAccount extends javax.swing.JDialog {
                                                                 Short.MAX_VALUE));
                 layout.setVerticalGroup(
                                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 561,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE));
+                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 598,
+                                                                Short.MAX_VALUE));
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
+
+        private void pwdActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_pwdActionPerformed
+                // TODO add your handling code here:
+        }// GEN-LAST:event_pwdActionPerformed
 
         private void returnButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_returnButtonActionPerformed
                 this.dispose();
@@ -401,13 +452,15 @@ public class EditAccount extends javax.swing.JDialog {
                 // String password = BCrypt.hashpw(txtpassword.getText(), BCrypt.gensalt(12));
                 String ID = IdField.getText();
                 String contactNumberPhone = contactNumber.getText();
+                String passWord = pwd.getText();
                 String gender = genderChoose.getSelectedItem().toString();
                 String date = "";
                 if (jDateChooser3.getDate() != null) {
                         date = jDateChooser3.getDate().toString();
                 }
+                String hashed = BCrypt.hashpw(passWord, BCrypt.gensalt(12));
                 if (fullName.equals("") || contactNumberPhone.equals("") || ID.equals("")
-                                || gender.equals("") || date.equals("")) {
+                                || gender.equals("") || date.equals("") || passWord.equals("")) {
                         JOptionPane.showMessageDialog(this,
                                         "Make sure to fill out the required information accurately !",
                                         "Warning",
@@ -421,7 +474,7 @@ public class EditAccount extends javax.swing.JDialog {
                                         return;
                                 }
                                 if (adminService.getAdminById(ID) != null) {
-                                        adminService.editAccount(contactNumberPhone, admin.getPwd(), fullName, date,
+                                        adminService.editAccount(contactNumberPhone, hashed, fullName, date,
                                                         gender, "Admin");
                                         this.dispose();
                                         adminList.loadDataToTable(adminService.getAdmins());
@@ -440,7 +493,7 @@ public class EditAccount extends javax.swing.JDialog {
                                         return;
                                 }
                                 if (adminService.getEmployeeById(ID) != null) {
-                                        adminService.editAccount(contactNumberPhone, employee.getPwd(), fullName, date,
+                                        adminService.editAccount(contactNumberPhone, hashed, fullName, date,
                                                         gender, "Employee");
                                         this.dispose();
                                         employeeList.loadDataToTable(adminService.getEmployees());
@@ -515,6 +568,7 @@ public class EditAccount extends javax.swing.JDialog {
         private javax.swing.JTextField fullNametxt;
         private javax.swing.JComboBox<String> genderChoose;
         private com.toedter.calendar.JDateChooser jDateChooser3;
+        private javax.swing.JLabel jLabel10;
         private javax.swing.JLabel jLabel13;
         private javax.swing.JLabel jLabel15;
         private javax.swing.JLabel jLabel6;
@@ -525,6 +579,7 @@ public class EditAccount extends javax.swing.JDialog {
         private javax.swing.JPanel jPanel11;
         private javax.swing.JPanel jPanel12;
         private javax.swing.JPanel jPanel13;
+        private javax.swing.JPanel jPanel14;
         private javax.swing.JPanel jPanel15;
         private javax.swing.JPanel jPanel17;
         private javax.swing.JPanel jPanel18;
@@ -533,6 +588,7 @@ public class EditAccount extends javax.swing.JDialog {
         private javax.swing.JPanel jPanel22;
         private javax.swing.JPanel jPanel26;
         private javax.swing.JPanel jPanel27;
+        private javax.swing.JPanel jPanel28;
         private javax.swing.JPanel jPanel29;
         private javax.swing.JPanel jPanel3;
         private javax.swing.JPanel jPanel30;
@@ -540,6 +596,7 @@ public class EditAccount extends javax.swing.JDialog {
         private javax.swing.JPanel jPanel4;
         private javax.swing.JPanel jPanel5;
         private javax.swing.JPanel jPanel9;
+        private javax.swing.JPasswordField pwd;
         private javax.swing.JButton returnButton;
         private javax.swing.JButton saveButton1;
         private javax.swing.JLabel titleTxt;

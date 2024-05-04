@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -17,6 +18,7 @@ import com.lms.dashboard.application.Application;
 import com.lms.dashboard.menu.MenuEmp;
 import com.lms.exportCRUD.form.ExportView;
 import com.lms.importCRUD.form.ImportView;
+import com.lms.informationCRUD.form.InfoPage;
 import com.lms.publisherCRUD.form.PublishersView;
 import com.lms.sheetCRUD.form.SheetView;
 
@@ -33,15 +35,28 @@ public class Emp extends javax.swing.JPanel {
     private javax.swing.JToolBar toolbar;
     private User empUser;
     private Application application;
+    private ImportView importView;
+    private ExportView exportView;
+    private InfoPage infoPage;
     public ArrayList<JPanel> listFrame = new ArrayList<JPanel>();
 
     public Emp(Application app, User user) {
         this.application = app;
         this.empUser = user;
+        application.setUserInformation(empUser);
+        importView = new ImportView(empUser);
+        exportView = new ExportView(empUser);
+        try {
+            infoPage = new InfoPage(empUser, "Employee");
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         System.out.println("Emp: " + empUser.toString());
         initComponents();
         init();
-
+        // if (this.empUser != null && this.empUser.getId() != null) {
+        // }
         this.addComponentListener(new ComponentListener() {
 
             public void componentResized(ComponentEvent e) {
@@ -77,7 +92,7 @@ public class Emp extends javax.swing.JPanel {
         scrollMenu.setViewportView(menuEmp);
         scrollMenu.setPreferredSize(new Dimension(widthMenu, bg.getHeight()));
         toolbar.add(scrollMenu);
-        
+
         scrollBody = new javax.swing.JScrollPane();
         scrollBody.setPreferredSize(new Dimension(bg.getWidth() - scrollMenu.getWidth(), bg.getHeight()));
         scrollBody.setViewportView(mainForm);
@@ -93,10 +108,10 @@ public class Emp extends javax.swing.JPanel {
         listFrame.add(new CategoryView());
         listFrame.add(new PublishersView());
         listFrame.add(new AuthorsView());
-        listFrame.add(new ImportView(empUser));
-        listFrame.add(new ExportView(empUser));
+        listFrame.add(importView);
+        listFrame.add(exportView);
         listFrame.add(new SheetView());
-        // listFrame.add(new InfoPage());
+        listFrame.add(infoPage);
     }
 
     public void logOut() {
@@ -110,7 +125,8 @@ public class Emp extends javax.swing.JPanel {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         bg = new javax.swing.JLayeredPane();
@@ -118,26 +134,22 @@ public class Emp extends javax.swing.JPanel {
         javax.swing.GroupLayout bgLayout = new javax.swing.GroupLayout(bg);
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
-            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1074, Short.MAX_VALUE)
-        );
+                bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 1074, Short.MAX_VALUE));
         bgLayout.setVerticalGroup(
-            bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-        );
+                bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 540, Short.MAX_VALUE));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(bg))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(bg)));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(bg, javax.swing.GroupLayout.Alignment.TRAILING)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(bg, javax.swing.GroupLayout.Alignment.TRAILING));
     }// </editor-fold>//GEN-END:initComponents
 
     public void openAndCloseButton(java.awt.event.ActionEvent evt) {
