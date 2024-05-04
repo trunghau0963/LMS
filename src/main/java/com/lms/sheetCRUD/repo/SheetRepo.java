@@ -94,4 +94,30 @@ public class SheetRepo implements SheetDao {
         }
         return id;
     }
+
+    @Override
+    public ArrayList<Sheet> getSheetsByDateRange(String startDate, String endDate) {
+        ArrayList<Sheet> sheets = new ArrayList<>();
+        try {
+            connection = JDBCConnection.getJDBCConnection();
+            String sql = "SELECT * FROM sheet WHERE importDate BETWEEN ? AND ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDate(1, java.sql.Date.valueOf(startDate));
+            preparedStatement.setDate(2, java.sql.Date.valueOf(endDate));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Sheet sheet = new Sheet();
+                sheet.setSheetId(resultSet.getString("sheetId"));
+                sheet.setResponsible(resultSet.getString("responsible"));
+                sheet.setDate(resultSet.getDate("importDate").toString());
+                sheet.setTotalCost(resultSet.getFloat("totalCost"));
+                sheets.add(sheet);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return sheets;
+    }
 }

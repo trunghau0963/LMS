@@ -23,4 +23,8 @@ public class SheetService {
     public String createSheet(String importdate, String responsible){
         return dao.createSheet(importdate, responsible);
     }
+
+    public ArrayList<Sheet> getSheetsByDateRange(String startDate, String endDate){
+        return dao.getSheetsByDateRange(startDate, endDate);
+    }
 }
