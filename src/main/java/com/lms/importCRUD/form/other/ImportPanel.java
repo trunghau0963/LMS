@@ -14,6 +14,7 @@ import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -62,7 +63,7 @@ import com.lms.importCRUD.repo.SheetRepo;
 import com.lms.importCRUD.service.BookService;
 import com.lms.importCRUD.service.SheetDetailService;
 import com.lms.importCRUD.service.SheetService;
-
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -88,7 +89,8 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         JComponent component = (JComponent) super.getTableCellRendererComponent(table, value,
                                         isSelected,
                                         hasFocus, row, column);
-                        if (disabledRows.containsValue(row)) {
+
+                        if (disabledRows.containsKey(table.getValueAt(row, 0))) {
                                 component.setEnabled(false);
                         } else {
                                 component.setEnabled(true); // Kích hoạt trở lại các dòng không bị vô hiệu hóa
@@ -156,6 +158,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                                 };
 
                                 listBookModel.addRow(rowData);
+                                bookListTable.repaint();
                         }
                 } catch (Exception e) {
                         // TODO: handle exception
@@ -168,6 +171,14 @@ public class ImportPanel extends javax.swing.JInternalFrame {
          */
         public ImportPanel() {
                 initComponents();
+
+                refreshButton.setIcon(new FlatSVGIcon("svg/refresh.svg"));
+
+                searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+                        public void keyReleased(java.awt.event.KeyEvent evt) {
+                                searchFieldKeyReleased(evt);
+                        }
+                });
 
                 bookDao = new BookRepo();
                 bookService = new BookService(bookDao, new AuthorRepo(), new CategoryRepo(), new PublisherRepo(),
@@ -205,6 +216,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
@@ -214,7 +226,6 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 searchZone = new javax.swing.JPanel();
                 jPanel4 = new javax.swing.JPanel();
                 jPanel14 = new javax.swing.JPanel();
-                filterButton = new javax.swing.JButton();
                 searchOption = new javax.swing.JComboBox<>();
                 jPanel15 = new javax.swing.JPanel();
                 searchField = new javax.swing.JTextField();
@@ -280,16 +291,8 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                 jPanel14.setPreferredSize(new java.awt.Dimension(150, 40));
 
-                filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
-                filterButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                filterButtonActionPerformed(evt);
-                        }
-                });
-                jPanel14.add(filterButton);
-
                 searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(
-                                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                                new String[] { "Any", "Title", "Author", "Publisher" }));
                 searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
                 searchOption.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -424,7 +427,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 jPanel17.setLayout(new javax.swing.BoxLayout(jPanel17, javax.swing.BoxLayout.Y_AXIS));
 
                 jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-                jLabel9.setText("Title");
+                jLabel9.setText("ID Employee");
 
                 javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
                 jPanel10.setLayout(jPanel10Layout);
@@ -455,7 +458,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 jPanel18.setLayout(new javax.swing.BoxLayout(jPanel18, javax.swing.BoxLayout.Y_AXIS));
 
                 jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-                jLabel10.setText("Title");
+                jLabel10.setText("Name Employee");
 
                 javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
                 jPanel12.setLayout(jPanel12Layout);
@@ -656,11 +659,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                         importListBookModel.removeRow(row);
 
-                        System.out.println(idObject);
-
                         disabledRows.remove(idObject);
-
-                        System.out.println(disabledRows);
 
                         bookListTable.repaint();
                 }
@@ -805,7 +804,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         if (inputs != null) {
                                 book.setQuantity(Integer.parseInt(inputs.get(0)));
                                 book.setSalePrice(Float.parseFloat(inputs.get(1)));
-                                System.out.println(inputs.get(1));
+                                
                                 importBooks.add(book);
 
                                 Object[] rowData = {
@@ -869,7 +868,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
 
                         String sheetId = sheetService.createSheet(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
                                         "ef3d16db8e6aad88");
-                        System.out.println(sheetId);
+                 
                         sheetDetailService.insertIntoSheet(sheetId, imBooks);
 
                         JOptionPane.showMessageDialog(this, "Import successfully");
@@ -1112,6 +1111,29 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                 });
         }
 
+        protected void searchFieldKeyReleased(KeyEvent evt) {
+                String choose = (String) searchOption.getSelectedItem();
+                String searchContent = searchField.getText();
+
+                String tab = "All";
+                switch (choose) {
+                        case "Any":
+                                books = bookService.searchByAny(searchContent, tab);
+                                break;
+                        case "Title":
+                                books = bookService.searchByTitle(searchContent, tab);
+                                break;
+                        case "Publisher":
+                                books = bookService.searchByPublisher(searchContent, tab);
+                                break;
+                        case "Author":
+                                books = bookService.searchByAuthor(searchContent, tab);
+                                break;
+                }
+
+                loadBooksToTable(books);
+        }
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JTable bookListTable;
         private javax.swing.JPanel bookListTableZone;
@@ -1168,6 +1190,5 @@ public class ImportPanel extends javax.swing.JInternalFrame {
         private List<BookModel> books;
         private List<BookModel> importBooks = new ArrayList<BookModel>();
         private Map<String, Integer> disabledRows = new HashMap<>();
-
         // End of variables declaration//GEN-END:variables
 }

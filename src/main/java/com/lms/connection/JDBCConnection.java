@@ -13,7 +13,8 @@ public class JDBCConnection {
 
             String url = "jdbc:postgresql://localhost:5432/lms";
             String username = "postgres"; // replace with your username
-            String password = "0934117756minh"; // replace with your password
+            String password = "25122002"; // replace with your password
+
 
             connection = DriverManager.getConnection(url, username, password);
 
