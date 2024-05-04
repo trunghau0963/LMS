@@ -2,7 +2,7 @@ package com.lms.exportCRUD.model;
 
 import java.util.List;
 
-import com.lms.exportCRUD.entities.Book;
+import com.lms.bookCRUD.entities.Book;
 
 import java.util.ArrayList;
 
@@ -55,6 +55,18 @@ public class BookModel {
         List<String> categoryIds = new ArrayList<>();
         categories.forEach(category -> categoryIds.add(category.getId()));
         return categoryIds;
+    }
+
+    public List<String> getGenres() {
+        List<String> genres = new ArrayList<>();
+        categories.forEach(category -> genres.add(category.getGenre().toLowerCase()));
+        return genres;
+    }
+
+    public List<String> getAuthorNames() {
+        List<String> authorNames = new ArrayList<>();
+        authors.forEach(author -> authorNames.add(author.getName().toLowerCase()));
+        return authorNames;
     }
 
     public PublisherModel getPublisher() {
@@ -121,7 +133,7 @@ public class BookModel {
         categories.add(category);
     }
 
-    public void loadFromEntity(Book book) {
+    public void loadFromEntity(com.lms.exportCRUD.entities.Book book) {
         id = book.getId();
         title = book.getTitle();
         edition = book.getEdition();

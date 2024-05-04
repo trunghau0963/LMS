@@ -10,4 +10,6 @@ public interface BookAuthorDao {
     public boolean add(BookAuthor ba);
 
     public boolean delete(String bookId, String authorId);
+
+    public boolean deleteByBookId(String bookId);
 }

@@ -15,6 +15,7 @@ public class JDBCConnection {
             String username = "postgres"; // replace with your username
             String password = "25122002"; // replace with your password
 
+
             connection = DriverManager.getConnection(url, username, password);
 
             // Connection successful
