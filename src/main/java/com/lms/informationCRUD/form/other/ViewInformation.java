@@ -440,13 +440,6 @@ public class ViewInformation extends javax.swing.JPanel {
                         if (role == "Admin") {
                                 Admin admin = new Admin();
                                 admin = infoService.getAdminById(accCur.getId());
-
-                                if (infoService.getAdminByPhoneNumber(contactNumberPhone).getAdminId() != null) {
-                                        JOptionPane.showMessageDialog(this, "Phone number already exists !",
-                                                        "Warning",
-                                                        JOptionPane.WARNING_MESSAGE);
-                                        return;
-                                }
                                 if (infoService.getAdminById(accCur.getId()) != null) {
                                         infoService.editAccount(contactNumberPhone, admin.getPwd(), fullName, date,
                                                         gender, "Admin");
@@ -460,12 +453,6 @@ public class ViewInformation extends javax.swing.JPanel {
                         if (role == "Employee") {
                                 Employee employee = new Employee();
                                 employee = infoService.getEmployeeById(accCur.getId());
-                                if (infoService.getEmployeeByPhoneNumber(contactNumberPhone).getEmpId() != null) {
-                                        JOptionPane.showMessageDialog(this, "Phone number already exists !",
-                                                        "Warning",
-                                                        JOptionPane.WARNING_MESSAGE);
-                                        return;
-                                }
                                 if (infoService.getEmployeeById(accCur.getId()) != null) {
                                         infoService.editAccount(contactNumberPhone, employee.getPwd(), fullName, date,
                                                         gender, "Employee");

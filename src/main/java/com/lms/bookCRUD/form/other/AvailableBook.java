@@ -416,7 +416,9 @@ public class AvailableBook extends javax.swing.JInternalFrame {
     }
 
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonActionPerformed
-        // TODO add your handling code here:
+        FilterDialog a = new FilterDialog(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                rootPaneCheckingEnabled, bookService, this.getClass().getSimpleName());
+        a.setVisible(true);
     }// GEN-LAST:event_filterButtonActionPerformed
 
     private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed

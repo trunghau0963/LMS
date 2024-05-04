@@ -10,9 +10,11 @@ import com.lms.importCRUD.form.other.ImportPanel;
 public class ImportView extends JPanel {
     ImportPanel importPanel;
     private CardLayout cardLayout;
+    private User user;
 
     public ImportView(User user) {
         super();
+        this.user = user;
 
         importPanel = new ImportPanel(user);
         cardLayout = new CardLayout();
@@ -23,4 +25,10 @@ public class ImportView extends JPanel {
         cardLayout.show(this, "importPanel");
 
     }
+
+    public void setUserInformation(User user) {
+        this.user = user;
+        System.out.println("User: " + user.toString());
+    }
+
 }

@@ -1,11 +1,11 @@
-package com.lms.bookCRUD.service;
+package com.lms.importCRUD.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lms.bookCRUD.dal.*;
-import com.lms.bookCRUD.entities.*;
-import com.lms.bookCRUD.model.*;
+import com.lms.importCRUD.dal.*;
+import com.lms.importCRUD.entities.*;
+import com.lms.importCRUD.models.*;
 
 public class BookService {
     private BookDao bookDao;
@@ -62,6 +62,7 @@ public class BookService {
 
         return bookModels;
     }
+
 
     public List<BookModel> getAvailableBooks() {
         List<Book> books = bookDao.findAvailableBooks();
@@ -139,6 +140,7 @@ public class BookService {
         return bookModels;
     }
 
+
     public BookModel getBookDetails(String bookId) {
         Book book = bookDao.findById(bookId);
         BookModel bookModel = new BookModel();
@@ -174,18 +176,12 @@ public class BookService {
         Book newBook = new Book();
         newBook.loadFromModel(bookModel);
         boolean isBookAdded = bookDao.add(newBook);
+
         if (!isBookAdded) {
             return false;
         }
 
-        String newBookId = "";
-        List<Book> books = bookDao.findByTitle(newBook.getTitle());
-        for (Book book : books) {
-            if (book.getEdition() == newBook.getEdition()) {
-                newBookId = book.getId();
-                break;
-            }
-        }
+        String newBookId = bookDao.findByTitle(newBook.getTitle()).getId();
 
         for (AuthorModel authorModel : bookModel.getAuthors()) {
             BookAuthor newBookAuthor = new BookAuthor(newBookId, authorModel.getId());
@@ -201,12 +197,6 @@ public class BookService {
             }
         }
         return true;
-    }
-
-    public boolean setBookVisibility(String bookId, Boolean isHide) {
-        Book book = bookDao.findById(bookId);
-        book.setIsHide(isHide);
-        return bookDao.update(book);
     }
 
     public boolean editBook(BookModel bookModel) {
@@ -259,242 +249,36 @@ public class BookService {
         return true;
     }
 
-    public List<BookModel> searchByAny(String keyword, String tab) {
-        List<BookModel> allBooks;
-        if (tab.equals("All")) {
-            allBooks = getAllBooks();
-        } else if (tab.equals("Available")) {
-            allBooks = getAvailableBooks();
-        } else {
-            allBooks = getUnavailableBooks();
-        }
-        List<BookModel> results = new ArrayList<>();
-        for (BookModel book : allBooks) {
-            Boolean isContainKw = false;
+    public BookModel getBookByTitle(String title) {
+        Book book = bookDao.findByTitle(title);
+        BookModel bookModel = new BookModel();
+        bookModel.loadFromEntity(book);
 
-            if (book.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                    || book.getPublisher().getName().toLowerCase().contains(keyword.toLowerCase()))
-                isContainKw = true;
+        List<String> authorIds = getAuthorIds(book.getId());
+        for (String authorId : authorIds) {
+            Author author = getAuthor(authorId);
+            AuthorModel authorModel = new AuthorModel();
+            authorModel.loadFromEntity(author);
 
-            List<String> genres = book.getGenres();
-            for (String genre : genres) {
-                if (genre.contains(keyword.toLowerCase())) {
-                    isContainKw = true;
-                    break;
-                }
-            }
-            List<String> authorNames = book.getAuthorNames();
-            for (String authorName : authorNames) {
-                if (authorName.contains(keyword.toLowerCase())) {
-                    isContainKw = true;
-                    break;
-                }
-            }
-
-            if (isContainKw) {
-                results.add(book);
-            }
-        }
-        return results;
-    }
-
-    public List<BookModel> searchByTitle(String keyword, String tab) {
-        List<BookModel> allBooks;
-        if (tab.equals("All")) {
-            allBooks = getAllBooks();
-        } else if (tab.equals("Available")) {
-            allBooks = getAvailableBooks();
-        } else {
-            allBooks = getUnavailableBooks();
-        }
-        List<BookModel> results = new ArrayList<>();
-        for (BookModel book : allBooks) {
-            if (book.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add(book);
-            }
-        }
-        return results;
-    }
-
-    public List<BookModel> searchByCategory(String keyword, String tab) {
-        List<BookModel> allBooks;
-        if (tab.equals("All")) {
-            allBooks = getAllBooks();
-        } else if (tab.equals("Available")) {
-            allBooks = getAvailableBooks();
-        } else {
-            allBooks = getUnavailableBooks();
-        }
-        List<BookModel> results = new ArrayList<>();
-        for (BookModel book : allBooks) {
-            Boolean isContainKw = false;
-            List<String> genres = book.getGenres();
-            for (String genre : genres) {
-                if (genre.contains(keyword.toLowerCase())) {
-                    isContainKw = true;
-                    break;
-                }
-            }
-            if (isContainKw) {
-                results.add(book);
-            }
-        }
-        return results;
-    }
-
-    public List<BookModel> searchByAuthor(String keyword, String tab) {
-        List<BookModel> allBooks;
-        if (tab.equals("All")) {
-            allBooks = getAllBooks();
-        } else if (tab.equals("Available")) {
-            allBooks = getAvailableBooks();
-        } else {
-            allBooks = getUnavailableBooks();
-        }
-        List<BookModel> results = new ArrayList<>();
-        for (BookModel book : allBooks) {
-            Boolean isContainKw = false;
-            List<String> authorNames = book.getAuthorNames();
-            for (String authorName : authorNames) {
-                if (authorName.contains(keyword.toLowerCase())) {
-                    isContainKw = true;
-                    break;
-                }
-            }
-            if (isContainKw) {
-                results.add(book);
-            }
-        }
-        return results;
-    }
-
-    public List<BookModel> searchByPublisher(String keyword, String tab) {
-        List<BookModel> allBooks;
-        if (tab.equals("All")) {
-            allBooks = getAllBooks();
-        } else if (tab.equals("Available")) {
-            allBooks = getAvailableBooks();
-        } else {
-            allBooks = getUnavailableBooks();
-        }
-        List<BookModel> results = new ArrayList<>();
-        for (BookModel book : allBooks) {
-            if (book.getPublisher().getName().toLowerCase().contains(keyword.toLowerCase())) {
-                results.add(book);
-            }
-        }
-        return results;
-    }
-
-    public List<BookModel> getBookByTitle(String title) {
-        List<Book> books = bookDao.findByTitle(title);
-        List<BookModel> bookModels = new ArrayList<>();
-        for (Book book : books) {
-            BookModel bookModel = new BookModel();
-            bookModel.loadFromEntity(book);
-
-            List<String> authorIds = getAuthorIds(book.getId());
-            for (String authorId : authorIds) {
-                Author author = getAuthor(authorId);
-                AuthorModel authorModel = new AuthorModel();
-                authorModel.loadFromEntity(author);
-
-                bookModel.addAuthor(authorModel);
-            }
-
-            List<String> categoryIds = getCategoryIds(book.getId());
-            for (String categoryId : categoryIds) {
-                Category category = getCategory(categoryId);
-                CategoryModel categoryModel = new CategoryModel();
-                categoryModel.loadFromEntity(category);
-
-                bookModel.addCategory(categoryModel);
-            }
-
-            Publisher publisher = getPublisher(book.getPublisherId());
-            PublisherModel publisherModel = new PublisherModel();
-            publisherModel.loadFromEntity(publisher);
-
-            bookModel.setPublisher(publisherModel);
-            bookModels.add(bookModel);
+            bookModel.addAuthor(authorModel);
         }
 
-        return bookModels;
-    }
+        List<String> categoryIds = getCategoryIds(book.getId());
+        for (String categoryId : categoryIds) {
+            Category category = getCategory(categoryId);
+            CategoryModel categoryModel = new CategoryModel();
+            categoryModel.loadFromEntity(category);
 
-    public List<BookModel> filterBooks(String tab, List<CategoryModel> categories, AuthorModel author,
-            PublisherModel publisher, float price) {
-        List<BookModel> allBooks;
-        if (tab.contains("All")) {
-            allBooks = getAllBooks();
-        } else if (tab.contains("Available")) {
-            allBooks = getAvailableBooks();
-        } else {
-            allBooks = getUnavailableBooks();
+            bookModel.addCategory(categoryModel);
         }
-        List<BookModel> results = new ArrayList<>();
-        for (BookModel book : allBooks) {
-            Boolean check = true;
-            if (price != 0) {
-                if (book.getSalePrice() > price) {
-                    check = false;
-                }
-            }
 
-            if (!categories.isEmpty()) {
-                List<CategoryModel> genres = book.getCategories();
-                Boolean checkCategory = false;
-                for (int i = 0; i < categories.size(); i++) {
-                    for (int j = 0; j < genres.size(); j++) {
-                        if (genres.get(j).getGenre().equals(categories.get(i).getGenre())) {
-                            checkCategory = true;
-                            break;
-                        }
-                    }
-                    if (checkCategory) {
-                        break;
-                    }
-                }
-                if (!checkCategory) {
-                    check = false;
-                }
-            }
+        Publisher publisher = getPublisher(book.getPublisherId());
+        PublisherModel publisherModel = new PublisherModel();
+        publisherModel.loadFromEntity(publisher);
 
-            if (author != null && !author.getName().equals("All")) {
-                List<AuthorModel> authorNames = book.getAuthors();
-                Boolean checkAuthor = false;
-                for (int i = 0; i < authorNames.size(); i++) {
-                    if (authorNames.get(i).getName().equals(author.getName())) {
-                        checkAuthor = true;
-                        break;
-                    }
-                }
-                if (!checkAuthor) {
-                    check = false;
-                }
-            }
+        bookModel.setPublisher(publisherModel);
 
-            if (publisher != null && !publisher.getName().equals("All")) {
-                if (!publisher.getName().equals(book.getPublisher().getName())) {
-                    check = false;
-                }
-            }
-
-            if (check) {
-                results.add(book);
-            }
-        }
-        return results;
-    }
-
-    public boolean deleteBookById(String id) {
-        bookAuthorDao.deleteByBookId(id);
-        bookCategoryDao.deleteByBookId(id);
-        return bookDao.delete(id);
-    }
-
-    public boolean updateQuantity(String bookId, int quantity) {
-        return bookDao.updateQuantity(bookId, quantity);
+        return bookModel;
     }
 
     private List<String> getAuthorIds(String bookId) {
@@ -546,4 +330,5 @@ public class BookService {
     private Publisher getPublisher(String id) {
         return publisherDao.findById(id);
     }
+
 }
