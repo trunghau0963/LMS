@@ -63,6 +63,9 @@ public class BookService {
         return bookModels;
     }
 
+    public String getNameOfBook(String bookId) {
+        return bookDao.findById(bookId).getTitle();
+    }
 
     public List<BookModel> getAvailableBooks() {
         List<Book> books = bookDao.findAvailableBooks();
@@ -139,7 +142,6 @@ public class BookService {
 
         return bookModels;
     }
-
 
     public BookModel getBookDetails(String bookId) {
         Book book = bookDao.findById(bookId);

@@ -31,7 +31,12 @@ public class ImportBook {
         this.quantity = quantity;
     }
 
-    public void setImportPrice(float importPrice) {
-        this.importPrice = importPrice;
+    @Override
+    public String toString() {
+        return "ImportBook{" +
+                "id='" + id + '\'' +
+                ", quantity=" + quantity +
+                ", importPrice=" + importPrice +
+                '}';
     }
 }

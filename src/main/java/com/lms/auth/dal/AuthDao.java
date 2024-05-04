@@ -13,5 +13,6 @@ public interface AuthDao {
     public User logIn(LoginModel data);
     public User forgotPassword(String phoneNumber, String userType);
     public User updatePassword(User user, String newPassword);
+    public User getUserByPhoneNumber(String phoneNumber, String userType);
     public List<Employee> getAllEmployeeList();
 } 

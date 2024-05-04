@@ -26,12 +26,6 @@ public class Main {
         AuthDao authDao = new AuthRepo();
         AuthService authService = new AuthService(authDao);
         FlatSVGIcon icon = new FlatSVGIcon("svg/logo.svg");
-        
-        // Login login = new Login(authService);
-        // login.setVisible(true);
-        // login.pack();
-        // login.setLocationRelativeTo(null);
-        
         FlatLightLaf.setup();
         
         Application application = new Application(authService);

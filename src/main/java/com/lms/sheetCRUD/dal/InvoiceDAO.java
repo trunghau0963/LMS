@@ -1,6 +1,14 @@
 package com.lms.sheetCRUD.dal;
 
-public interface InvoiceDAO {
+import java.util.ArrayList;
+
+import com.lms.sheetCRUD.entities.Invoice;
+
+public interface InvoiceDao {
+
     
-    public void addInvoice();
-}
+    public ArrayList<Invoice> getAll();
+    public Invoice getById(String id);
+    public String createInvoice(String empId, String customerId, String date);
+    
+} 

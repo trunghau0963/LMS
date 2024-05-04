@@ -36,12 +36,10 @@ public class Application extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         // setLocationRelativeTo(null);
 
-        app.setContentPane(app.authView);
-
-        admin = new Admin(this);
-        emp = new Emp(this);
-        app.pack();
-        app.setLocationRelativeTo(null);
+        // app = this;
+        setContentPane(authView);
+        this.pack();
+        setLocationRelativeTo(null);
 
     }
 
@@ -73,17 +71,26 @@ public class Application extends javax.swing.JFrame {
     // }
 
     public void dashboardAdmin() {
-        app.setContentPane(app.admin);
+        admin = new Admin(this,user);
+        setContentPane(this.admin);
         FlatLaf.updateUI();
     }
 
     public void dashboardUser() {
-        app.setContentPane(app.emp);
+        emp = new Emp(this,user);
+        setContentPane(this.emp);
         FlatLaf.updateUI();
     }
 
     public void setUserInformation(User user) {
-        app.user = user;
+        this.user = user;
+        System.out.println("User: " + user.toString());
+    }
+
+    public void logOut() {
+        setContentPane(authView);
+        setUserInformation(new User());
+        FlatLaf.updateUI();
     }
 
     @SuppressWarnings("unchecked")

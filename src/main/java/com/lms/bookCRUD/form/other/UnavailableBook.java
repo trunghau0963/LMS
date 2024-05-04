@@ -14,17 +14,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -35,11 +34,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.lms.auth.entities.Employee;
 import com.lms.authorCRUD.dal.AuthorDao;
 import com.lms.authorCRUD.entities.Author;
 import com.lms.authorCRUD.repo.AuthorRepo;
-import com.lms.categoryCRUD.entities.Category;
 import com.lms.bookCRUD.model.AuthorModel;
 import com.lms.bookCRUD.model.BookModel;
 import com.lms.bookCRUD.model.CategoryModel;
@@ -47,6 +44,7 @@ import com.lms.bookCRUD.model.PublisherModel;
 import com.lms.bookCRUD.service.BookService;
 import com.lms.bookCRUD.ui.CenterTableCellRenderer;
 import com.lms.categoryCRUD.dal.CategoryDao;
+import com.lms.categoryCRUD.entities.Category;
 import com.lms.categoryCRUD.repo.CategoryRepo;
 import com.lms.publisherCRUD.dal.PublisherDao;
 import com.lms.publisherCRUD.entities.Publisher;
@@ -61,6 +59,7 @@ public class UnavailableBook extends javax.swing.JInternalFrame {
     public UnavailableBook(BookService bookService) {
         this.bookService = bookService;
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        UIManager.put("Table.showVerticalLines", true);
         initComponents();
         init();
     }

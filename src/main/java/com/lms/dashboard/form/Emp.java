@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.lms.auth.entities.User;
 import com.lms.authorCRUD.form.AuthorsView;
 import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
@@ -30,11 +31,14 @@ public class Emp extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollMenu;
     private javax.swing.JScrollPane scrollBody;
     private javax.swing.JToolBar toolbar;
-    private static Application app;
+    private User empUser;
+    private Application application;
     public ArrayList<JPanel> listFrame = new ArrayList<JPanel>();
 
-    public Emp(Application app) {
-        this.app = app;
+    public Emp(Application app, User user) {
+        this.application = app;
+        this.empUser = user;
+        System.out.println("Emp: " + empUser.toString());
         initComponents();
         init();
 
@@ -65,7 +69,6 @@ public class Emp extends javax.swing.JPanel {
         // bg.setLayout(layout);
         // bg.setSize(new Dimension(960, 560));
         mainForm = new MainForm();
-        mainForm.showForm(listFrame.get(0));
         menuEmp = new MenuEmp(this);
         toolbar = new javax.swing.JToolBar();
         scrollMenu = new javax.swing.JScrollPane();
@@ -90,14 +93,14 @@ public class Emp extends javax.swing.JPanel {
         listFrame.add(new CategoryView());
         listFrame.add(new PublishersView());
         listFrame.add(new AuthorsView());
-        listFrame.add(new ImportView());
-        listFrame.add(new ExportView());
+        listFrame.add(new ImportView(empUser));
+        listFrame.add(new ExportView(empUser));
         listFrame.add(new SheetView());
         // listFrame.add(new InfoPage());
     }
 
     public void logOut() {
-        // app.logOut();
+        application.logOut();
     }
 
     public void changeFrame(int index) {

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -59,6 +60,7 @@ public class AvailableBook extends javax.swing.JInternalFrame {
     public AvailableBook(BookService bookService) {
         this.bookService = bookService;
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        UIManager.put("Table.showVerticalLines", true);
         initComponents();
         init();
     }

@@ -7,6 +7,7 @@ import com.lms.accountCRUD.dal.AdminDao;
 import com.lms.accountCRUD.model.ModelAddUser;
 import com.lms.accountCRUD.model.ModelEditAccount;
 import com.lms.accountCRUD.repo.AdminRepo;
+import com.lms.auth.controller.BCrypt;
 import com.lms.auth.entities.Admin;
 import com.lms.auth.entities.Employee;
 import com.lms.auth.entities.User;
@@ -24,13 +25,15 @@ public class AdminService {
 
   public User addUser(String phoneNumber, String pw, String userType, String gender, String dob, String fullName) {
 
-    ModelAddUser newUser = new ModelAddUser(fullName, phoneNumber, pw, userType, gender, dob);
+    String hashed = BCrypt.hashpw(pw, BCrypt.gensalt(12));
+    ModelAddUser newUser = new ModelAddUser(fullName, phoneNumber, hashed, userType, gender, dob);
     return adminDao.addUser(newUser);
   }
 
   public boolean editAccount(String phoneNumber, String pw, String fullName, String dob, String gender,
       String userType) {
-    ModelEditAccount editUser = new ModelEditAccount(fullName, phoneNumber, dob, gender, pw);
+    String hashed = BCrypt.hashpw(pw, BCrypt.gensalt(12));
+    ModelEditAccount editUser = new ModelEditAccount(fullName, phoneNumber, dob, gender, hashed);
     if (userType.equals("Employee"))
       return adminDao.editEmployee(editUser);
     else if (userType.equals("Admin"))
@@ -44,7 +47,8 @@ public class AdminService {
     String dob = admin.getDob();
     String gender = admin.getGender();
     String pw = admin.getPwd();
-    ModelEditAccount editUser = new ModelEditAccount(fullName, phoneNumber, dob, gender, pw);
+    String hashed = BCrypt.hashpw(pw, BCrypt.gensalt(12));
+    ModelEditAccount editUser = new ModelEditAccount(fullName, phoneNumber, dob, gender, hashed);
     return adminDao.editAccount(editUser);
   }
 

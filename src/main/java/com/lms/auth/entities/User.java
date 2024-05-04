@@ -27,11 +27,9 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-
     public void setGender(String gender) {
         this.gender = gender;
     }
-
 
     public String getId() {
         return Id;
@@ -49,9 +47,19 @@ public class User {
         return phoneNumber;
     }
 
-
     public String getGender() {
         return gender;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "Id='" + Id + '\'' +
+                ", Name='" + Name + '\'' +
+                ", dob='" + dob + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
     }
 
 }

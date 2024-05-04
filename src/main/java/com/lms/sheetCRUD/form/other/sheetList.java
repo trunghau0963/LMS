@@ -5,6 +5,8 @@
 package com.lms.sheetCRUD.form.other;
 
 import com.lms.sheetCRUD.service.BookService;
+import com.lms.sheetCRUD.service.InvoiceDetailService;
+import com.lms.sheetCRUD.service.InvoiceService;
 import com.lms.sheetCRUD.service.SheetDetailService;
 import com.lms.sheetCRUD.service.SheetService;
 
@@ -16,13 +18,15 @@ public class SheetList extends javax.swing.JPanel {
     private BookService bookService;
     private SheetService sheetService;
     private SheetDetailService sheetDetailService;
+    private InvoiceService invoiceService;
+    private InvoiceDetailService invoiceDetailService;
     private ImportSheet importSheet;
     private ExportSheet exportSheet;
 
-    public SheetList(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService) {
+    public SheetList(BookService bookService, SheetService sheetService, SheetDetailService sheetDetailService, InvoiceService invoiceService, InvoiceDetailService invoiceDetailService) {
         initComponents();
         importSheet = new ImportSheet(bookService, sheetService, sheetDetailService);
-        exportSheet = new ExportSheet(bookService, sheetService, sheetDetailService);
+        exportSheet = new ExportSheet(bookService, invoiceService, invoiceDetailService);
         init();
     }
 

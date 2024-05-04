@@ -4,10 +4,25 @@
  */
 package com.lms.exportCRUD.form.other;
 
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -20,8 +35,6 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
@@ -34,58 +47,127 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
-
-import com.lms.exportCRUD.service.BookService;
-import com.lms.exportCRUD.model.BookModel;
-import com.lms.exportCRUD.repo.InvoiceRepo;
-import com.lms.exportCRUD.ui.CenterTableCellRenderer;
-
+import com.lms.auth.entities.User;
 import com.lms.exportCRUD.entities.ExportBook;
+import com.lms.exportCRUD.entities.Member;
+import com.lms.exportCRUD.model.BookModel;
+import com.lms.exportCRUD.model.MemberModel;
+import com.lms.exportCRUD.service.BookService;
 import com.lms.exportCRUD.service.InvoiceDetailService;
 import com.lms.exportCRUD.service.InvoiceService;
-import com.lms.exportCRUD.dal.InvoiceDetailDao;
-import com.lms.exportCRUD.dal.InvoiceDao;
-import com.lms.exportCRUD.repo.InvoiceDetailRepo;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-
-import javax.swing.*;
+import com.lms.exportCRUD.service.MemberService;
+import com.lms.exportCRUD.ui.CenterTableCellRenderer;
 
 /**
  *
  * @author nttha
  */
-public class exportPanel extends javax.swing.JInternalFrame {
+public class ExportPanel extends javax.swing.JInternalFrame {
 
-        /**
-         * Creates new form ImportPanel
-         */
+        private String exportFormat = "";
+        public List<BookModel> bookAlready = new ArrayList<>();
         private BookService bookService;
         private InvoiceService invoiceService;
         private InvoiceDetailService invoiceDetailService;
-        private InvoiceDao invoiceDao;
-        private InvoiceDetailDao invoiceDetailDao;
+        private MemberService memberService;
+        private User user;
 
-        public exportPanel(BookService bookService) {
-
-                invoiceDao = new InvoiceRepo();
-                invoiceDetailDao = new InvoiceDetailRepo();
-
-                invoiceService = new InvoiceService(invoiceDao);
-                invoiceDetailService = new InvoiceDetailService(invoiceDetailDao);
-
+        public ExportPanel(BookService bookService, InvoiceService invoiceService,
+                        InvoiceDetailService invoiceDetailService, MemberService memberService, User user) {
+                this.user = user;
+                this.invoiceDetailService = invoiceDetailService;
+                this.invoiceService = invoiceService;
                 this.bookService = bookService;
+                this.memberService = memberService;
                 initComponents();
                 ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
                 UIManager.put("Table.showVerticalLines", true);
                 bookList.setDefaultEditor(Object.class, null);
                 bookList1.setDefaultEditor(Object.class, null);
+                init();
 
+        }
+
+        private void init() {
+                idEmployee.setText(user.getId());
+                nameEmployee.setText(user.getName());
+                ArrayList<Member> members = memberService.getAllMembers();
+                DefaultComboBoxModel<MemberModel> model = new DefaultComboBoxModel<MemberModel>();
+                for (Member member : members) {
+                        MemberModel memberModel = new MemberModel();
+                        memberModel.loadFromEntity(member);
+                        model.addElement(memberModel);
+                }
+                MemberModel nullModel = new MemberModel();
+                nullModel.setId("");
+                nullModel.setname("Null");
+                model.addElement(nullModel);
+
+                listMember.setModel(model);
+
+                List<BookModel> bookModels = bookService.getAvailableBooks();
+                DefaultTableModel tblModel = (DefaultTableModel) bookList.getModel();
+                reloadTable(tblModel, bookModels);
+
+                TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(bookList.getModel());
+                bookList.setRowSorter(sorter);
+
+                bookList.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                                if (e.getClickCount() == 2) {
+                                        int selectedRow = bookList.getSelectedRow();
+                                        if (selectedRow != -1) {
+                                                String inputValue = JOptionPane
+                                                                .showInputDialog("Enter the number of books:");
+                                                int numberOfBooks = Integer.parseInt(inputValue);
+                                                int quantity = (int) bookList.getValueAt(selectedRow, 8);
+                                                if (numberOfBooks > quantity) {
+                                                        JOptionPane.showMessageDialog(null,
+                                                                        "The number of books is greater than the quantity of books in stock",
+                                                                        "Error", JOptionPane.ERROR_MESSAGE);
+                                                } else {
+                                                        JOptionPane.showMessageDialog(null, "Add to list successfully",
+                                                                        "Success", JOptionPane.INFORMATION_MESSAGE);
+                                                        BookModel bookModel = new BookModel();
+                                                        bookModel.setId((String) bookList.getValueAt(selectedRow, 1));
+                                                        bookModel.setTitle(
+                                                                        (String) bookList.getValueAt(selectedRow, 2));
+                                                        bookModel.setEdition((int) bookList.getValueAt(selectedRow, 3));
+                                                        bookModel.setSalePrice(
+                                                                        (float) bookList.getValueAt(selectedRow, 7));
+                                                        bookModel.setQuantity((int) numberOfBooks);
+
+                                                        bookAlready.add(bookModel);
+
+                                                        // Create a new DefaultTableModel
+                                                        DefaultTableModel tblModel = new DefaultTableModel();
+
+                                                        customTable(bookList1);
+                                                        // Set column names for the table model
+                                                        tblModel.setColumnIdentifiers(new Object[] { "Title",
+                                                                        "Edition", "Sale Price", "Quantity" });
+
+                                                        // Populate the table model with data from bookAlready
+                                                        float totalPrice = 0;
+                                                        for (BookModel book : bookAlready) {
+                                                                tblModel.addRow(new Object[] {
+                                                                                book.getTitle(),
+                                                                                book.getEdition(),
+                                                                                book.getSalePrice(),
+                                                                                book.getQuantity()
+                                                                });
+                                                                totalPrice += book.getSalePrice() * book.getQuantity();
+                                                        }
+
+                                                        bookList1.setModel(tblModel);
+                                                        totalNumber.setText(String.valueOf(totalPrice) + "đ");
+                                                }
+
+                                        }
+                                }
+                        }
+                });
         }
 
         /**
@@ -94,6 +176,8 @@ public class exportPanel extends javax.swing.JInternalFrame {
          * regenerated by the Form Editor.
          */
         @SuppressWarnings("unchecked")
+        // <editor-fold defaultstate="collapsed" desc="Generated
+        // <editor-fold defaultstate="collapsed" desc="Generated
         // <editor-fold defaultstate="collapsed" desc="Generated
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
@@ -118,16 +202,20 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 jLabel1 = new javax.swing.JLabel();
                 totalNumber = new javax.swing.JLabel();
                 jPanel2 = new javax.swing.JPanel();
-                jPanel7 = new javax.swing.JPanel();
-                jPanel8 = new javax.swing.JPanel();
-                jPanel17 = new javax.swing.JPanel();
-                jPanel10 = new javax.swing.JPanel();
-                jLabel9 = new javax.swing.JLabel();
-                titleTxT = new javax.swing.JTextField();
-                jPanel18 = new javax.swing.JPanel();
-                jPanel12 = new javax.swing.JPanel();
-                jLabel10 = new javax.swing.JLabel();
-                titleTxT1 = new javax.swing.JTextField();
+                jPanel22 = new javax.swing.JPanel();
+                infoZone1 = new javax.swing.JPanel();
+                jPanel30 = new javax.swing.JPanel();
+                jPanel31 = new javax.swing.JPanel();
+                jLabel12 = new javax.swing.JLabel();
+                nameEmployee = new javax.swing.JTextField();
+                jPanel25 = new javax.swing.JPanel();
+                jPanel26 = new javax.swing.JPanel();
+                jLabel11 = new javax.swing.JLabel();
+                idEmployee = new javax.swing.JTextField();
+                jPanel32 = new javax.swing.JPanel();
+                jPanel33 = new javax.swing.JPanel();
+                jLabel13 = new javax.swing.JLabel();
+                listMember = new javax.swing.JComboBox<>();
                 jPanel5 = new javax.swing.JPanel();
                 jScrollPane3 = new javax.swing.JScrollPane();
                 bookList1 = new javax.swing.JTable();
@@ -178,9 +266,8 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 });
                 jPanel14.add(filterButton);
 
-                searchOption.setModel(
-                                new javax.swing.DefaultComboBoxModel<>(
-                                                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(
+                                new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
                 searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
                 searchOption.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,7 +290,7 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                                                 .addContainerGap()
                                                                 .addComponent(searchField,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                253, Short.MAX_VALUE)
+                                                                                227, Short.MAX_VALUE)
                                                                 .addGap(8, 8, 8)));
                 jPanel15Layout.setVerticalGroup(
                                 jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,80 +365,123 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 jPanel2.setPreferredSize(new java.awt.Dimension(200, 517));
                 jPanel2.setLayout(new java.awt.BorderLayout());
 
-                jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
-                jPanel7.setLayout(new javax.swing.BoxLayout(jPanel7, javax.swing.BoxLayout.LINE_AXIS));
+                jPanel22.setPreferredSize(new java.awt.Dimension(150, 180));
+                jPanel22.setLayout(new javax.swing.BoxLayout(jPanel22, javax.swing.BoxLayout.LINE_AXIS));
 
-                jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Information",
+                infoZone1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Information",
                                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                                 javax.swing.border.TitledBorder.DEFAULT_POSITION,
                                 new java.awt.Font("Segoe UI", 1, 18))); // NOI18N
-                jPanel8.setLayout(new javax.swing.BoxLayout(jPanel8, javax.swing.BoxLayout.Y_AXIS));
+                infoZone1.setPreferredSize(new java.awt.Dimension(700, 200));
+                infoZone1.setLayout(new javax.swing.BoxLayout(infoZone1, javax.swing.BoxLayout.Y_AXIS));
 
-                jPanel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
-                jPanel17.setPreferredSize(new java.awt.Dimension(700, 60));
-                jPanel17.setLayout(new javax.swing.BoxLayout(jPanel17, javax.swing.BoxLayout.Y_AXIS));
+                jPanel30.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
+                jPanel30.setPreferredSize(new java.awt.Dimension(700, 60));
+                jPanel30.setLayout(new javax.swing.BoxLayout(jPanel30, javax.swing.BoxLayout.Y_AXIS));
 
-                jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-                jLabel9.setText("Title");
+                jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                jLabel12.setText("Name Employee");
 
-                javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-                jPanel10.setLayout(jPanel10Layout);
-                jPanel10Layout.setHorizontalGroup(
-                                jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 266, Short.MAX_VALUE)
-                                                .addGroup(jPanel10Layout.createParallelGroup(
+                javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
+                jPanel31.setLayout(jPanel31Layout);
+                jPanel31Layout.setHorizontalGroup(
+                                jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGap(0, 241, Short.MAX_VALUE)
+                                                .addGroup(jPanel31Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jLabel9,
+                                                                .addComponent(jLabel12,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                266, Short.MAX_VALUE)));
-                jPanel10Layout.setVerticalGroup(
-                                jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                241, Short.MAX_VALUE)));
+                jPanel31Layout.setVerticalGroup(
+                                jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGap(0, 16, Short.MAX_VALUE)
-                                                .addGroup(jPanel10Layout.createParallelGroup(
+                                                .addGroup(jPanel31Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addGroup(jPanel10Layout.createSequentialGroup()
-                                                                                .addComponent(jLabel9)
+                                                                .addGroup(jPanel31Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel12)
                                                                                 .addGap(0, 0, Short.MAX_VALUE))));
 
-                jPanel17.add(jPanel10);
-                jPanel17.add(titleTxT);
+                jPanel30.add(jPanel31);
 
-                jPanel8.add(jPanel17);
+                nameEmployee.setPreferredSize(new java.awt.Dimension(60, 22));
+                jPanel30.add(nameEmployee);
 
-                jPanel18.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
-                jPanel18.setPreferredSize(new java.awt.Dimension(700, 60));
-                jPanel18.setLayout(new javax.swing.BoxLayout(jPanel18, javax.swing.BoxLayout.Y_AXIS));
+                infoZone1.add(jPanel30);
 
-                jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-                jLabel10.setText("Title");
+                jPanel25.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
+                jPanel25.setPreferredSize(new java.awt.Dimension(700, 60));
+                jPanel25.setLayout(new javax.swing.BoxLayout(jPanel25, javax.swing.BoxLayout.Y_AXIS));
 
-                javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-                jPanel12.setLayout(jPanel12Layout);
-                jPanel12Layout.setHorizontalGroup(
-                                jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 266, Short.MAX_VALUE)
-                                                .addGroup(jPanel12Layout.createParallelGroup(
+                jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                jLabel11.setText("ID Employee");
+
+                javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
+                jPanel26.setLayout(jPanel26Layout);
+                jPanel26Layout.setHorizontalGroup(
+                                jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGap(0, 241, Short.MAX_VALUE)
+                                                .addGroup(jPanel26Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addComponent(jLabel10,
+                                                                .addComponent(jLabel11,
                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                266, Short.MAX_VALUE)));
-                jPanel12Layout.setVerticalGroup(
-                                jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                241, Short.MAX_VALUE)));
+                jPanel26Layout.setVerticalGroup(
+                                jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGap(0, 16, Short.MAX_VALUE)
-                                                .addGroup(jPanel12Layout.createParallelGroup(
+                                                .addGroup(jPanel26Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                .addGroup(jPanel12Layout.createSequentialGroup()
-                                                                                .addComponent(jLabel10)
+                                                                .addGroup(jPanel26Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel11)
                                                                                 .addGap(0, 0, Short.MAX_VALUE))));
 
-                jPanel18.add(jPanel12);
-                jPanel18.add(titleTxT1);
+                jPanel25.add(jPanel26);
 
-                jPanel8.add(jPanel18);
+                idEmployee.setPreferredSize(new java.awt.Dimension(60, 22));
+                jPanel25.add(idEmployee);
 
-                jPanel7.add(jPanel8);
+                infoZone1.add(jPanel25);
 
-                jPanel2.add(jPanel7, java.awt.BorderLayout.PAGE_START);
+                jPanel32.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
+                jPanel32.setPreferredSize(new java.awt.Dimension(700, 60));
+                jPanel32.setLayout(new javax.swing.BoxLayout(jPanel32, javax.swing.BoxLayout.Y_AXIS));
+
+                jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                jLabel13.setText("Member");
+
+                javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
+                jPanel33.setLayout(jPanel33Layout);
+                jPanel33Layout.setHorizontalGroup(
+                                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGap(0, 241, Short.MAX_VALUE)
+                                                .addGroup(jPanel33Layout.createParallelGroup(
+                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(jLabel13,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                241, Short.MAX_VALUE)));
+                jPanel33Layout.setVerticalGroup(
+                                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGap(0, 16, Short.MAX_VALUE)
+                                                .addGroup(jPanel33Layout.createParallelGroup(
+                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(jPanel33Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel13)
+                                                                                .addGap(0, 0, Short.MAX_VALUE))));
+
+                jPanel32.add(jPanel33);
+
+                listMember.setPreferredSize(new java.awt.Dimension(72, 40));
+                listMember.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                listMemberActionPerformed(evt);
+                        }
+                });
+                jPanel32.add(listMember);
+
+                infoZone1.add(jPanel32);
+
+                jPanel22.add(infoZone1);
+
+                jPanel2.add(jPanel22, java.awt.BorderLayout.PAGE_START);
 
                 jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel5.setLayout(new java.awt.BorderLayout());
@@ -383,15 +513,14 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 jPanel21.setLayout(jPanel21Layout);
                 jPanel21Layout.setHorizontalGroup(
                                 jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 280, Short.MAX_VALUE)
+                                                .addGap(0, 253, Short.MAX_VALUE)
                                                 .addGroup(jPanel21Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addGroup(jPanel21Layout.createSequentialGroup()
                                                                                 .addContainerGap()
                                                                                 .addComponent(jButton8,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                268,
-                                                                                                Short.MAX_VALUE)
+                                                                                                241, Short.MAX_VALUE)
                                                                                 .addContainerGap())));
                 jPanel21Layout.setVerticalGroup(
                                 jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -423,15 +552,14 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 jPanel20.setLayout(jPanel20Layout);
                 jPanel20Layout.setHorizontalGroup(
                                 jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGap(0, 280, Short.MAX_VALUE)
+                                                .addGap(0, 253, Short.MAX_VALUE)
                                                 .addGroup(jPanel20Layout.createParallelGroup(
                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addGroup(jPanel20Layout.createSequentialGroup()
                                                                                 .addContainerGap()
                                                                                 .addComponent(jButton9,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                268,
-                                                                                                Short.MAX_VALUE)
+                                                                                                241, Short.MAX_VALUE)
                                                                                 .addContainerGap())));
                 jPanel20Layout.setVerticalGroup(
                                 jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -475,7 +603,6 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                 jButton3ActionPerformed(evt);
                         }
                 });
-
                 jPanel29.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
                 jButton4.setText("Excel");
@@ -485,7 +612,6 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                 jButton4ActionPerformed(evt);
                         }
                 });
-
                 jPanel29.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
                 jPanel27.add(jPanel29, java.awt.BorderLayout.CENTER);
@@ -495,71 +621,6 @@ public class exportPanel extends javax.swing.JInternalFrame {
                 getContentPane().add(jPanel2);
 
                 pack();
-
-                List<BookModel> bookModels = bookService.getAvailableBooks();
-                DefaultTableModel tblModel = (DefaultTableModel) bookList.getModel();
-                reloadTable(tblModel, bookModels);
-
-                TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(bookList.getModel());
-                bookList.setRowSorter(sorter);
-
-                bookList.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                                if (e.getClickCount() == 2) {
-                                        int selectedRow = bookList.getSelectedRow();
-                                        if (selectedRow != -1) {
-                                                String inputValue = JOptionPane
-                                                                .showInputDialog("Enter the number of books:");
-                                                int numberOfBooks = Integer.parseInt(inputValue);
-                                                int quantity = (int) bookList.getValueAt(selectedRow, 8);
-                                                if (numberOfBooks > quantity) {
-                                                        JOptionPane.showMessageDialog(null,
-                                                                        "The number of books is greater than the quantity of books in stock",
-                                                                        "Error", JOptionPane.ERROR_MESSAGE);
-                                                } else {
-                                                        JOptionPane.showMessageDialog(null, "Add to list successfully",
-                                                                        "Success", JOptionPane.INFORMATION_MESSAGE);
-                                                        BookModel bookModel = new BookModel();
-                                                        bookModel.setId((String) bookList.getValueAt(selectedRow, 1));
-                                                        bookModel.setTitle(
-                                                                        (String) bookList.getValueAt(selectedRow, 2));
-                                                        bookModel.setEdition((int) bookList.getValueAt(selectedRow, 3));
-                                                        bookModel.setSalePrice(
-                                                                        (float) bookList.getValueAt(selectedRow, 7));
-                                                        bookModel.setQuantity((int) numberOfBooks);
-
-                                                        bookAlready.add(bookModel);
-
-                                                        // Create a new DefaultTableModel
-                                                        DefaultTableModel tblModel = new DefaultTableModel();
-
-                                                        customTable(bookList1);
-                                                        // Set column names for the table model
-                                                        tblModel.setColumnIdentifiers(new Object[] { "Title",
-                                                                        "Edition", "Sale Price", "Quantity" });
-
-                                                        // Populate the table model with data from bookAlready
-                                                        float totalPrice = 0;
-                                                        for (BookModel book : bookAlready) {
-                                                                tblModel.addRow(new Object[] {
-                                                                                book.getTitle(),
-                                                                                book.getEdition(),
-                                                                                book.getSalePrice(),
-                                                                                book.getQuantity()
-                                                                });
-                                                                totalPrice += book.getSalePrice() * book.getQuantity();
-                                                        }
-
-                                                        bookList1.setModel(tblModel);
-                                                        totalNumber.setText(String.valueOf(totalPrice) + "đ");
-                                                }
-
-                                        }
-                                }
-                        }
-                });
-
         }// </editor-fold>//GEN-END:initComponents
 
         public void reloadTable(DefaultTableModel tblModel, List<BookModel> bookModels) {
@@ -613,19 +674,48 @@ public class exportPanel extends javax.swing.JInternalFrame {
                         tblModel.setColumnIdentifiers(new Object[] { "ID", "Title", "Edition", "Sale Price",
                                         "Quantity" });
                         float totalPrice = 0;
-                        for (BookModel book : bookAlready) {
-                                tblModel.addRow(new Object[] { book.getId(), book.getTitle(), book.getEdition(),
-                                                book.getSalePrice(), book.getQuantity() });
-                                totalPrice += book.getSalePrice() * book.getQuantity();
+                        // for (BookModel book : bookAlready) {
+                        //         tblModel.addRow(new Object[] { book.getId(), book.getTitle(), book.getEdition(),
+                        //                         book.getSalePrice(), book.getQuantity() });
+                        //         totalPrice += book.getSalePrice() * book.getQuantity();
+                        // }
+                        String selectedMember = listMember.getSelectedItem().toString();
+                        if (selectedMember.equals("Null")) {
+                                for (BookModel book : bookAlready) {
+                                        totalPrice += book.getSalePrice() * book.getQuantity();
+                                }
+                                totalNumber.setText(String.valueOf(totalPrice) + "đ");
+                        } else {
+                                for (BookModel book : bookAlready) {
+                                        totalPrice += book.getSalePrice() * book.getQuantity();
+                                }
+                                totalNumber.setText(String.valueOf(totalPrice * 0.95) + "đ");
                         }
                         bookList1.setModel(tblModel);
-                        totalNumber.setText(String.valueOf(totalPrice) + "đ");
+                        // totalNumber.setText(String.valueOf(totalPrice) + "đ");
                 }
         }
 
         private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshButtonActionPerformed
                 // TODO add your handling code here:
         }// GEN-LAST:event_refreshButtonActionPerformed
+
+        private void listMemberActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_listMemberActionPerformed
+                String selectedMember = listMember.getSelectedItem().toString();
+                if (selectedMember.equals("Null")) {
+                        float totalPrice = 0;
+                        for (BookModel book : bookAlready) {
+                                totalPrice += book.getSalePrice() * book.getQuantity();
+                        }
+                        totalNumber.setText(String.valueOf(totalPrice) + "đ");
+                } else {
+                        float totalPrice = 0;
+                        for (BookModel book : bookAlready) {
+                                totalPrice += book.getSalePrice() * book.getQuantity();
+                        }
+                        totalNumber.setText(String.valueOf(totalPrice * 0.95) + "đ");
+                }
+        }// GEN-LAST:event_listMemberActionPerformed
 
         private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed
                 // TODO add your handling code here:
@@ -688,7 +778,7 @@ public class exportPanel extends javax.swing.JInternalFrame {
 
                 String invoiceId = invoiceService.createInvoice("0997fa53eef44c07", "0f253955123c5568",
                                 new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
- 
+
                 invoiceDetailService.insertIntoInvoice(invoiceId, exportBooks);
 
                 JOptionPane.showMessageDialog(null, "Export successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -724,17 +814,25 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                 titleCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
                                 titleCell.getCellStyle().setFont(createHeaderFont(workbook));
 
+                                // Create name of member row
+                                XSSFRow memberRow = sheet.createRow(1);
+                                XSSFCell memberCell = memberRow.createCell(0);
+                                memberCell.setCellValue("Member: " + listMember.getSelectedItem().toString());
+                                sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, bookList1.getColumnCount() - 1));
+                                memberCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
+
                                 // Create date and time row
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
                                 String formattedDateTime = LocalDateTime.now().format(formatter);
-                                XSSFRow dateTimeRow = sheet.createRow(1);
+                                XSSFRow dateTimeRow = sheet.createRow(2);
                                 XSSFCell dateTimeCell = dateTimeRow.createCell(0);
                                 dateTimeCell.setCellValue("Export Date and Time: " + formattedDateTime);
-                                sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, bookList1.getColumnCount() - 1));
+                                // Corrected merged region for the "Export Date and Time" row
+                                sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, bookList1.getColumnCount() - 1));
                                 dateTimeCell.getCellStyle().setAlignment(HorizontalAlignment.CENTER);
 
                                 // Create header row
-                                XSSFRow headerRow = sheet.createRow(2);
+                                XSSFRow headerRow = sheet.createRow(3);
                                 for (int i = 0; i < bookList1.getColumnCount(); i++) {
                                         XSSFCell headerCell = headerRow.createCell(i);
                                         headerCell.setCellValue(bookList1.getColumnName(i));
@@ -811,6 +909,11 @@ public class exportPanel extends javax.swing.JInternalFrame {
                                                 .setTextAlignment(TextAlignment.CENTER);
                                 document.add(title);
 
+                                // Set member name 
+                                Paragraph member = new Paragraph("Member: " + listMember.getSelectedItem().toString())
+                                                .setTextAlignment(TextAlignment.CENTER);
+                                document.add(member);
+
                                 // Set export date and time
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
                                 String formattedDateTime = LocalDateTime.now().format(formatter);
@@ -859,48 +962,50 @@ public class exportPanel extends javax.swing.JInternalFrame {
         private javax.swing.JTable bookList;
         private javax.swing.JTable bookList1;
         private javax.swing.JButton filterButton;
+        private javax.swing.JTextField idEmployee;
+        private javax.swing.JPanel infoZone1;
         private javax.swing.JButton jButton2;
         private javax.swing.JButton jButton3;
         private javax.swing.JButton jButton4;
         private javax.swing.JButton jButton8;
         private javax.swing.JButton jButton9;
         private javax.swing.JLabel jLabel1;
-        private javax.swing.JLabel jLabel10;
-        private javax.swing.JLabel jLabel9;
+        private javax.swing.JLabel jLabel11;
+        private javax.swing.JLabel jLabel12;
+        private javax.swing.JLabel jLabel13;
         private javax.swing.JPanel jPanel1;
-        private javax.swing.JPanel jPanel10;
         private javax.swing.JPanel jPanel11;
-        private javax.swing.JPanel jPanel12;
         private javax.swing.JPanel jPanel13;
         private javax.swing.JPanel jPanel14;
         private javax.swing.JPanel jPanel15;
         private javax.swing.JPanel jPanel16;
-        private javax.swing.JPanel jPanel17;
-        private javax.swing.JPanel jPanel18;
         private javax.swing.JPanel jPanel19;
         private javax.swing.JPanel jPanel2;
         private javax.swing.JPanel jPanel20;
         private javax.swing.JPanel jPanel21;
+        private javax.swing.JPanel jPanel22;
         private javax.swing.JPanel jPanel24;
+        private javax.swing.JPanel jPanel25;
+        private javax.swing.JPanel jPanel26;
         private javax.swing.JPanel jPanel27;
         private javax.swing.JPanel jPanel28;
         private javax.swing.JPanel jPanel29;
         private javax.swing.JPanel jPanel3;
+        private javax.swing.JPanel jPanel30;
+        private javax.swing.JPanel jPanel31;
+        private javax.swing.JPanel jPanel32;
+        private javax.swing.JPanel jPanel33;
         private javax.swing.JPanel jPanel4;
         private javax.swing.JPanel jPanel5;
         private javax.swing.JPanel jPanel6;
-        private javax.swing.JPanel jPanel7;
-        private javax.swing.JPanel jPanel8;
         private javax.swing.JPanel jPanel9;
         private javax.swing.JScrollPane jScrollPane2;
         private javax.swing.JScrollPane jScrollPane3;
+        private javax.swing.JComboBox<MemberModel> listMember;
+        private javax.swing.JTextField nameEmployee;
         private javax.swing.JButton refreshButton;
         private javax.swing.JTextField searchField;
         private javax.swing.JComboBox<String> searchOption;
-        private javax.swing.JTextField titleTxT;
-        private javax.swing.JTextField titleTxT1;
         private javax.swing.JLabel totalNumber;
-        private String exportFormat = "";
-        public List<BookModel> bookAlready = new ArrayList<>();
         // End of variables declaration//GEN-END:variables
 }

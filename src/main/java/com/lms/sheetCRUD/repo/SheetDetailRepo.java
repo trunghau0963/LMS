@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lms.connection.JDBCConnection;
 import com.lms.sheetCRUD.dal.SheetDetailDao;
 import com.lms.sheetCRUD.entities.ImportBook;
+import com.lms.sheetCRUD.entities.SheetDetail;
 
 public class SheetDetailRepo implements SheetDetailDao {
     Connection connection = null;
@@ -37,22 +39,29 @@ public class SheetDetailRepo implements SheetDetailDao {
     }
 
     @Override
-    public void getSheetDetail(String sheetId) {
+    public SheetDetail getSheetDetail(String sheetId) {
+        SheetDetail sheetDetail = null;
         try {
             connection = JDBCConnection.getJDBCConnection();
             String sql = "SELECT * FROM sheet_detail WHERE sheetId = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, sheetId);
             ResultSet resultSet = preparedStatement.executeQuery();
+            List<ImportBook> books = new ArrayList<>();
             while (resultSet.next()) {
-                System.out.println(resultSet.getString("sheetId") + " " + resultSet.getString("bookId") + " "
-                        + resultSet.getInt("quantity") + " " + resultSet.getFloat("importPrice"));
+                String bookId = resultSet.getString("bookId");
+                int quantity = resultSet.getInt("quantity");
+                float importPrice = resultSet.getFloat("importPrice");
+                ImportBook book = new ImportBook(bookId, quantity, importPrice);
+                books.add(book);
             }
+            sheetDetail = new SheetDetail(sheetId, books);
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException se) {
             se.printStackTrace();
         }
+        return sheetDetail;
     }
 
     @Override

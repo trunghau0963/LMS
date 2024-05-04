@@ -31,18 +31,18 @@ public class Sheet {
     }
 
     public String getSheetId() {
-        return sheetId;
+        return this.sheetId;
     }
 
     public String getResponsible() {
-        return responsible;
+        return this.responsible;
     }
 
     public String getDate() {
-        return date;
+        return this.date;
     }
 
     public float getTotalCost() {
-        return totalCost;
+        return this.totalCost;
     }
 }

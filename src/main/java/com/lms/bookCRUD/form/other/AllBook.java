@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -57,6 +58,7 @@ public class AllBook extends javax.swing.JInternalFrame {
     public AllBook(BookService bookService) {
         this.bookService = bookService;
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
+        UIManager.put("Table.showVerticalLines", true);
         initComponents();
         init();
     }
@@ -402,7 +404,9 @@ public class AllBook extends javax.swing.JInternalFrame {
     }
 
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterButtonActionPerformed
-        // TODO add your handling code here:
+        FilterDialog a = new FilterDialog(this, (JFrame) javax.swing.SwingUtilities.getWindowAncestor(this),
+                rootPaneCheckingEnabled);
+        a.setVisible(true);
     }// GEN-LAST:event_filterButtonActionPerformed
 
     private void searchOptionActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchOptionActionPerformed

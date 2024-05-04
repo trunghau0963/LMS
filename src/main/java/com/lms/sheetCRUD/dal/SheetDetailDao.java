@@ -1,14 +1,16 @@
 package com.lms.sheetCRUD.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lms.sheetCRUD.entities.ImportBook;
+import com.lms.sheetCRUD.entities.SheetDetail;
 
 public interface SheetDetailDao {
 
     public void getAll();
 
-    public void getSheetDetail(String sheetId);
+    public SheetDetail getSheetDetail(String sheetId);
 
     public void insertIntoSheet(String sheetId, List<ImportBook> books);
 

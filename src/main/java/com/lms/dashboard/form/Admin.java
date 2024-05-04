@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.lms.accountCRUD.form.InfoPage;
 import com.lms.accountCRUD.form.UsersView;
+import com.lms.auth.entities.User;
 import com.lms.authorCRUD.form.AuthorsView;
 import com.lms.bookCRUD.form.BookView;
 import com.lms.categoryCRUD.form.CategoryView;
@@ -32,15 +33,14 @@ public class Admin extends javax.swing.JPanel {
     private javax.swing.JScrollPane scrollMenu;
     private javax.swing.JScrollPane scrollBody;
     private javax.swing.JToolBar toolbar;
-    private static Application app;
     public ArrayList<JPanel> listFrame = new ArrayList<JPanel>();
-    private UserService userService;
+    private Application application;
+    private User adminUser;
 
-
-    public Admin(Application app) {
-        this.app = app;
-        UserRepo userRepo = new UserRepo();
-        this.userService = new UserService(userRepo);
+    public Admin(Application app, User user) {
+        application = app;
+        adminUser = user;
+        System.out.println("Admin: " + adminUser.toString());
         initComponents();
         init();
 
@@ -71,7 +71,6 @@ public class Admin extends javax.swing.JPanel {
         // bg.setLayout(layout);
         // bg.setSize(new Dimension(960, 560));
         mainForm = new MainForm();
-        mainForm.showForm(listFrame.get(0));
         menuAdmin = new MenuAdmin(this);
         toolbar = new javax.swing.JToolBar();
         scrollMenu = new javax.swing.JScrollPane();
@@ -110,6 +109,7 @@ public class Admin extends javax.swing.JPanel {
     }
 
     public void logOut() {
+        application.logOut();
         // app.logOut();
     }
 
