@@ -814,10 +814,10 @@ public class ExportPanel extends javax.swing.JInternalFrame {
         }// GEN-LAST:event_jButton8ActionPerformed
 
         private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
-                for (BookModel book : bookAlready) {
-                        bookService.updateQuantity(book.getId(), book.getQuantity());
+                // for (BookModel book : bookAlready) {
+                //         bookService.updateQuantity(book.getId(), book.getQuantity());
                         
-                }
+                // }
                 boolean result = false;
                 if (exportFormat.equals("Excel")) {
                         result = exportExcel();

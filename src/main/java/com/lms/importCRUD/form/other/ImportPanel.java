@@ -871,7 +871,7 @@ public class ImportPanel extends javax.swing.JInternalFrame {
                         }
 
                         String sheetId = sheetService.createSheet(new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
-                                        "ef3d16db8e6aad88");
+                                        user.getId());
                         System.out.println(sheetId);
                         sheetDetailService.insertIntoSheet(sheetId, imBooks);
 

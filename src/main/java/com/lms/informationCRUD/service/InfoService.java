@@ -19,7 +19,7 @@ public class InfoService {
         String hashed = BCrypt.hashpw(pw, BCrypt.gensalt(12));
         ModelEditAccount editUser = new ModelEditAccount(fullName, phoneNumber, dob, gender, hashed);
         if (userType.equals("Employee"))
-            return infoDao.editAccount(editUser);
+            return infoDao.editEmployee(editUser);
         else if (userType.equals("Admin"))
             return infoDao.editAccount(editUser);
         return false;
