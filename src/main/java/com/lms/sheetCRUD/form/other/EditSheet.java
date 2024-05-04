@@ -89,21 +89,112 @@ public class EditSheet extends javax.swing.JDialog {
         sheet = importSheet.getSelectedSheet();
         System.out.println("sheet ID: " + sheet.getSheetId());
         sheetDetails = sheetDetailService.getSheetDetail(sheet.getSheetId());
-        for (int i = 0; i < sheetDetails.getBooks().size(); i++) {
-            System.out.println("Sheet ID: " + sheetDetails.getSheetId());
-            System.out.println(sheetDetails.getBooks().get(i).getId());
-        }
+        
+        setImportListBookModel();
         model = (DefaultTableModel) importBookListTable.getModel();
         reloadTable(model, sheetDetails);
+
+        setListBookModel();
         books = bookSer.getAllBooks();
         loadBooksToTable(books);
+
         titleTxT.setText(sheet.getSheetId());
 
     }
 
+    public void setImportListBookModel() {
+        importListBookModel = new javax.swing.table.DefaultTableModel(
+                        new Object[][] {
+
+                        },
+                        new String[] {
+                                        "Id", "Title", "Editon", "Sale Price", "Quantity"
+                        }) {
+                Class[] types = new Class[] {
+                                java.lang.String.class, java.lang.String.class, java.lang.Integer.class,
+                                java.lang.Double.class,
+                                java.lang.Integer.class
+                };
+                boolean[] canEdit = new boolean[] {
+                                false, false, true, true, true
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                        return types[columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                        return canEdit[columnIndex];
+                }
+        };
+        importBookListTable.setModel(importListBookModel);
+}
+
+    public void setListBookModel() {
+        // Add event supplementary
+        setRemoveBtnEven();
+
+        listBookModel = new javax.swing.table.DefaultTableModel(
+                new Object[][] {
+
+                },
+                new String[] {
+                        "Id", "Title", "Sale Price", "Quantity", "Edition", "Publisher",
+                        "Authors"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.String.class, java.lang.String.class, java.lang.Double.class,
+                    java.lang.Integer.class,
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+
+        bookListTable.setModel(listBookModel);
+    }
+
+    void setRemoveBtnEven() {
+        removeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                int[] rows = importBookListTable.getSelectedRows();
+                for (int row : rows) {
+                    System.out.println(row);
+
+                }
+                for (int row : rows) {
+                    String id = (String) importBookListTable.getValueAt(row, 1);
+
+                    importListBookModel.removeRow(row);
+
+                    for (BookModel book : importBooks) {
+                        if (book.getId().equals(id)) {
+                            importBooks.remove(book);
+                            break;
+                        }
+                    }
+
+                    disabledRows.remove(id);
+                }
+
+                importBookListTable.repaint();
+                bookListTable.repaint();
+            }
+        });
+    }
+
     public void reloadTable(DefaultTableModel tblModel, SheetDetail sheetDetails) {
         CenterTableCellRenderer centerRenderer = new CenterTableCellRenderer();
-        int idx = 0;
+
         tblModel.setRowCount(0);
         tblModel.addColumn("No.");
         tblModel.addColumn("Book ID");
@@ -165,6 +256,7 @@ public class EditSheet extends javax.swing.JDialog {
                 };
 
                 listBookModel.addRow(rowData);
+                bookListTable.repaint();
             }
         } catch (Exception e) {
             // TODO: handle exception
@@ -179,7 +271,7 @@ public class EditSheet extends javax.swing.JDialog {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -188,7 +280,6 @@ public class EditSheet extends javax.swing.JDialog {
         searchZone = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
-        filterButton = new javax.swing.JButton();
         searchOption = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
@@ -235,9 +326,7 @@ public class EditSheet extends javax.swing.JDialog {
         jPanel11.setPreferredSize(new java.awt.Dimension(800, 120));
         jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
 
-        searchZone.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Edit Import Book",
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
+        searchZone.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Edit Import Book", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 24))); // NOI18N
         searchZone.setPreferredSize(new java.awt.Dimension(400, 200));
         searchZone.setLayout(new java.awt.BorderLayout());
 
@@ -246,16 +335,7 @@ public class EditSheet extends javax.swing.JDialog {
 
         jPanel14.setPreferredSize(new java.awt.Dimension(150, 40));
 
-        filterButton.setPreferredSize(new java.awt.Dimension(40, 40));
-        filterButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filterButtonActionPerformed(evt);
-            }
-        });
-        jPanel14.add(filterButton);
-
-        searchOption.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         searchOption.setPreferredSize(new java.awt.Dimension(100, 40));
         searchOption.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,18 +353,19 @@ public class EditSheet extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
-                jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-                                .addGap(8, 8, 8)));
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchField, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addGap(8, 8, 8))
+        );
         jPanel15Layout.setVerticalGroup(
-                jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel15Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(34, Short.MAX_VALUE)));
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
 
         jPanel4.add(jPanel15, java.awt.BorderLayout.CENTER);
 
@@ -317,19 +398,19 @@ public class EditSheet extends javax.swing.JDialog {
         jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 153), 5));
 
         bookListTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "Id", "Title", "Sale Price", "Quantity", "Edition", "Publishers", "Authors"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class,
-                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            },
+            new String [] {
+                "Id", "Title", "Sale Price", "Quantity", "Edition", "Publishers", "Authors"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
         });
         bookListTable.setRowHeight(30);
@@ -353,9 +434,7 @@ public class EditSheet extends javax.swing.JDialog {
         jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 1, 1));
         jPanel7.setLayout(new javax.swing.BoxLayout(jPanel7, javax.swing.BoxLayout.LINE_AXIS));
 
-        infoZone.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Information",
-                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION,
-                new java.awt.Font("Segoe UI", 1, 18))); // NOI18N
+        infoZone.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 18))); // NOI18N
         infoZone.setLayout(new javax.swing.BoxLayout(infoZone, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 5, 1));
@@ -368,17 +447,19 @@ public class EditSheet extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
-                jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 321, Short.MAX_VALUE)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)));
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 321, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
+        );
         jPanel10Layout.setVerticalGroup(
-                jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 16, Short.MAX_VALUE)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel10Layout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addGap(0, 0, Short.MAX_VALUE))));
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addComponent(jLabel9)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         jPanel17.add(jPanel10);
         jPanel17.add(titleTxT);
@@ -395,17 +476,19 @@ public class EditSheet extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
-                jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 321, Short.MAX_VALUE)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)));
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 321, Short.MAX_VALUE)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
+        );
         jPanel12Layout.setVerticalGroup(
-                jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 16, Short.MAX_VALUE)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel12Layout.createSequentialGroup()
-                                        .addComponent(jLabel10)
-                                        .addGap(0, 0, Short.MAX_VALUE))));
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel12Layout.createSequentialGroup()
+                    .addComponent(jLabel10)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         jPanel18.add(jPanel12);
         jPanel18.add(titleTxT1);
@@ -757,7 +840,6 @@ public class EditSheet extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable bookListTable;
     private javax.swing.JPanel bookListZone;
-    private javax.swing.JButton filterButton;
     private javax.swing.JTable importBookListTable;
     private javax.swing.JPanel infoZone;
     private javax.swing.JLabel jLabel1;

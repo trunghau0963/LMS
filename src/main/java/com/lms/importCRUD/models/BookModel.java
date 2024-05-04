@@ -29,6 +29,18 @@ public class BookModel {
         isHide = false;
     }
 
+    public List<String> getAuthorNames() {
+        List<String> authorNames = new ArrayList<>();
+        authors.forEach(author -> authorNames.add(author.getName().toLowerCase()));
+        return authorNames;
+    }
+
+    public List<String> getGenres() {
+        List<String> genres = new ArrayList<>();
+        categories.forEach(category -> genres.add(category.getGenre().toLowerCase()));
+        return genres;
+    }
+
     public String getId() {
         return id;
     }
